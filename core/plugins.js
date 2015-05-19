@@ -74,6 +74,6 @@ PluginInfo.prototype.Load = function() {
 	}
 };
 
-PluginInfo.prototypeUnload = function() {
+PluginInfo.prototype.Unload = function() {
 	
 };
