@@ -1,0 +1,8 @@
+{
+	"name": "slack",
+	"longname": "Slack Integrator",
+	"author": "Joe Carter",
+	"license": "MIT",
+	"script": "slack.js",
+	"dependencies": ["plug"]
+}
