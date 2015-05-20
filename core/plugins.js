@@ -29,8 +29,9 @@ PluginManager.prototype.AddPath = function(path) {
 };
 
 PluginManager.prototype.ScanPlugins = function() {
+	var newplugins = [];
+
 	//iterate directories and scan meta.json files (use PluginInfo method)
-	//TODO: merge with existing list
 	for (var i = 0; i < this.paths.length; i++) {
 		var dir = this.paths[i];
 		var files = fs.readdirSync(dir);
@@ -39,7 +40,7 @@ PluginManager.prototype.ScanPlugins = function() {
 			if (fs.lstatSync(file).isDirectory()) {
 				try {
 					var plugin = new PluginInfo(this, file);
-					this.plugins.push(plugin);
+					newplugins.push(plugin);
 				}
 				catch (e) {
 					//TODO: print warning to console here
@@ -47,13 +48,14 @@ PluginManager.prototype.ScanPlugins = function() {
 			}
 		}
 	}
+	this.plugins = newplugins;
 	
 };
 
 PluginManager.prototype.GetPlugin = function(pluginName) {
 	for (var i = 0; i < this.plugins.length; i++) {
 		var plugin = this.plugins[i];
-		if (plugin.name == pluginName) {
+		if (plugin.meta.name == pluginName) {
 			return plugin;
 		}
 	}
@@ -87,7 +89,7 @@ function PluginInfo(manager, directory) {
 }
 
 PluginInfo.prototype._Load = function() {
-	var path = this.directory + '/' + this.meta.script;
+	var path = '../' + this.directory + '/' + this.meta.script;
 	try {
 		this.plugin = require(path);
 
@@ -95,15 +97,17 @@ PluginInfo.prototype._Load = function() {
 
 		this.loaded = true;
 
-		this.plugin.events.onLoad()
+		console.log(this.plugin);
+		this.plugin.events.onLoad();
 	}
 	catch (e) {
 		//TODO: consider removing try/catch, or rethrowing.
+		console.log(e);
 	}
 };
 
 PluginInfo.prototype._Unload = function() {
-	var path = this.directory + '/' + this.meta.script;
+	var path = '../' + this.directory + '/' + this.meta.script;
 
 	//http://stackoverflow.com/a/6677355
 	var name = require.resolve(path);
