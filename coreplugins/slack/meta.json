@@ -4,5 +4,10 @@
 	"author": "Joe Carter",
 	"license": "MIT",
 	"script": "slack.js",
-	"dependencies": ["plug"]
+	"dependencies": ["plug"],
+	"config": {
+		"webhookuri": "******",
+		"username": "webhookbot",
+		"channel": "#ylt-bottest"
+	}
 }
