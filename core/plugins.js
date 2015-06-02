@@ -61,20 +61,9 @@ PluginManager.prototype.GetPlugin = function(pluginName) {
 	}
 };
 
-
-PluginManager.prototype.Load = function(plugin) {
-	//TODO: check if dependencies loaded 
-	
-
-	if (!plugin.loaded) {
-		plugin._Load();
-	}
-};
-
-PluginManager.prototype.Unload = function(plugin) {
-	plugin._Unload();
-};
-
+PluginManager.prototype.GetConfig = function() {
+	return {}; //TODO: make file based w/ persistence
+}
 
 function PluginInfo(manager, directory) {
 	this.manager = manager;
@@ -88,7 +77,8 @@ function PluginInfo(manager, directory) {
 	this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 }
 
-PluginInfo.prototype._Load = function() {
+PluginInfo.prototype.Load = function() {
+	//get plugin script path
 	var path = '../' + this.directory + '/' + this.meta.script;
 	try {
 		this.plugin = require(path);
@@ -98,7 +88,7 @@ PluginInfo.prototype._Load = function() {
 		this.loaded = true;
 
 		console.log(this.plugin);
-		this.plugin.events.onLoad();
+		this.plugin.events.onLoad(this);
 	}
 	catch (e) {
 		//TODO: consider removing try/catch, or rethrowing.
@@ -106,7 +96,7 @@ PluginInfo.prototype._Load = function() {
 	}
 };
 
-PluginInfo.prototype._Unload = function() {
+PluginInfo.prototype.Unload = function() {
 	var path = '../' + this.directory + '/' + this.meta.script;
 
 	//http://stackoverflow.com/a/6677355
