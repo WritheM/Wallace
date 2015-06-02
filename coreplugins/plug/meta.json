@@ -1,0 +1,14 @@
+{
+	"name": "plug",
+	"longname": "Plug service",
+	"author": "Joe Carter",
+	"license": "MIT",
+	"script": "plug.js",
+	"config": {
+		"auth": {
+			"email": "******@gmail.com",
+			"password": "******",
+			"room": "3425163633978028428"
+		}
+	}
+}
