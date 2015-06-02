@@ -84,8 +84,8 @@ PluginInfo.prototype.Load = function() {
 
         this.loaded = true;
 
-        console.log(this.plugin);
         this.plugin.events.onLoad(this);
+        console.log("Loaded "+this.meta.name);
     }
     catch (e) {
         // TODO: consider removing try/catch, or rethrowing.
@@ -105,5 +105,9 @@ PluginInfo.prototype.GetConfig = function() {
     var manconf = this.manager.GetConfig();
     if (this.meta.name in manconf) { return this.meta.name; }
     // no existing userconfig, clone it before returning
-    return manconf[this.meta.name] = JSON.parse(JSON.stringify(this.meta));
+    
+    var conf = {}
+    if ("config" in this.meta)
+        conf = this.meta.config;
+    return manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
 };
