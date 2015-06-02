@@ -4,7 +4,8 @@ var events = {}
 var plug;
 var config;
 
-events.onLoad = function(plugin) {
+events.onLoad = function(_plugin) {
+    plugin = _plugin;
     config = plugin.GetConfig();
 
     var PlugAPI = require('plugapi');
@@ -16,7 +17,7 @@ events.onLoad = function(plugin) {
 
     plug.connect(config.auth.room);
 
-    plug.on('roomJoin', eventproxy.roomJoin);
+    //plug.on('roomJoin', eventproxy.roomJoin);
 
     for ( var i in PlugAPI.events) {
         var event = PlugAPI.events[i];
@@ -28,8 +29,11 @@ events.onLoad = function(plugin) {
             plug.on(event, function(event) {
                 return function(arg) {
                     eventproxy.generic(event, arg);
-                }(event);
-            });
+                };
+            }(event));
+        }
+        else {
+            plug.on(event, eventproxy[event]);
         }
     }
     
@@ -39,11 +43,30 @@ var eventproxy = {};
 
 eventproxy.generic = function(event, arg) {
     //console.log("generic", event, arg);
+    console.log("Event", event, arg);
+    plugin.manager.FireEvent("plug_"+event, arg);
 }
 
 eventproxy.roomJoin = function(room) {
     console.log("Joined " + room);
     plug.sendChat("Hello World");
+    
+    plugin.manager.FireEvent("plug_roomJoin", room);
+}
+
+eventproxy.chat = function(message) {
+    plugin.manager.FireEvent("plug_chat", message);
+    
+    plugin.manager.FireEvent("plug_message", message);
+}
+
+eventproxy.command = function(message) {
+    plugin.manager.FireEvent("plug_command_"+message.command, message);
+}
+
+
+events.plug_chat = function(message) {
+    console.log("Received chat from event :D", message.message);
 }
 
 module.exports = {
