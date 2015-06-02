@@ -37,6 +37,8 @@ events.onLoad = function(_plugin) {
         }
     }
     
+    
+    module.exports.plug = plug;
 }
 
 var eventproxy = {};
@@ -70,5 +72,6 @@ events.plug_chat = function(message) {
 }
 
 module.exports = {
-    "events" : events
+    "events" : events,
+    "plug": plug
 };
