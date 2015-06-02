@@ -19,25 +19,26 @@ events.onLoad = function(plugin) {
     plug.on('roomJoin', eventproxy.roomJoin);
 
     for ( var i in PlugAPI.events) {
-        // javascript closure abuse: -
-        // goal is to have "event" defined and to also pass that into the event
-        // function
         var event = PlugAPI.events[i];
-        
-        plug.on(event, function(event) {
-            return function(arg) {
-                eventproxy.generic(event, arg);
-            }(event);
-        });
-
+        if (!(event in eventproxy)) {
+            // javascript closure abuse: -
+            // goal is to have "event" defined and to also pass that into the event
+            // function
+            
+            plug.on(event, function(event) {
+                return function(arg) {
+                    eventproxy.generic(event, arg);
+                }(event);
+            });
+        }
     }
-
+    
 }
 
 var eventproxy = {};
 
 eventproxy.generic = function(event, arg) {
-    console.log("generic", event, arg);
+    //console.log("generic", event, arg);
 }
 
 eventproxy.roomJoin = function(room) {
