@@ -11,5 +11,8 @@ for (var i = 0; i < plugman.plugins.length; i++) {
     // console.log(plugin.meta.name);
 }
 
-var slack = plugman.GetPlugin("plug");
+var plug = plugman.GetPlugin("plug");
+plug.Load();
+
+var slack = plugman.GetPlugin("slack");
 slack.Load();
