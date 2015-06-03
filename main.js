@@ -1,6 +1,6 @@
-var Plugins = require("./core/plugins.js");
+var PluginManager = require("./core/PluginManager.js");
 
-plugman = new Plugins.PluginManager();
+plugman = new PluginManager();
 plugman.AddPath("coreplugins");
 plugman.AddPath("plugins");
 
@@ -16,3 +16,6 @@ plug.Load();
 
 var slack = plugman.GetPlugin("slack");
 slack.Load();
+
+//var callouts = plugman.GetPlugin("callouts");
+//callouts.Load();
