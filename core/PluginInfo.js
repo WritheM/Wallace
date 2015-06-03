@@ -7,12 +7,15 @@ function PluginInfo(manager, directory) {
     this.loaded = false;
     this.events = {};
 
-    // meta
-    var file = this.directory + '/meta.json';
-    this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
+    this.reloadMeta();
 }
 
 module.exports = PluginInfo;
+
+PluginInfo.prototype.reloadMeta = function() {
+    var file = this.directory + '/meta.json';
+    this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
+}
 
 PluginInfo.prototype.load = function() {
     // get plugin script path

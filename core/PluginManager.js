@@ -24,16 +24,40 @@ PluginManager.prototype.scanPlugins = function() {
         for (var j = 0; j < files.length; j++) {
             var file = dir + "/" + files[j];
             if (fs.lstatSync(file).isDirectory()) {
-                try {
-                    var plugin = new PluginInfo(this, file);
-                    newplugins.push(plugin);
+
+                var plugin = this.getPluginByPath(file);
+                if (plugin != null) {
+                    try {
+                        plugin.reloadMeta(plugin);
+
+                        newplugins.push(plugin);
+                    }
+                    catch (e) {
+                        // maybe a bit harsh, but unload plugin..
+                        plugin.unload();
+                    }
                 }
-                catch (e) {
-                    // TODO: print warning to console here
+                else {
+                    try {
+                        var plugin = new PluginInfo(this, file);
+                        newplugins.push(plugin);
+                    }
+                    catch (e) {
+                        // TODO: print warning to console here
+                    }
                 }
             }
         }
     }
+
+    // unload plugins that no-longer exist.
+    for (var i = 0; i < this.plugins.length; i++) {
+        var plugin = this.plugins[i];
+        if (!(plugin in newplugins)) {
+            plugin.unload();
+        }
+    }
+
     this.plugins = newplugins;
 
 };
@@ -44,6 +68,13 @@ PluginManager.prototype.getPlugin = function(pluginName) {
         if (plugin.meta.name == pluginName) { return plugin; }
     }
 };
+
+PluginManager.prototype.getPluginByPath = function(path) {
+    for (var i = 0; i < this.plugins.length; i++) {
+        var plugin = this.plugins[i];
+        if (plugin.directory == path) { return plugin; }
+    }
+}
 
 PluginManager.prototype.getConfig = function() {
     return {}; // TODO: make file based w/ persistence
