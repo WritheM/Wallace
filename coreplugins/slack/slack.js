@@ -26,8 +26,8 @@ events.plug_chat = function(message) {
 
     slack.webhook({
         channel : config.channel,
-        username : config.username,
-        text : "[" + message.from.username + "] " + message.message
+        username : message.from.username,
+        text : message.message
     }, function(err, response) {
         if (response.status != "ok") {
             console.log(response);
