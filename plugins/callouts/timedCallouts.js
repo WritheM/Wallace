@@ -6,16 +6,14 @@ var timedCallouts = {
 var events = {};
 
 events.onLoad = function(plugin) {
-    timedCallouts.config = plugin.GetConfig();
+    timedCallouts.config = plugin.getConfig();
     
     timedCallouts.scheduleShoutout();
     timedCallouts.storedRequest = plugin;
 };
 
 events.plug_command_callouts = function(request) {
-    console.log(timedCallouts.storedRequest.manager.GetPlugin("plug"));
-    
-    var sendChat = timedCallouts.storedRequest.manager.GetPlugin("plug").plugin.plug.sendChat;
+    var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
     
     if (request.args === undefined) {
         // output the current callout count
@@ -80,7 +78,7 @@ timedCallouts.doShoutout = function() {
     if (message && message.trim().length) {
         console.log("scheduledShoutout: " + message);
         
-        var sendChat = timedCallouts.storedRequest.manager.GetPlugin("plug").plugin.plug.sendChat;
+        var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
         sendChat(message);
     }
 

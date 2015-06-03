@@ -6,7 +6,7 @@ var config;
 
 events.onLoad = function(_plugin) {
     plugin = _plugin;
-    config = plugin.GetConfig();
+    config = plugin.getConfig();
 
     var PlugAPI = require('plugapi');
 
@@ -46,24 +46,24 @@ var eventproxy = {};
 eventproxy.generic = function(event, arg) {
     //console.log("generic", event, arg);
     console.log("Event", event, arg);
-    plugin.manager.FireEvent("plug_"+event, arg);
+    plugin.manager.fireEvent("plug_"+event, arg);
 }
 
 eventproxy.roomJoin = function(room) {
     console.log("Joined " + room);
     plug.sendChat("Hello World");
     
-    plugin.manager.FireEvent("plug_roomJoin", room);
+    plugin.manager.fireEvent("plug_roomJoin", room);
 }
 
 eventproxy.chat = function(message) {
-    plugin.manager.FireEvent("plug_chat", message);
+    plugin.manager.fireEvent("plug_chat", message);
     
-    plugin.manager.FireEvent("plug_message", message);
+    plugin.manager.fireEvent("plug_message", message);
 }
 
 eventproxy.command = function(message) {
-    plugin.manager.FireEvent("plug_command_"+message.command, message);
+    plugin.manager.fireEvent("plug_command_"+message.command, message);
 }
 
 

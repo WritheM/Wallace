@@ -14,7 +14,7 @@ function PluginInfo(manager, directory) {
 
 module.exports = PluginInfo;
 
-PluginInfo.prototype.Load = function() {
+PluginInfo.prototype.load = function() {
     // get plugin script path
     var path = '../' + this.directory + '/' + this.meta.script;
     try {
@@ -33,7 +33,7 @@ PluginInfo.prototype.Load = function() {
     }
 };
 
-PluginInfo.prototype.Unload = function() {
+PluginInfo.prototype.unload = function() {
     var path = '../' + this.directory + '/' + this.meta.script;
 
     // http://stackoverflow.com/a/6677355
@@ -41,8 +41,8 @@ PluginInfo.prototype.Unload = function() {
     delete require.cache[name];
 };
 
-PluginInfo.prototype.GetConfig = function() {
-    var manconf = this.manager.GetConfig();
+PluginInfo.prototype.getConfig = function() {
+    var manconf = this.manager.getConfig();
     if (this.meta.name in manconf) { return this.meta.name; }
     // no existing userconfig, clone it before returning
 
@@ -52,7 +52,7 @@ PluginInfo.prototype.GetConfig = function() {
     return manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
 };
 
-PluginInfo.prototype.FireEvent = function(eventname, args) {
+PluginInfo.prototype.fireEvent = function(eventname, args) {
     if (!this.loaded) { return; }
     if (!(eventname in this.plugin.events)) { return; }
     this.plugin.events[eventname](args);

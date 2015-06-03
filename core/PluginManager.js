@@ -10,11 +10,11 @@ function PluginManager() {
 
 module.exports = PluginManager;
 
-PluginManager.prototype.AddPath = function(path) {
+PluginManager.prototype.addPath = function(path) {
     this.paths.push(path);
 };
 
-PluginManager.prototype.ScanPlugins = function() {
+PluginManager.prototype.scanPlugins = function() {
     var newplugins = [];
 
     // iterate directories and scan meta.json files (use PluginInfo method)
@@ -38,18 +38,18 @@ PluginManager.prototype.ScanPlugins = function() {
 
 };
 
-PluginManager.prototype.GetPlugin = function(pluginName) {
+PluginManager.prototype.getPlugin = function(pluginName) {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (plugin.meta.name == pluginName) { return plugin; }
     }
 };
 
-PluginManager.prototype.GetConfig = function() {
+PluginManager.prototype.getConfig = function() {
     return {}; // TODO: make file based w/ persistence
 }
 
-PluginManager.prototype.FireEvent = function(event, args) {
+PluginManager.prototype.fireEvent = function(event, args) {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (plugin.loaded) {

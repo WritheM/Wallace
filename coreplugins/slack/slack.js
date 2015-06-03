@@ -7,7 +7,7 @@ var events = {}
 events.onLoad = function(plugin) {
     // dependency injection, any better methods for Node?
     this.plugin = plugin;
-    config = plugin.GetConfig();
+    config = plugin.getConfig();
 
     // https://www.npmjs.com/package/slack-node
     var Slack = require('slack-node');
