@@ -29,7 +29,7 @@ events.plug_chat = function(message) {
     
     if (parts[0] == "/me") {
         parts.shift();
-        content = "`" + parts.join(" ") + "`"; 
+        content = "_" + parts.join(" ") + "_"; 
     }
         
     slack.webhook({
