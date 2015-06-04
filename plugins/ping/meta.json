@@ -1,0 +1,7 @@
+{
+    "author": "ylt",
+    "name": "ping",
+    "description": "Ping",
+    "script": "ping.js",
+    "dependencies": ["plug"]
+}
