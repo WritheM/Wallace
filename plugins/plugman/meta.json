@@ -1,0 +1,7 @@
+{
+    "author": "ylt",
+    "name": "plugman",
+    "description": "Plugman",
+    "script": "plugman.js",
+    "dependencies": ["plugman"]
+}
