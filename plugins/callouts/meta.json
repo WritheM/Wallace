@@ -3,7 +3,7 @@
     "name": "callouts",
     "description": "Callouts Administration. valid arguments are view|add|del or do not pass anything to view how many callouts there are.",
     "config": {
-        "shoutOutInterval": 1,
+        "shoutOutInterval": 60,
         "callouts": [
             "Welcome to our broadcast! We are running the \"Grooveshark Broadcast Bot\", created by grooveshark.com/uman42, with the Callouts plugin created by grooveshark.com/pironic.",
             "Join your fellow listeners and broadcasters on the Grooveshark Community Forums now! http://sharkcommunity.com/"

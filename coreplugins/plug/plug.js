@@ -72,7 +72,7 @@ eventproxy.command = function(message) {
 
 
 events.plug_chat = function(message) {
-    console.log("Received chat from event :D", message.message);
+    console.log("PlugChat: [@"+ message.from.username +"] ", message.message);
 }
 
 module.exports = {
