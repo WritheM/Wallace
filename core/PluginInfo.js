@@ -41,10 +41,15 @@ PluginInfo.prototype.unload = function() {
 
     this.loaded = false;
     this.plugin = undefined;
-    
-    // http://stackoverflow.com/a/6677355
-    var name = require.resolve(path);
-    delete require.cache[name];
+
+    try {
+        // http://stackoverflow.com/a/6677355
+        var name = require.resolve(path);
+        delete require.cache[name];
+    }
+    catch (e) {
+
+    }
 };
 
 PluginInfo.prototype.getConfig = function() {
@@ -61,5 +66,10 @@ PluginInfo.prototype.getConfig = function() {
 PluginInfo.prototype.fireEvent = function(eventname, args) {
     if (!this.loaded) { return; }
     if (!(eventname in this.plugin.events)) { return; }
-    this.plugin.events[eventname](args);
+    try {
+        this.plugin.events[eventname](args);
+    }
+    catch (e) {
+        console.log("Event handler crashed", e);
+    }
 }

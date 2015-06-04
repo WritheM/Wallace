@@ -55,7 +55,6 @@ PluginManager.prototype.scanPlugins = function() {
         for (var j = 0; j < files.length; j++) {
             var file = dir + "/" + files[j];
             if (fs.lstatSync(file).isDirectory()) {
-
                 var plugin = this.getPluginByPath(file);
                 if (plugin != null) {
                     try {
@@ -84,7 +83,8 @@ PluginManager.prototype.scanPlugins = function() {
     // unload plugins that no-longer exist.
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
-        if (!(plugin in newplugins)) {
+        if (newplugins.indexOf(plugin) == -1) {
+            console.log(plugin.meta.name+" no longer exists, unload");
             plugin.unload();
         }
     }
