@@ -1,0 +1,9 @@
+#eclipse files
+.project
+.settings/
+
+#bot configuration, contains passwords
+config.json
+
+#nodejs modules
+node_modules/
