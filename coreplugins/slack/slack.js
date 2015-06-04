@@ -35,7 +35,7 @@ events.plug_chat = function(message) {
     slack.webhook({
         channel : config.channel,
         username : message.from.username,
-        text : message.message
+        text : content
     }, function(err, response) {
         if (response.status != "ok") {
             console.log(response);
