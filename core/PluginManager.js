@@ -84,7 +84,7 @@ PluginManager.prototype.fireEvent = function(event, args) {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (plugin.loaded) {
-            plugin.FireEvent(event, args);
+            plugin.fireEvent(event, args);
         }
     }
 }

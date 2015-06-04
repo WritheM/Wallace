@@ -21,7 +21,7 @@ events.onLoad = function(_plugin) {
 
     for ( var i in PlugAPI.events) {
         var event = PlugAPI.events[i];
-        if (!(event in eventproxy)) {
+        if (!(event in eventproxy) && event != "command") {
             // javascript closure abuse: -
             // goal is to have "event" defined and to also pass that into the event
             // function
@@ -37,6 +37,10 @@ events.onLoad = function(_plugin) {
         }
     }
     
+    
+    //plugAPI has a bug, raw command event double fires
+    // bind specific command event also and filter out plain within func
+    plug.on("command:*", eventproxy["command"]);
     
     module.exports.plug = plug;
 }
@@ -63,6 +67,7 @@ eventproxy.chat = function(message) {
 }
 
 eventproxy.command = function(message) {
+    if (this.event.indexOf(":") == -1) { return; }
     plugin.manager.fireEvent("plug_command_"+message.command, message);
 }
 
