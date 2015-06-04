@@ -39,6 +39,9 @@ PluginInfo.prototype.load = function() {
 PluginInfo.prototype.unload = function() {
     var path = '../' + this.directory + '/' + this.meta.script;
 
+    this.loaded = false;
+    this.plugin = undefined;
+    
     // http://stackoverflow.com/a/6677355
     var name = require.resolve(path);
     delete require.cache[name];

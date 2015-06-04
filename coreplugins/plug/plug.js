@@ -55,7 +55,6 @@ eventproxy.generic = function(event, arg) {
 
 eventproxy.roomJoin = function(room) {
     console.log("Joined " + room);
-    plug.sendChat("Hello World");
     
     plugin.manager.fireEvent("plug_roomJoin", room);
 }
