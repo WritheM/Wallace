@@ -6,6 +6,15 @@ function PluginManager() {
     this.plugins = []
     this.pluginnames = {};
     this.loaded = [];
+
+    this.config = {};
+
+    try {
+        JSON.parse(fs.readFileSync("config.json", "utf8"));
+    }
+    catch (e) {
+
+    }
 }
 
 module.exports = PluginManager;
@@ -77,7 +86,11 @@ PluginManager.prototype.getPluginByPath = function(path) {
 }
 
 PluginManager.prototype.getConfig = function() {
-    return {}; // TODO: make file based w/ persistence
+    return this.config;
+}
+
+PluginManager.prototype.saveConfig = function() {
+    fs.writeFileSync("config.json", JSON.stringify(this.config, null, 4), "utf8");
 }
 
 PluginManager.prototype.fireEvent = function(event, args) {
