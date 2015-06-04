@@ -1,6 +1,7 @@
-#eclipse files
+#eclipse/phpstorm files
 .project
 .settings/
+.idea
 
 #bot configuration, contains passwords
 config.json
