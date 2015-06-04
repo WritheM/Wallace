@@ -46,7 +46,7 @@ PluginInfo.prototype.unload = function() {
 
 PluginInfo.prototype.getConfig = function() {
     var manconf = this.manager.getConfig();
-    if (this.meta.name in manconf) { return this.meta.name; }
+    if (this.meta.name in manconf) { return manconf[this.meta.name]; }
     // no existing userconfig, clone it before returning
 
     var conf = {}

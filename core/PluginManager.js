@@ -7,17 +7,39 @@ function PluginManager() {
     this.pluginnames = {};
     this.loaded = [];
 
-    this.config = {};
+    this.config = {
+        "core" : {
+            "paths" : [ "coreplugins", "plugins" ],
+            "plugins" : []
+        }
+    };
 
     try {
-        JSON.parse(fs.readFileSync("config.json", "utf8"));
+        this.config = JSON.parse(fs.readFileSync("config.json", "utf8"));
     }
     catch (e) {
-
+        console.log(e);
     }
 }
 
 module.exports = PluginManager;
+
+PluginManager.prototype.start = function() {
+    for (var i = 0; i < this.config.core.paths.length; i++) {
+        var path = this.config.core.paths[i];
+        this.addPath(path);
+    }
+
+    this.scanPlugins();
+    
+    for (var i = 0; i < this.config.core.plugins.length; i++) {
+        var plugin = this.config.core.plugins[i];
+        
+        var inst = this.getPlugin(plugin);
+        if (inst)
+            inst.load();
+    }
+}
 
 PluginManager.prototype.addPath = function(path) {
     this.paths.push(path);
