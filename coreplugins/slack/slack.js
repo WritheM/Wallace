@@ -23,7 +23,15 @@ events.plug_join = function(user) {
 }
 
 events.plug_chat = function(message) {
-
+    var content = message.message;
+    
+    var parts = content.split(" ");
+    
+    if (parts[0] == "/me") {
+        parts.shift();
+        content = "`" + parts.join(" ") + "`"; 
+    }
+        
     slack.webhook({
         channel : config.channel,
         username : message.from.username,
