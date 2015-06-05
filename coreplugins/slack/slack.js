@@ -18,8 +18,21 @@ events.onLoad = function(plugin) {
 events.onUnload = function() {
 }
 
-events.plug_join = function(user) {
 
+function sendMessage(user, content) {
+    slack.webhook({
+        channel : config.channel,
+        username : user,
+        text : content
+    }, function(err, response) {
+        if (response.status != "ok") {
+            console.log(response);
+        }
+    });
+}
+
+events.plug_join = function(user) {
+    
 }
 
 events.plug_chat = function(message) {
@@ -32,16 +45,15 @@ events.plug_chat = function(message) {
         content = "_" + parts.join(" ") + " _"; 
     }
         
-    slack.webhook({
-        channel : config.channel,
-        username : message.from.username,
-        text : content
-    }, function(err, response) {
-        if (response.status != "ok") {
-            console.log(response);
-        }
-    });
+    sendMessage(message.from.username, content);
+}
 
+events.plug_advance = function(track) {
+    //on start: lastPlay: { dj: null, media: null, score: null }
+    if (track.lastPlay.score != null) {
+        sendMessage("Events", "*Last play:-* Woots: "+track.lastPlay.score.positive+", Grabs: "+track.lastPlay.score.grabs+", Mehs: "+track.lastPlay.score.negative);
+    }
+    sendMessage("Events", "*"+track.currentDJ.username+"* has started playing *"+track.media.author+"* - *"+track.media.title+"*");
 }
 
 module.exports = {
