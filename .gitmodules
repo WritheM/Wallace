@@ -1,0 +1,3 @@
+[submodule "node_modules/plugapi"]
+	path = node_modules/plugapi
+	url = https://github.com/WritheM/plugAPI.git
