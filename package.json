@@ -12,8 +12,8 @@
 	},
 	"license": "MIT",	
 	"dependencies": {
-		"plugapi": ">=3.3.0",
+		"plugapi": "https://github.com/writhem/PlugAPI/tarball/master",
 		"slack-node": ">=0.1.3",
-		"winston": ">=1.0.0"
+		"log4js": ">=1.0.0"
 	}
 }
