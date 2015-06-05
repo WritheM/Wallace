@@ -20,6 +20,22 @@ function PluginManager() {
     catch (e) {
         console.log(e);
     }
+
+    
+    if (this.config.core.logger === undefined) {
+        // set some sane defaults
+        this.config.core.logger = {
+            "appenders" : [ {
+                type : "console"
+            } ],
+            "replaceConsole" : true
+        }
+    }
+    
+    var log4js = require("log4js");
+    log4js.configure(this.config.core.logger);
+    this.logger = log4js.getLogger();
+
 }
 
 module.exports = PluginManager;
@@ -31,10 +47,10 @@ PluginManager.prototype.start = function() {
     }
 
     this.scanPlugins();
-    
+
     for (var i = 0; i < this.config.core.plugins.length; i++) {
         var plugin = this.config.core.plugins[i];
-        
+
         var inst = this.getPlugin(plugin);
         if (inst)
             inst.load();
@@ -84,7 +100,7 @@ PluginManager.prototype.scanPlugins = function() {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (newplugins.indexOf(plugin) == -1) {
-            console.log(plugin.meta.name+" no longer exists, unload");
+            console.log(plugin.meta.name + " no longer exists, unload");
             plugin.unload();
         }
     }
