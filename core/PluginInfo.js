@@ -42,6 +42,8 @@ PluginInfo.prototype.unload = function() {
     this.loaded = false;
     this.plugin = undefined;
 
+    this.fireEvent("onUnload");
+    
     try {
         // http://stackoverflow.com/a/6677355
         var name = require.resolve(path);

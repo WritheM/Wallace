@@ -12,6 +12,11 @@ events.onLoad = function(plugin) {
     timedCallouts.storedRequest = plugin;
 };
 
+events.onUnload = function() {
+    window.clearTimeout(timedCallouts.timeoutID);
+    timedCallouts.timeoutID = null;
+}
+
 events.plug_command_callouts = function(request) {
     var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
     
