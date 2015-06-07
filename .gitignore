@@ -1,10 +1,11 @@
 #eclipse/phpstorm files
-.project
+.project/
 .settings/
-.idea
+.idea/
 
 #bot configuration, contains passwords
 config.json
 
 #nodejs modules
 node_modules/
+!node_modules/plugapi/
