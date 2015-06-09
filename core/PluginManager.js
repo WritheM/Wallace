@@ -7,21 +7,8 @@ function PluginManager() {
     this.pluginnames = {};
     this.loaded = [];
 
-    this.config = {
-        "core" : {
-            "paths" : [ "coreplugins", "plugins" ],
-            "plugins" : []
-        }
-    };
+    PluginManager.prototype.getConfig();
 
-    try {
-        this.config = JSON.parse(fs.readFileSync("config.json", "utf8"));
-    }
-    catch (e) {
-        console.log(e);
-    }
-
-    
     if (this.config.core.logger === undefined) {
         // set some sane defaults
         this.config.core.logger = {
@@ -124,6 +111,20 @@ PluginManager.prototype.getPluginByPath = function(path) {
 }
 
 PluginManager.prototype.getConfig = function() {
+    this.config = {
+        "core" : {
+            "paths" : [ "coreplugins", "plugins" ],
+            "plugins" : []
+        }
+    };
+
+    try {
+        this.config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+    }
+    catch (e) {
+        console.log(e);
+    }
+
     return this.config;
 }
 
