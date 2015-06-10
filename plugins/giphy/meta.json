@@ -1,0 +1,12 @@
+{
+    "author": "pironic",
+    "name": "gif",
+    "description": "Giphy.com integration. Search for a gif that belongs to a set of tags, or return a random gif.",
+    "config": {
+        "api_key": "dc6zaTOxFJmzC",
+        "rating": "pg-13",
+        "permission": ["guest"],
+        "url": "http://api.giphy.com/v1/gifs/random"
+    },
+    "script": "giphy.js"
+}
