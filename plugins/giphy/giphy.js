@@ -40,7 +40,7 @@ events.plug_command_gif.get_gif = function(tags, func)
     //console.log("giphy query:");
     var params = "?api_key="+config.api_key+"&rating="+ config.rating+"&format=json";
     if (tags !== null)
-        params += "&tags="+encodeURIComponent(tags);
+        params += "&tag="+encodeURIComponent(tags);
 
     http.get(config.url+params, function(res) {
         //console.log("giphy resp: " + res.statusCode);
