@@ -18,7 +18,7 @@ events.plug_command_wa = function(request) {
         && config.url.length > 0)
     {
         //console.log("!wa: query:");
-        http.get(config.url+encodeURIComponent(request.args), function(res) {
+        http.get(config.url+encodeURIComponent(request.args.join(" ")), function(res) {
             //console.log("!wa: Got response: " + res.statusCode);
             res.setEncoding('utf8');
 
