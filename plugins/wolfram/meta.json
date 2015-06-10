@@ -1,0 +1,10 @@
+{
+    "author": "pironic",
+    "name": "wa",
+    "description": "Search Wolfram|Alpha for an answer to your question.",
+    "config": {
+        "permission": ["guest"],
+        "url": null
+    },
+    "script": "wolfram.js"
+}
