@@ -1,0 +1,10 @@
+{
+    "author": "pironig",
+    "name": "rrdstats",
+    "description": "Will forward to the RRD API for basic stat storage.",
+    "config": {
+        "url": null
+    },
+    "script": "rrd.js",
+    "dependencies": ["plug"]
+}
