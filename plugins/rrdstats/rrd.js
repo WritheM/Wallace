@@ -90,15 +90,15 @@ function save_stats() {
             data.avgLevel = levels.sum / levels.count;
 
         }
-        //console.log(data);
         var payload = "["+JSON.stringify(data)+"]";
+        //console.log("rrdstats payload: "+payload);
 
         //console.log("rrdstats query:" + config.url);
         var link = url.parse(config.url, true, true);
         var options = {
             host: link.hostname,
             port: link.port,
-            path: link.pathname,
+            path: link.path,
             method: 'POST',
             headers: {
                 'Content-Type':'application/json',
