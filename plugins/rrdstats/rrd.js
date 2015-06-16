@@ -48,7 +48,7 @@ function save_stats() {
         && config.url.length > 0)
     {
         var users = plug.getUsers();
-        console.log(users);
+        //console.log(users);
         var data = {};
         data.djs = plug.getWaitList().length + (typeof plug.getDJ() === 'undefined'?0:1);
         data.listeners = users.length;
