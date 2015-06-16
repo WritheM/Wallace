@@ -39,11 +39,11 @@ PluginInfo.prototype.load = function() {
 PluginInfo.prototype.unload = function() {
     var path = '../' + this.directory + '/' + this.meta.script;
 
+    this.fireEvent("onUnload");
+
     this.loaded = false;
     this.plugin = undefined;
 
-    this.fireEvent("onUnload");
-    
     try {
         // http://stackoverflow.com/a/6677355
         var name = require.resolve(path);

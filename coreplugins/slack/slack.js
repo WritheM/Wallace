@@ -61,7 +61,7 @@ events.plug_chat = function(message) {
         text: content
     });
 
-    console.log("https://www.d3s.co/plug/badges/" + message.from.badge + ".png")
+    //console.log("https://www.d3s.co/plug/badges/" + message.from.badge + ".png")
 }
 
 events.plug_advance = function(track) {

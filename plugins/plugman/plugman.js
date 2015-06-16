@@ -64,7 +64,7 @@ events.plug_command_plugin = function(message) {
     else if (message.args[0] == "reload") {
         plugin.unload();
         plugin.load();
-        plug.sendChat("[@" + message.from.username + "] Plugin unloaded");
+        plug.sendChat("[@" + message.from.username + "] Plugin reloaded");
     }
     else {
         plug.sendChat("[@" + message.from.username + "] Usage: !plugin info/load/unload/reload [plugin Name]");
