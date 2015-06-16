@@ -1,0 +1,7 @@
+{
+    "author": ["ylt","pironig"],
+    "name": "basicBot",
+    "description": "suite of basicBot commands",
+    "script": ["ping.js"],
+    "dependencies": ["plug"]
+}
