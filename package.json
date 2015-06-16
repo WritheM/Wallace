@@ -13,7 +13,7 @@
 	"license": "MIT",	
 	"dependencies": {
 		"plugapi": "https://github.com/writhem/PlugAPI/tarball/master",
-		"slack-node": ">=0.1.3",
+		"node-slackr": ">=0.1.0",
 		"log4js": ">=0.6.25"
 	}
 }
