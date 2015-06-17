@@ -4,6 +4,8 @@ var events = {}
 var plug;
 var config;
 
+var PlugUser = require("./PlugUser.js");
+
 events.onLoad = function(_plugin) {
     plugin = _plugin;
     config = plugin.getConfig();
@@ -60,14 +62,20 @@ eventproxy.roomJoin = function(room) {
 }
 
 eventproxy.chat = function(message) {
-    plugin.manager.fireEvent("plug_chat", message);
+    //var user = new PlugUser(message.from);
+    message.from = new PlugUser(message.from, plug);
     
-    plugin.manager.fireEvent("plug_message", message);
+    plugin.manager.fireEvent("plug_chat", message);
+    plugin.manager.fireEvent("chat", message);
 }
 
 eventproxy.command = function(message) {
     if (this.event.indexOf(":") == -1) { return; }
+    
+    message.from = new PlugUser(message.from, plug);
+    
     plugin.manager.fireEvent("plug_command_"+message.command, message);
+    plugin.manager.fireEvent("command_"+message.command, message);
 }
 
 
@@ -77,5 +85,6 @@ events.plug_chat = function(message) {
 
 module.exports = {
     "events" : events,
-    "plug": plug
+    "plug": plug,
+    "PlugUser": PlugUser
 };
