@@ -10,14 +10,15 @@ function PluginInfo(manager, directory) {
     this.reloadMeta();
 }
 
-module.exports = PluginInfo;
-
 PluginInfo.prototype.reloadMeta = function() {
     var file = this.directory + '/meta.json';
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 }
 
-PluginInfo.prototype.load = function() {
+PluginInfo.prototype._load = function() {
+    if (this.loaded)
+        return true;
+    
     // get plugin script path
     var path = '../' + this.directory + '/' + this.meta.script;
     try {
@@ -33,10 +34,11 @@ PluginInfo.prototype.load = function() {
     catch (e) {
         // TODO: consider removing try/catch, or rethrowing.
         console.log(e);
+        return false;
     }
 };
 
-PluginInfo.prototype.unload = function() {
+PluginInfo.prototype._unload = function() {
     var path = '../' + this.directory + '/' + this.meta.script;
 
     this.fireEvent("onUnload");
@@ -53,6 +55,36 @@ PluginInfo.prototype.unload = function() {
 
     }
 };
+
+PluginInfo.prototype.load = function() {
+    var deps = this.manager.getDependencies(this);
+    for (var i = 0; i < deps.length; i++) {
+        var dep = deps[i];
+        dep._load();
+    }
+}
+
+PluginInfo.prototype.unload = function() {
+    var deps = this.manager.filterLoaded(this.manager.getDependants(this));
+    for (var i = 0; i < deps.length; i++) {
+        var dep = deps[i];
+        dep._unload();
+    }
+    this._unload();
+}
+
+PluginInfo.prototype.reload = function() {
+    var deps = this.manager.filterLoaded(this.manager.getDependants(this));
+    
+    this.unload();
+    this.load();
+    
+    //reload everything that got unloaded (as they were depending on this)
+    for(var i = 0; i < deps.length; i++) {
+        var dep = deps[i];
+        dep.load();
+    }
+}
 
 PluginInfo.prototype.getConfig = function() {
     var manconf = this.manager.getConfig();
@@ -78,3 +110,5 @@ PluginInfo.prototype.fireEvent = function(eventname) {
         console.log("Event handler crashed", e);
     }
 }
+
+module.exports = PluginInfo;

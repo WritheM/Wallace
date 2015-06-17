@@ -2,7 +2,7 @@
 
 GLOBAL.BOTPLUGVERSION = '0.0.1';
 
-var PluginManager = require("./core/PluginManager.js");
+var Core = require("./core/Core.js");
 
-plugman = new PluginManager();
-plugman.start();
+core = new Core();
+

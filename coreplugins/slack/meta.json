@@ -8,6 +8,11 @@
 	"config": {
 		"webhookuri": "******",
 		"username": "webhookbot",
-		"channel": "#ylt-bottest"
+		"channel": "#ylt-bottest",
+		"ignoreself": true,
+		"server": {
+			"port": 8124,
+			"host": "0.0.0.0"
+		}
 	}
 }
