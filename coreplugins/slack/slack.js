@@ -1,13 +1,18 @@
 var plugin;
+var manager;
 var slack;
+var plug;
 var config;
 
 var events = {}
 
-events.onLoad = function(plugin) {
-    // dependency injection, any better methods for Node?
-    this.plugin = plugin;
+events.onLoad = function(_plugin) {
+    plugin = _plugin;
     config = plugin.getConfig();
+    
+    manager = plugin.manager;
+    plug = manager.getPlugin("plug").plugin.plug;
+    
 
     // https://www.npmjs.com/package/slack-node
     var Slack = require('node-slackr');
@@ -69,7 +74,7 @@ events.plug_advance = function(track) {
 
     var message = [];
 
-    if (track.lastPlay.dj != null) {
+    if (track.lastPlay != undefined && track.lastPlay.dj != null) {
         message.push({
             text : "*Last play:-* Woots: " + track.lastPlay.score.positive + ", Grabs: " + track.lastPlay.score.grabs
                     + ", Mehs: " + track.lastPlay.score.negative,
@@ -109,6 +114,33 @@ events.plug_advance = function(track) {
      * "ok") { console.log(response); } });
      */
 
+}
+
+var http = require('http');
+http.createServer(function (req, res) {
+  var body = ''
+  req.on('data', function (data) {
+      body += data;
+  });
+  req.on('end', function () {
+      var qs = require('querystring');
+      receivedSlackMessage(qs.parse(body));
+  });
+  
+  res.writeHead(200);
+  res.end();
+}).listen(8124, "127.0.0.1");
+
+function receivedSlackMessage(message) {
+    if (message.user_id == "USLACKBOT")
+        return;
+    
+    //command
+    if (message.message.text[0] == "!") {
+        
+    }
+    
+    plug.sendChat("#"+message.user_name+"# "+message.text);
 }
 
 module.exports = {
