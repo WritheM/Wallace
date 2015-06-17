@@ -1,4 +1,7 @@
 var http = require('http');
+var request = require('request')
+var fs = require('fs');
+var path = require('path');
 
 var plugin;
 var manager;
@@ -8,6 +11,11 @@ var config;
 
 var events = {}
 var server;
+
+var pollTimer;
+var slackUsers;
+var slackEmotes;
+
 events.onLoad = function(_plugin) {
     plugin = _plugin;
     config = plugin.getConfig();
@@ -26,23 +34,64 @@ events.onLoad = function(_plugin) {
         server = http.createServer(slackRequest);
         server.listen(config.server.port, config.server.host);
     }
+    
+    if (config.usertoken) {
+        pollTimer = setInterval(fetchUsers, (config.fetchInterval||30)*1000);
+        fetchUsers();
+    }
+    
+    slackEmotes = JSON.parse(fs.readFileSync(path.join(__dirname, "emotes.json")));
 }
 
 events.onUnload = function() {
     if (server)
         server.close();
+    if (pollTimer)
+        clearTimer(pollTimer)
 }
 
-function sendMessage(user, content) {
-    slack.webhook({
-        channel : config.channel,
-        username : user,
-        text : content
-    }, function(err, response) {
-        if (response.status != "ok") {
+function fetchUsers() {
+    request("https://slack.com/api/users.list?token="+config.usertoken, function(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            slackUsers = JSON.parse(body);
+        }
+        else {
             console.log(response);
         }
     });
+}
+
+function plugToSlack(message) {
+    if (slackUsers) {
+        for(var i = 0; i < slackUsers.members.length; i++) {
+            var user = slackUsers.members[i];
+            message = message.replace("@"+user.name, "<@"+user.id+"|"+user.name+">");
+        }
+    }
+    
+    for(var k in slackEmotes) {
+        var emote = slackEmotes[k];
+        message = message.replace(k, ":"+emote+":");
+    }
+    
+    return message;
+}
+
+function slackToPlug(message) {
+    if (slackUsers) {
+        for(var i = 0; i < slackUsers.members.length; i++) {
+            var user = slackUsers.members[i];
+            //TODO: replace with a regex
+            message = message.replace("<@"+user.id+"|"+user.name+">", "@"+user.name);
+            message = message.replace("<@"+user.id+">", "@"+user.name);
+        }
+    }
+    for(var k in slackEmotes) {
+        var emote = slackEmotes[k];
+        message = message.replace(":"+emote+":", k);
+    }
+    
+    return message;
 }
 
 events.plug_join = function(user) {
@@ -50,7 +99,7 @@ events.plug_join = function(user) {
 }
 
 events.plug_chat = function(message) {
-    var content = message.message;
+    var content = plugToSlack(message.message);
 
     
     if (config.ignoreself == true) {
@@ -156,7 +205,7 @@ function receivedSlackMessage(message) {
         });
     }
     else {
-        plug.sendChat("<`" + message.user_name + "@slack`> " + message.text);
+        plug.sendChat("<`" + message.user_name + "@slack`> " + slackToPlug(message.text));
     }
     
     plugin.manager.fireEvent("chat", {

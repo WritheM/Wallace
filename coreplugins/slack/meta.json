@@ -10,6 +10,8 @@
 		"username": "webhookbot",
 		"channel": "#ylt-bottest",
 		"ignoreself": true,
+		"usertoken": "",
+		"fetchinterval": 30,
 		"server": {
 			"port": 8124,
 			"host": "0.0.0.0"
