@@ -87,9 +87,10 @@ PluginManager.prototype.getConfig = function() {
 }
 
 PluginManager.prototype.getPlugin = function(pluginName) {
+    pluginName = pluginName.toLowerCase(); 
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
-        if (plugin.meta.name == pluginName) { return plugin; }
+        if (plugin.meta.name.toLowerCase() == pluginName) { return plugin; }
     }
 };
 
