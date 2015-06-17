@@ -177,6 +177,10 @@ SlackUser.prototype.sendReply = function(message) {
     slack.notify({text: "[<@"+this.user.user_id+">] "+message});
 }
 
+SlackUser.prototype.sendEmote = function(message) {
+    slack.notify({text: "*"+message+" *"});
+}
+
 module.exports = {
     "events" : events
 };

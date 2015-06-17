@@ -19,5 +19,8 @@ PlugUser.prototype.sendReply = function(message) {
     this.plug.sendChat("[@"+this.user.username+"] "+message);
 }
 
+PlugUser.prototype.sendEmote = function(message) {
+    this.plug.sendChat("*"+message+" *");
+}
 
 module.exports = PlugUser;
