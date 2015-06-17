@@ -64,8 +64,7 @@ events.plug_command_plugin = function(message) {
         plug.sendChat("[@" + message.from.username + "] Plugin unloaded");
     }
     else if (message.args[0] == "reload") {
-        plugin.unload();
-        plugin.load();
+        plugin.reload();
         plug.sendChat("[@" + message.from.username + "] Plugin reloaded");
     }
     else {
@@ -73,6 +72,9 @@ events.plug_command_plugin = function(message) {
     }
 }
 
+events.plug_command_deps = function(message) {
+    console.log(manager.getDependencies(message.args[0]));
+}
 
 module.exports = {
     "events" : events

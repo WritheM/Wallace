@@ -6,13 +6,11 @@ function PluginManager(_core) {
     this.plugins = []
     this.pluginnames = {};
     this.loaded = [];
-    
-    //this.config = _config;
-    this.core = _core;
-    this.config = _core.config; //temporary
-}
 
-module.exports = PluginManager;
+    // this.config = _config;
+    this.core = _core;
+    this.config = _core.config; // temporary
+}
 
 PluginManager.prototype.start = function() {
     for (var i = 0; i < this.config.core.paths.length; i++) {
@@ -83,7 +81,7 @@ PluginManager.prototype.scanPlugins = function() {
 
 };
 
-//temporary until a proper config system is in place
+// temporary until a proper config system is in place
 PluginManager.prototype.getConfig = function() {
     return this.core.loadConfig();
 }
@@ -110,3 +108,49 @@ PluginManager.prototype.fireEvent = function() {
         }
     }
 }
+
+PluginManager.prototype.getDependencies = function(plugin, missing) {
+    var plugins = [ plugin ];
+    missing = missing || [];
+
+    for (var i = 0; i < plugins.length; i++) {
+        var plugin = plugins[i];
+        if (!plugin.meta.dependencies)
+            continue;
+
+        for ( var j in plugin.meta.dependencies) {
+            var dependency = plugin.meta.dependencies[j];
+            var cplugin = this.getPlugin(dependency);
+            if (cplugin) {
+                if (plugins.indexOf(cplugin) == -1)
+                    plugins.push(cplugin);
+            }
+            else
+                missing.push(dependency);
+        }
+    }
+    return plugins.reverse();
+}
+
+PluginManager.prototype.getDependants = function(plugin) {
+    var dependants = [];
+    for (var i = 0; i < this.plugins.length; i++) {
+        var cplugin = this.plugins[i];
+        var dependencies = this.getDependencies(cplugin);
+        if (dependencies.indexOf(plugin) != -1)
+            dependants.push(cplugin);
+    }
+    return dependants;
+}
+
+PluginManager.prototype.filterLoaded = function(plugins) {
+    var out = [];
+    for (var i = 0; i < plugins.length; i++) {
+        var cplugin = plugins[i];
+        if (cplugin.loaded)
+            out.push(cplugin);
+    }
+    return out;
+}
+
+module.exports = PluginManager;
