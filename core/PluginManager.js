@@ -1,28 +1,13 @@
 var fs = require('fs');
 var PluginInfo = require("./PluginInfo");
 
-function PluginManager() {
+function PluginManager(_config) {
     this.paths = [];
     this.plugins = []
     this.pluginnames = {};
     this.loaded = [];
-
-    PluginManager.prototype.getConfig();
-
-    if (this.config.core.logger === undefined) {
-        // set some sane defaults
-        this.config.core.logger = {
-            "appenders" : [ {
-                type : "console"
-            } ],
-            "replaceConsole" : true
-        }
-    }
     
-    var log4js = require("log4js");
-    log4js.configure(this.config.core.logger);
-    this.logger = log4js.getLogger();
-
+    this.config = _config;
 }
 
 module.exports = PluginManager;
@@ -108,28 +93,6 @@ PluginManager.prototype.getPluginByPath = function(path) {
         var plugin = this.plugins[i];
         if (plugin.directory == path) { return plugin; }
     }
-}
-
-PluginManager.prototype.getConfig = function() {
-    this.config = {
-        "core" : {
-            "paths" : [ "coreplugins", "plugins" ],
-            "plugins" : []
-        }
-    };
-
-    try {
-        this.config = JSON.parse(fs.readFileSync("config.json", "utf8"));
-    }
-    catch (e) {
-        console.log(e);
-    }
-
-    return this.config;
-}
-
-PluginManager.prototype.saveConfig = function() {
-    fs.writeFileSync("config.json", JSON.stringify(this.config, null, 4), "utf8");
 }
 
 PluginManager.prototype.fireEvent = function() {
