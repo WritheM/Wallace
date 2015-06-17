@@ -134,7 +134,7 @@ function receivedSlackMessage(message) {
     // command
     if (message.text[0] == "!") {
         var cmd = message.text.substr(1).split(' ')[0];
-        var args = message.text.substr(1 + cmd.length + 1);
+        var args = message.text.substr(1 + cmd.length + 1).split(' ');
         
         plugin.manager.fireEvent("command_"+cmd, {
             command: cmd,
