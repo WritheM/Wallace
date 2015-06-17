@@ -65,11 +65,14 @@ PluginInfo.prototype.getConfig = function() {
     return manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
 };
 
-PluginInfo.prototype.fireEvent = function(eventname, args) {
+PluginInfo.prototype.fireEvent = function(eventname) {
     if (!this.loaded) { return; }
     if (!(eventname in this.plugin.events)) { return; }
     try {
-        this.plugin.events[eventname](args);
+        var args = Array.prototype.slice.call(arguments);
+        args.shift();
+        
+        this.plugin.events[eventname].apply(this.plugin, args);
     }
     catch (e) {
         console.log("Event handler crashed", e);

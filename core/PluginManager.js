@@ -132,11 +132,11 @@ PluginManager.prototype.saveConfig = function() {
     fs.writeFileSync("config.json", JSON.stringify(this.config, null, 4), "utf8");
 }
 
-PluginManager.prototype.fireEvent = function(event, args) {
+PluginManager.prototype.fireEvent = function() {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (plugin.loaded) {
-            plugin.fireEvent(event, args);
+            plugin.fireEvent.apply(plugin, arguments);
         }
     }
 }
