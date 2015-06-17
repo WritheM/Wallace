@@ -10,12 +10,13 @@ events.onLoad = function(_plugin) {
     plug = manager.getPlugin("plug").plugin.plug;
 }
 
-events.plug_command_save = function(message) {
+events.command_save = function(message) {
     manager.core.saveConfig();
 }
 
 
-events.plug_command_plugins = function(message) {
+events.command_plugins = function(message) {
+    console.log(message);
     if (message.args[0] == "list") {
         var loaded = [];
         var unloaded = [];
@@ -31,23 +32,23 @@ events.plug_command_plugins = function(message) {
             }
         }
         
-        plug.sendChat("[@" + message.from.username + "] Loaded: " + loaded.join(", "));
-        plug.sendChat("[@" + message.from.username + "] Available: " + unloaded.join(", "));
+        message.from.sendReply("Loaded: " + loaded.join(", "));
+        message.from.sendReply("Available: " + unloaded.join(", "));
     }
     else if (message.args[0] == "refresh") {
         manager.scanPlugins();
-        plug.sendChat("[@" + message.from.username + "] Plugins rescanned");
+        message.from.sendReply("Plugins rescanned");
     }
     else {
-        plug.sendChat("[@" + message.from.username + "] Usage: !plugins list/refresh");
+        message.from.sendReply("Usage: !plugins list/refresh");
     }
 }
 
-events.plug_command_plugin = function(message) {
+events.command_plugin = function(message) {
     var plugin = manager.getPlugin(message.args[1]);
     if (["info", "load", "unload", "reload"].indexOf(message.args[0]) != -1) {
         if (!plugin) {
-            plug.sendChat("[@" + message.from.username + "] Error: Couldn't find plugin");
+            message.from.sendReply("Error: Couldn't find plugin");
             return;
         }
     }
@@ -57,18 +58,18 @@ events.plug_command_plugin = function(message) {
     }
     else if (message.args[0] == "load") {
         plugin.load();
-        plug.sendChat("[@" + message.from.username + "] Plugin loaded");
+        message.from.sendReply("Plugin loaded");
     }
     else if (message.args[0] == "unload") {
         plugin.unload();
-        plug.sendChat("[@" + message.from.username + "] Plugin unloaded");
+        message.from.sendReply("Plugin unloaded");
     }
     else if (message.args[0] == "reload") {
         plugin.reload();
-        plug.sendChat("[@" + message.from.username + "] Plugin reloaded");
+        message.from.sendReply("Plugin reloaded");
     }
     else {
-        plug.sendChat("[@" + message.from.username + "] Usage: !plugin info/load/unload/reload [plugin Name]");
+        message.from.sendReply("Usage: !plugin info/load/unload/reload [plugin Name]");
     }
 }
 
