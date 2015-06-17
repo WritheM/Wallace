@@ -146,7 +146,7 @@ function receivedSlackMessage(message) {
         });
     }
     else {
-        plug.sendChat("#" + message.user_name + "# " + message.text);        
+        plug.sendChat("<`" + message.user_name + "@slack`> " + message.text);
     }
     
     plugin.manager.fireEvent("chat", {
