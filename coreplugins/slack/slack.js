@@ -22,7 +22,7 @@ events.onLoad = function(_plugin) {
     });
 
     
-    if (config.server) {
+    if (config.server != undefined) {
         server = http.createServer(slackRequest);
         server.listen(config.server.port, config.server.host);
     }
@@ -116,6 +116,13 @@ events.plug_advance = function(track) {
 }
 
 function slackRequest(req, res) {
+    if (req.method != "POST") {
+        res.writeHead("403", "Fuck off");
+        res.end();
+        req.connection.destroy();
+        return;
+    }
+    
     var body = ''
     req.on('data', function(data) {
         body += data;
@@ -130,6 +137,9 @@ function slackRequest(req, res) {
 };
 
 function receivedSlackMessage(message) {
+    if (!message.token || (config.server.token && message.token != config.server.token))
+        return;
+    
     if (message.user_id == "USLACKBOT")
         return;
 
