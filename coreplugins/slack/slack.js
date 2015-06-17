@@ -15,20 +15,22 @@ events.onLoad = function(_plugin) {
     manager = plugin.manager;
     plug = manager.getPlugin("plug").plugin.plug;
 
-    // https://www.npmjs.com/package/slack-node
     var Slack = require('node-slackr');
     slack = new Slack(config.webhookuri, {
         channel : config.channel,
         username : config.username
     });
 
-    server = http.createServer(slackRequest);
-    server.listen(8124, "127.0.0.1");
-
+    
+    if (config.server) {
+        server = http.createServer(slackRequest);
+        server.listen(config.server.port, config.server.host);
+    }
 }
 
 events.onUnload = function() {
-    server.close();
+    if (server)
+        server.close();
 }
 
 function sendMessage(user, content) {
