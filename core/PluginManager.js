@@ -1,13 +1,15 @@
 var fs = require('fs');
 var PluginInfo = require("./PluginInfo");
 
-function PluginManager(_config) {
+function PluginManager(_core) {
     this.paths = [];
     this.plugins = []
     this.pluginnames = {};
     this.loaded = [];
     
-    this.config = _config;
+    //this.config = _config;
+    this.core = _core;
+    this.config = _core.config; //temporary
 }
 
 module.exports = PluginManager;
@@ -80,6 +82,11 @@ PluginManager.prototype.scanPlugins = function() {
     this.plugins = newplugins;
 
 };
+
+//temporary until a proper config system is in place
+PluginManager.prototype.getConfig = function() {
+    return this.core.loadConfig();
+}
 
 PluginManager.prototype.getPlugin = function(pluginName) {
     for (var i = 0; i < this.plugins.length; i++) {

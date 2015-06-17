@@ -11,7 +11,7 @@ events.onLoad = function(_plugin) {
 }
 
 events.plug_command_save = function(message) {
-    manager.saveConfig();
+    manager.core.saveConfig();
 }
 
 
@@ -45,9 +45,11 @@ events.plug_command_plugins = function(message) {
 
 events.plug_command_plugin = function(message) {
     var plugin = manager.getPlugin(message.args[1]);
-    if (!plugin) {
-        plug.sendChat("[@" + message.from.username + "] Error: Couldn't find plugin");
-        return;
+    if (["info", "load", "unload", "reload"].indexOf(message.args[0]) != -1) {
+        if (!plugin) {
+            plug.sendChat("[@" + message.from.username + "] Error: Couldn't find plugin");
+            return;
+        }
     }
     
     if (message.args[0] == "info") {

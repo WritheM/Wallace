@@ -18,7 +18,7 @@ function Core() {
     log4js.configure(this.config.core.logger);
     this.logger = log4js.getLogger();
     
-    plugman = new PluginManager(this.config);
+    plugman = new PluginManager(this);
     plugman.start();
 }
 
