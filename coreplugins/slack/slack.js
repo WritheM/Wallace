@@ -156,7 +156,7 @@ function receivedSlackMessage(message) {
         });
     }
     else {
-        plug.sendChat("#" + message.user_name + "# " + message.text);        
+        plug.sendChat("<`" + message.user_name + "@slack`> " + message.text);
     }
     
     plugin.manager.fireEvent("chat", {
@@ -188,7 +188,7 @@ SlackUser.prototype.sendReply = function(message) {
 }
 
 SlackUser.prototype.sendEmote = function(message) {
-    slack.notify({text: "*"+message+" *"});
+    slack.notify({text: "_[<@"+this.user.user_id+">] "+message+" _"});
 }
 
 module.exports = {

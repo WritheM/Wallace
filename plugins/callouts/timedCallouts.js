@@ -13,13 +13,18 @@ events.onLoad = function(plugin) {
 };
 
 events.onUnload = function() {
-    window.clearTimeout(timedCallouts.timeoutID);
+    clearTimeout(timedCallouts.timeoutID);
     timedCallouts.timeoutID = null;
 }
 
 events.plug_command_callouts = function(request) {
     var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
-    
+
+    if (request.from.role < 4) {
+        request.from.sendEmote("Sorry you do not have access to this command.");
+        return false;
+    }
+
     if (request.args === undefined) {
         // output the current callout count
         sendChat("There are currently " + timedCallouts.config.callouts.length
