@@ -1,19 +1,25 @@
 {
 	"name": "botplug",
 	"version": "0.1.0",
+	"description": "",
+	"readme": "README.md",
 	"maintainers": [
 		"Joe Carter <youlikethaaaat@gmail.com>",
 		"Michael Writhe <michael@writhem.com>"
 	],
 	"author": "Joe Carter <youlikethaaaat@gmail.com",
+	
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/writhem/botPlug.git"
 	},
 	"license": "MIT",	
 	"dependencies": {
-		"plugapi": "https://github.com/writhem/PlugAPI/tarball/master",
+		"plugapi": "writhem/PlugAPI",
 		"node-slackr": ">=0.1.0",
-		"log4js": ">=0.6.25"
-	}
+		"log4js": ">=0.6.25",
+		"request": ">=2.58.0",
+		"config": ">=1.14.0"
+	},
+	"main": "main.js"
 }
