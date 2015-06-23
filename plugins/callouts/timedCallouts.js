@@ -1,33 +1,35 @@
-var timedCallouts = {
+var PluginInstance = require(__core + "PluginInstance.js");
+
+var timedCallouts = new PluginInstance();
+
+timedCallouts.vars = {
     timeoutID: null,
     storedRequest: null
 };
 
-var events = {};
-
-events.onLoad = function (plugin) {
+timedCallouts.events.onLoad = function (plugin) {
     timedCallouts.config = plugin.getConfig();
 
     timedCallouts.scheduleShoutout();
     timedCallouts.storedRequest = plugin;
 };
 
-events.onUnload = function () {
+timedCallouts.events.onUnload = function () {
     clearTimeout(timedCallouts.timeoutID);
     timedCallouts.timeoutID = null;
 };
 
-events.plug_command_callouts = function (request) {
-    var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
-
+timedCallouts.events.command_callouts = function (request) {
     if (request.from.role < 4) {
         request.from.sendEmote("Sorry you do not have access to this command.");
         return false;
     }
 
-    if (request.args === undefined) {
+    console.log(request.args.length);
+
+    if (request.args == 0) {
         // output the current callout count
-        sendChat("There are currently " + timedCallouts.config.callouts.length
+        request.from.sendEmote("There are currently " + timedCallouts.config.callouts.length
         + " entries in the list of valid callouts. To see each, please type /callouts view #");
     }
     else {
@@ -35,10 +37,10 @@ events.plug_command_callouts = function (request) {
         if (args[0] == "view") {
             if (!isNaN(args[1])) {
                 // rettrieve a certain number
-                sendChat(timedCallouts.config.callouts[args[1] - 1]);
+                request.from.sendEmote(timedCallouts.config.callouts[args[1] - 1]);
             }
             else {
-                sendChat("Invalid callout number. The correct format for this command is /callouts view #");
+                request.from.sendEmote("Invalid callout number. The correct format for this command is /callouts view #");
             }
         }
         else if (args[0] == "add") {
@@ -46,20 +48,20 @@ events.plug_command_callouts = function (request) {
             args.splice(0, 1);
             var newCallout = args.join(' ');
             timedCallouts.config.callouts.push(newCallout);
-            sendChat("Added a callout: " + newCallout);
+            request.from.sendEmote("Added a callout: " + newCallout);
         }
         else if (args[0] == "del") {
             if (!isNaN(args[1])) {
                 // remove a callout
                 timedCallouts.config.callouts.splice(args[1] - 1, 1);
-                sendChat("Removed 1 callout.")
+                request.from.sendEmote("Removed 1 callout.")
             }
             else {
-                sendChat("Invalid callout number. The correct format for this command is /callouts del #");
+                request.from.sendEmote("Invalid callout number. The correct format for this command is /callouts del #");
             }
         }
         else {
-            sendChat("That command was not understood. The valid commands for /callouts are view|add|del")
+            request.from.sendEmote("That command was not understood. The valid commands for /callouts are view|add|del")
         }
     }
 
@@ -96,6 +98,4 @@ timedCallouts.doShoutout = function () {
     timedCallouts.scheduleShoutout();
 };
 
-module.exports = {
-    "events": events
-};
+module.exports = timedCallouts;
