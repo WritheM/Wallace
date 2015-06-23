@@ -2,7 +2,7 @@ var PluginInstance = require(__core + "PluginInstance.js");
 var giphy = new PluginInstance();
 
 var request = require("request");
-var qs = require("qs");
+var qs = require("querystring");
 
 giphy.events.command_gif = function (request) {
     var tags = null;

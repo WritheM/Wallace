@@ -33,7 +33,7 @@ rrd.events.plug_advance = function (track) {
     this.save_stats();
 };
 
-rrd.save_stats() {
+rrd.save_stats = function () {
     clearInterval(statsTimer);
     statsTimer = setInterval(function () {
         save_stats();
