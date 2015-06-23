@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 function PluginCreateInstance(pluginInst) {
     var inst = new PluginInstance();
     inst.prototype = pluginInst;
@@ -18,6 +20,14 @@ PluginInstance.prototype.events.onLoad = function (_plugin) {
 
     if (this.init)
         this.init();
+};
+
+PluginInstance.prototype.loadDir = function(path) {
+    var files = fs.readdirSync(path);
+    for(var i in files) {
+        var file = files[i];
+        require(path+"/"+file)(this);
+    }
 };
 
 module.exports = PluginInstance;

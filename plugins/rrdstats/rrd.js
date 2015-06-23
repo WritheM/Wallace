@@ -2,7 +2,7 @@ var PluginInstance = require(__core + "PluginInstance.js");
 var rrd = new PluginInstance();
 
 var request = require("request");
-var plugAPI = require("plugAPI");
+var plugAPI = require("plugapi");
 
 rrd.init = function() {
     statsTimer = setInterval(function () {

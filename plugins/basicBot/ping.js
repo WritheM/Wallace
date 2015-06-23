@@ -2,6 +2,15 @@ var PluginInstance = require(__core + "PluginInstance.js");
 
 var basicBot = new PluginInstance();
 
+var plugAPI = require("plugapi");
+
+basicBot.init = function() {
+    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+};
+
+basicBot.loadDir(__dirname+"/cmds");
+
+
 // http://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
 basicBot.randmsg = ["Destination network unreachable", "Destination host unreachable", "Destination host unknown"];
 
@@ -19,8 +28,8 @@ basicBot.events.command_ping = function (message) {
 
 
 basicBot.events.command_link = function (message) {
-    if (message.from.rank >= this.core.ranks.RESIDENTDJ || plug.getDJ().id == message.from.id) {
-        var media = plug.getMedia();
+    if (message.from.rank >= this.core.ranks.RESIDENTDJ || this.plug.getDJ().id == message.from.id) {
+        var media = this.plug.getMedia();
         if (media.format == 1) {
             message.from.sendReply("http://youtu.be/"+media.cid);
         }
@@ -30,15 +39,6 @@ basicBot.events.command_link = function (message) {
     }
     else {
         message.from.sendReply("Command only available to DJ's and staff");
-    }
-};
-
-basicBot.events.command_ban = function (message) {
-    if (message.from.rank >= this.core.ranks.BOUNCER) {
-
-    }
-    else {
-        message.from.sendReply("Command only available to staff");
     }
 };
 
