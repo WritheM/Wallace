@@ -8,11 +8,11 @@ events.onLoad = function (_plugin) {
     plugin = _plugin;
     manager = plugin.manager;
     plug = manager.getPlugin("plug").plugin.plug;
-}
+};
 
 events.command_save = function (message) {
     manager.core.saveConfig();
-}
+};
 
 
 events.command_plugins = function (message) {
@@ -42,7 +42,7 @@ events.command_plugins = function (message) {
     else {
         message.from.sendReply("Usage: !plugins list/refresh");
     }
-}
+};
 
 events.command_plugin = function (message) {
     var plugin = manager.getPlugin(message.args[1]);
@@ -71,11 +71,11 @@ events.command_plugin = function (message) {
     else {
         message.from.sendReply("Usage: !plugin info/load/unload/reload [plugin Name]");
     }
-}
+};
 
 events.plug_command_deps = function (message) {
     console.log(manager.getDependencies(message.args[0]));
-}
+};
 
 module.exports = {
     "events": events

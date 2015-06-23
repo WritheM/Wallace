@@ -1,5 +1,5 @@
 var plugin;
-var events = {}
+var events = {};
 
 var plug;
 var config;
@@ -45,7 +45,7 @@ events.onLoad = function (_plugin) {
     plug.on("command:*", eventproxy["command"]);
 
     module.exports.plug = plug;
-}
+};
 
 var eventproxy = {};
 
@@ -53,13 +53,13 @@ eventproxy.generic = function (event, arg) {
     //console.log("generic", event, arg);
     console.log("Event", event, arg);
     plugin.manager.fireEvent("plug_" + event, arg);
-}
+};
 
 eventproxy.roomJoin = function (room) {
     console.log("Joined " + room);
 
     plugin.manager.fireEvent("plug_roomJoin", room);
-}
+};
 
 eventproxy.chat = function (message) {
     //var user = new PlugUser(message.from);
@@ -67,7 +67,7 @@ eventproxy.chat = function (message) {
 
     plugin.manager.fireEvent("plug_chat", message);
     plugin.manager.fireEvent("chat", message);
-}
+};
 
 eventproxy.command = function (message) {
     if (this.event.indexOf(":") == -1) {
@@ -78,12 +78,12 @@ eventproxy.command = function (message) {
 
     plugin.manager.fireEvent("plug_command_" + message.command, message);
     plugin.manager.fireEvent("command_" + message.command, message);
-}
+};
 
 
 events.plug_chat = function (message) {
     console.log("PlugChat: [@" + message.from.username + "] ", message.message);
-}
+};
 
 module.exports = {
     "events": events,

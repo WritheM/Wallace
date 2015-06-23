@@ -11,7 +11,7 @@ events.onLoad = function (_plugin) {
     manager = plugin.manager;
     plug = manager.getPlugin("plug").plugin.plug;
     config = plugin.getConfig();
-}
+};
 
 events.plug_command_wa = function (request) {
     if (config.url !== null
@@ -30,7 +30,7 @@ events.plug_command_wa = function (request) {
     } else {
         console.log("url set as: " + config.url);
     }
-}
+};
 
 module.exports = {
     "events": events

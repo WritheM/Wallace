@@ -3,7 +3,7 @@ var PluginInfo = require("./PluginInfo");
 
 function PluginManager(_core) {
     this.paths = [];
-    this.plugins = []
+    this.plugins = [];
     this.pluginnames = {};
     this.loaded = [];
 
@@ -27,7 +27,7 @@ PluginManager.prototype.start = function () {
         if (inst)
             inst.load();
     }
-}
+};
 
 PluginManager.prototype.addPath = function (path) {
     this.paths.push(path);
@@ -84,7 +84,7 @@ PluginManager.prototype.scanPlugins = function () {
 // temporary until a proper config system is in place
 PluginManager.prototype.getConfig = function () {
     return this.core.loadConfig();
-}
+};
 
 PluginManager.prototype.getPlugin = function (pluginName) {
     pluginName = pluginName.toLowerCase();
@@ -103,7 +103,7 @@ PluginManager.prototype.getPluginByPath = function (path) {
             return plugin;
         }
     }
-}
+};
 
 PluginManager.prototype.fireEvent = function () {
     for (var i = 0; i < this.plugins.length; i++) {
@@ -112,7 +112,7 @@ PluginManager.prototype.fireEvent = function () {
             plugin.fireEvent.apply(plugin, arguments);
         }
     }
-}
+};
 
 PluginManager.prototype.getDependencies = function (plugin, missing) {
     var plugins = [plugin];
@@ -135,7 +135,7 @@ PluginManager.prototype.getDependencies = function (plugin, missing) {
         }
     }
     return plugins.reverse();
-}
+};
 
 PluginManager.prototype.getDependants = function (plugin) {
     var dependants = [];
@@ -146,7 +146,7 @@ PluginManager.prototype.getDependants = function (plugin) {
             dependants.push(cplugin);
     }
     return dependants;
-}
+};
 
 PluginManager.prototype.filterLoaded = function (plugins) {
     var out = [];
@@ -156,6 +156,6 @@ PluginManager.prototype.filterLoaded = function (plugins) {
             out.push(cplugin);
     }
     return out;
-}
+};
 
 module.exports = PluginManager;

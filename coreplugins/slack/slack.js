@@ -1,5 +1,5 @@
 var http = require('http');
-var request = require('request')
+var request = require('request');
 var fs = require('fs');
 var path = require('path');
 
@@ -9,7 +9,7 @@ var slack;
 var plug;
 var config;
 
-var events = {}
+var events = {};
 var server;
 
 var pollTimer;
@@ -41,14 +41,14 @@ events.onLoad = function (_plugin) {
     }
 
     slackEmotes = JSON.parse(fs.readFileSync(path.join(__dirname, "emotes.json")));
-}
+};
 
 events.onUnload = function () {
     if (server)
         server.close();
     if (pollTimer)
         clearTimer(pollTimer)
-}
+};
 
 function fetchUsers() {
     request("https://slack.com/api/users.list?token=" + config.usertoken, function (error, response, body) {
@@ -96,7 +96,7 @@ function slackToPlug(message) {
 
 events.plug_join = function (user) {
 
-}
+};
 
 events.plug_chat = function (message) {
     var content = plugToSlack(message.message);
@@ -121,7 +121,7 @@ events.plug_chat = function (message) {
         icon_url: "https://www.d3s.co/plug/badges/" + message.from.badge + ".png",
         text: content
     });
-}
+};
 
 events.plug_advance = function (track) {
     // on start: lastPlay: { dj: null, media: null, score: null }
@@ -162,7 +162,7 @@ events.plug_advance = function (track) {
         attachments: message
     });
 
-}
+};
 
 function slackRequest(req, res) {
     if (req.method != "POST") {
@@ -172,7 +172,7 @@ function slackRequest(req, res) {
         return;
     }
 
-    var body = ''
+    var body = '';
     req.on('data', function (data) {
         body += data;
     });
@@ -183,8 +183,7 @@ function slackRequest(req, res) {
 
     res.writeHead(200);
     res.end();
-};
-
+}
 function receivedSlackMessage(message) {
     if (!message.token || (config.server.token && message.token != config.server.token))
         return;
@@ -230,15 +229,15 @@ var SlackUser = function (user, slack) {
 
 SlackUser.prototype.sendChat = function (message) {
     slack.notify({text: message});
-}
+};
 
 SlackUser.prototype.sendReply = function (message) {
     slack.notify({text: "[<@" + this.user.user_id + ">] " + message});
-}
+};
 
 SlackUser.prototype.sendEmote = function (message) {
     slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
-}
+};
 
 module.exports = {
     "events": events

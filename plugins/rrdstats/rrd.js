@@ -4,7 +4,7 @@ var plug;
 
 var statsTimer;
 
-var events = {}
+var events = {};
 
 events.onLoad = function (_plugin) {
     plugin = _plugin;
@@ -16,27 +16,27 @@ events.onLoad = function (_plugin) {
         save_stats();
     }, 30 * 1000);
     save_stats();
-}
+};
 
 events.onUnload = function () {
     clearInterval(statsTimer);
-}
+};
 
 events.plug_userJoin = function (user) {
     save_stats();
-}
+};
 
 events.plug_userLeave = function (user) {
     save_stats();
-}
+};
 
 events.plug_chat = function (message) {
 
-}
+};
 
 events.plug_advance = function (track) {
     save_stats();
-}
+};
 
 function save_stats() {
     clearInterval(statsTimer);

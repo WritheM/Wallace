@@ -8,7 +8,7 @@ events.onLoad = function (_plugin) {
     plugin = _plugin;
     manager = plugin.manager;
     plug = manager.getPlugin("plug").plugin.plug;
-}
+};
 
 // http://en.wikipedia.org/wiki/Internet_Control_Message_Protocol
 var randmsg = ["Destination network unreachable", "Destination host unreachable", "Destination host unknown"];
@@ -24,7 +24,7 @@ events.command_ping = function (message) {
 
     //plug.sendChat("[@" + message.from.username + "] " + response);
     message.from.sendReply(response);
-}
+};
 
 module.exports = {
     "events": events

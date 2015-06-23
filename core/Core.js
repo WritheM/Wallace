@@ -38,10 +38,10 @@ Core.prototype.loadConfig = function () {
     }
 
     return this.config;
-}
+};
 
 Core.prototype.saveConfig = function () {
     fs.writeFileSync("config.json", JSON.stringify(this.config, null, 4), "utf8");
-}
+};
 
 module.exports = Core;

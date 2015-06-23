@@ -1,7 +1,7 @@
 var timedCallouts = {
     timeoutID: null,
     storedRequest: null
-}
+};
 
 var events = {};
 
@@ -15,7 +15,7 @@ events.onLoad = function (plugin) {
 events.onUnload = function () {
     clearTimeout(timedCallouts.timeoutID);
     timedCallouts.timeoutID = null;
-}
+};
 
 events.plug_command_callouts = function (request) {
     var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
@@ -31,7 +31,7 @@ events.plug_command_callouts = function (request) {
         + " entries in the list of valid callouts. To see each, please type /callouts view #");
     }
     else {
-        var args = request.args
+        var args = request.args;
         if (args[0] == "view") {
             if (!isNaN(args[1])) {
                 // rettrieve a certain number

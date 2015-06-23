@@ -11,7 +11,7 @@ events.onLoad = function (_plugin) {
     manager = plugin.manager;
     plug = manager.getPlugin("plug").plugin.plug;
     config = plugin.getConfig();
-}
+};
 
 events.plug_command_gif = function (request) {
     if (request.args.length > 0) {
@@ -33,7 +33,7 @@ events.plug_command_gif = function (request) {
             }
         });
     }
-}
+};
 
 events.plug_command_gif.get_gif = function (tags, func) {
     //console.log("giphy query:");
@@ -56,7 +56,7 @@ events.plug_command_gif.get_gif = function (tags, func) {
         console.log("giphy: Got error: " + e.message);
         //plug.sendChat("giphy: Got error: " + e.message);
     });
-}
+};
 
 module.exports = {
     "events": events

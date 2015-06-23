@@ -13,14 +13,14 @@ var PlugUser = function (user, plug) {
 
 PlugUser.prototype.sendChat = function (message) {
     this.plug.sendChat(message);
-}
+};
 
 PlugUser.prototype.sendReply = function (message) {
     this.plug.sendChat("[@" + this.user.username + "] " + message);
-}
+};
 
 PlugUser.prototype.sendEmote = function (message) {
     this.plug.sendChat("/me [@" + this.user.username + "] " + message);
-}
+};
 
 module.exports = PlugUser;
