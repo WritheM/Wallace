@@ -52,6 +52,7 @@ function save_stats() {
         var data = {};
         data.djs = plug.getWaitList().length + (typeof plug.getDJ() === 'undefined'?0:1);
         data.listeners = users.length;
+        data.guests = plug.getGuests();
         data.user = 0;
         data.residentDJ = 0;
         data.bouncer = 0;
