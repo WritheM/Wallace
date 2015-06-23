@@ -12,7 +12,7 @@ function PluginManager(_core) {
     this.config = _core.config; // temporary
 }
 
-PluginManager.prototype.start = function() {
+PluginManager.prototype.start = function () {
     for (var i = 0; i < this.config.core.paths.length; i++) {
         var path = this.config.core.paths[i];
         this.addPath(path);
@@ -29,11 +29,11 @@ PluginManager.prototype.start = function() {
     }
 }
 
-PluginManager.prototype.addPath = function(path) {
+PluginManager.prototype.addPath = function (path) {
     this.paths.push(path);
 };
 
-PluginManager.prototype.scanPlugins = function() {
+PluginManager.prototype.scanPlugins = function () {
     var newplugins = [];
 
     // iterate directories and scan meta.json files (use PluginInfo method)
@@ -82,26 +82,30 @@ PluginManager.prototype.scanPlugins = function() {
 };
 
 // temporary until a proper config system is in place
-PluginManager.prototype.getConfig = function() {
+PluginManager.prototype.getConfig = function () {
     return this.core.loadConfig();
 }
 
-PluginManager.prototype.getPlugin = function(pluginName) {
-    pluginName = pluginName.toLowerCase(); 
+PluginManager.prototype.getPlugin = function (pluginName) {
+    pluginName = pluginName.toLowerCase();
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
-        if (plugin.meta.name.toLowerCase() == pluginName) { return plugin; }
+        if (plugin.meta.name.toLowerCase() == pluginName) {
+            return plugin;
+        }
     }
 };
 
-PluginManager.prototype.getPluginByPath = function(path) {
+PluginManager.prototype.getPluginByPath = function (path) {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
-        if (plugin.directory == path) { return plugin; }
+        if (plugin.directory == path) {
+            return plugin;
+        }
     }
 }
 
-PluginManager.prototype.fireEvent = function() {
+PluginManager.prototype.fireEvent = function () {
     for (var i = 0; i < this.plugins.length; i++) {
         var plugin = this.plugins[i];
         if (plugin.loaded) {
@@ -110,8 +114,8 @@ PluginManager.prototype.fireEvent = function() {
     }
 }
 
-PluginManager.prototype.getDependencies = function(plugin, missing) {
-    var plugins = [ plugin ];
+PluginManager.prototype.getDependencies = function (plugin, missing) {
+    var plugins = [plugin];
     missing = missing || [];
 
     for (var i = 0; i < plugins.length; i++) {
@@ -119,7 +123,7 @@ PluginManager.prototype.getDependencies = function(plugin, missing) {
         if (!plugin.meta.dependencies)
             continue;
 
-        for ( var j in plugin.meta.dependencies) {
+        for (var j in plugin.meta.dependencies) {
             var dependency = plugin.meta.dependencies[j];
             var cplugin = this.getPlugin(dependency);
             if (cplugin) {
@@ -133,7 +137,7 @@ PluginManager.prototype.getDependencies = function(plugin, missing) {
     return plugins.reverse();
 }
 
-PluginManager.prototype.getDependants = function(plugin) {
+PluginManager.prototype.getDependants = function (plugin) {
     var dependants = [];
     for (var i = 0; i < this.plugins.length; i++) {
         var cplugin = this.plugins[i];
@@ -144,7 +148,7 @@ PluginManager.prototype.getDependants = function(plugin) {
     return dependants;
 }
 
-PluginManager.prototype.filterLoaded = function(plugins) {
+PluginManager.prototype.filterLoaded = function (plugins) {
     var out = [];
     for (var i = 0; i < plugins.length; i++) {
         var cplugin = plugins[i];

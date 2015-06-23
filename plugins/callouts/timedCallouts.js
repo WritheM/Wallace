@@ -5,19 +5,19 @@ var timedCallouts = {
 
 var events = {};
 
-events.onLoad = function(plugin) {
+events.onLoad = function (plugin) {
     timedCallouts.config = plugin.getConfig();
-    
+
     timedCallouts.scheduleShoutout();
     timedCallouts.storedRequest = plugin;
 };
 
-events.onUnload = function() {
+events.onUnload = function () {
     clearTimeout(timedCallouts.timeoutID);
     timedCallouts.timeoutID = null;
 }
 
-events.plug_command_callouts = function(request) {
+events.plug_command_callouts = function (request) {
     var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
 
     if (request.from.role < 4) {
@@ -28,7 +28,7 @@ events.plug_command_callouts = function(request) {
     if (request.args === undefined) {
         // output the current callout count
         sendChat("There are currently " + timedCallouts.config.callouts.length
-                + " entries in the list of valid callouts. To see each, please type /callouts view #");
+        + " entries in the list of valid callouts. To see each, please type /callouts view #");
     }
     else {
         var args = request.args
@@ -65,7 +65,7 @@ events.plug_command_callouts = function(request) {
 
 };
 
-timedCallouts.scheduleShoutout = function() {
+timedCallouts.scheduleShoutout = function () {
     if (timedCallouts.timeoutID !== null) {
         // We've got a timeout scheduled already, let's clear it.
         clearTimeout(timedCallouts.timeoutID);
@@ -80,14 +80,14 @@ timedCallouts.scheduleShoutout = function() {
     // Schedule a single timeout
     timedCallouts.timeoutID = setTimeout(timedCallouts.doShoutout, shoutOutInterval);
 };
-timedCallouts.doShoutout = function() {
+timedCallouts.doShoutout = function () {
     // The timeout has executed, we don't need the handle anymore.
     timedCallouts.timeoutID = null;
 
     var message = timedCallouts.config.callouts[Math.floor(Math.random() * timedCallouts.config.callouts.length)];
     if (message && message.trim().length) {
         console.log("scheduledShoutout: " + message);
-        
+
         var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
         sendChat(message);
     }

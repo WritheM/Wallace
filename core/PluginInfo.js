@@ -10,15 +10,15 @@ function PluginInfo(manager, directory) {
     this.reloadMeta();
 }
 
-PluginInfo.prototype.reloadMeta = function() {
+PluginInfo.prototype.reloadMeta = function () {
     var file = this.directory + '/meta.json';
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 }
 
-PluginInfo.prototype._load = function() {
+PluginInfo.prototype._load = function () {
     if (this.loaded)
         return true;
-    
+
     // get plugin script path
     var path = '../' + this.directory + '/' + this.meta.script;
     try {
@@ -38,7 +38,7 @@ PluginInfo.prototype._load = function() {
     }
 };
 
-PluginInfo.prototype._unload = function() {
+PluginInfo.prototype._unload = function () {
     var path = '../' + this.directory + '/' + this.meta.script;
 
     this.fireEvent("onUnload");
@@ -56,7 +56,7 @@ PluginInfo.prototype._unload = function() {
     }
 };
 
-PluginInfo.prototype.load = function() {
+PluginInfo.prototype.load = function () {
     var deps = this.manager.getDependencies(this);
     for (var i = 0; i < deps.length; i++) {
         var dep = deps[i];
@@ -64,7 +64,7 @@ PluginInfo.prototype.load = function() {
     }
 }
 
-PluginInfo.prototype.unload = function() {
+PluginInfo.prototype.unload = function () {
     var deps = this.manager.filterLoaded(this.manager.getDependants(this));
     for (var i = 0; i < deps.length; i++) {
         var dep = deps[i];
@@ -73,22 +73,24 @@ PluginInfo.prototype.unload = function() {
     this._unload();
 }
 
-PluginInfo.prototype.reload = function() {
+PluginInfo.prototype.reload = function () {
     var deps = this.manager.filterLoaded(this.manager.getDependants(this));
-    
+
     this.unload();
     this.load();
-    
+
     //reload everything that got unloaded (as they were depending on this)
-    for(var i = 0; i < deps.length; i++) {
+    for (var i = 0; i < deps.length; i++) {
         var dep = deps[i];
         dep.load();
     }
 }
 
-PluginInfo.prototype.getConfig = function() {
+PluginInfo.prototype.getConfig = function () {
     var manconf = this.manager.getConfig();
-    if (this.meta.name in manconf) { return manconf[this.meta.name]; }
+    if (this.meta.name in manconf) {
+        return manconf[this.meta.name];
+    }
     // no existing userconfig, clone it before returning
 
     var conf = {}
@@ -97,13 +99,17 @@ PluginInfo.prototype.getConfig = function() {
     return manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
 };
 
-PluginInfo.prototype.fireEvent = function(eventname) {
-    if (!this.loaded) { return; }
-    if (!(eventname in this.plugin.events)) { return; }
+PluginInfo.prototype.fireEvent = function (eventname) {
+    if (!this.loaded) {
+        return;
+    }
+    if (!(eventname in this.plugin.events)) {
+        return;
+    }
     try {
         var args = Array.prototype.slice.call(arguments);
         args.shift();
-        
+
         this.plugin.events[eventname].apply(this.plugin, args);
     }
     catch (e) {
