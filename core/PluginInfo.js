@@ -22,7 +22,14 @@ PluginInfo.prototype._load = function () {
     // get plugin script path
     var path = '../' + this.directory + '/' + this.meta.script;
     try {
-        this.plugin = require(path);
+        var plugin = require(path);
+
+        if (typeof (plugin) === "function") {
+            this.plugin = plugin(this);
+        }
+        else {
+            this.plugin = plugin;
+        }
 
         // if here, plugin loaded successfully
 

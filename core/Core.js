@@ -1,8 +1,22 @@
 var fs = require("fs");
 var PluginManager = require("./PluginManager.js");
 
+global.__core = __dirname + '/';
+
 function Core() {
     Core.prototype.loadConfig();
+
+
+    //TODO: make into class
+    this.ranks = {
+        "NORMAL": 0,
+        "RESIDENTDJ": 20,
+        "BOUNCER": 40,
+        "MANAGER": 60,
+        "COHOST": 80,
+        "HOST": 100
+    };
+
 
     if (this.config.core.logger === undefined) {
         // set some sane defaults
