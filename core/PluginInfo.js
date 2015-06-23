@@ -35,7 +35,7 @@ PluginInfo.prototype._load = function () {
 
         this.loaded = true;
 
-        this.plugin.events.onLoad(this);
+        this.plugin.events.onLoad.call(this.plugin, this);
         console.log("Loaded " + this.meta.name);
     }
     catch (e) {
