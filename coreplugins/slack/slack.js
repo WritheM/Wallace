@@ -82,11 +82,11 @@ slack.slackToPlug = function (message) {
     return message;
 };
 
-events.plug_join = function (user) {
+slack.events.plug_join = function (user) {
 
 };
 
-events.plug_chat = function (message) {
+slack.events.plug_chat = function (message) {
     var content = this.plugToSlack(message.message);
 
 
@@ -111,7 +111,7 @@ events.plug_chat = function (message) {
     });
 };
 
-events.plug_advance = function (track) {
+slack.events.plug_advance = function (track) {
     // on start: lastPlay: { dj: null, media: null, score: null }
 
     var message = [];
@@ -228,6 +228,4 @@ SlackUser.prototype.sendEmote = function (message) {
     slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
 };
 
-module.exports = {
-    "events": events
-};
+module.exports = slack;
