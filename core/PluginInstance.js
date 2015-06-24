@@ -8,6 +8,7 @@ function PluginCreateInstance(pluginInst) {
 
 var PluginInstance = function () {
     this.pinst = this;
+    this.files = [];
 };
 
 PluginInstance.prototype.events = {};
@@ -26,7 +27,20 @@ PluginInstance.prototype.loadDir = function(path) {
     var files = fs.readdirSync(path);
     for(var i in files) {
         var file = files[i];
+        this.files.push(require.resolve(path));
         require(path+"/"+file)(this);
+    }
+};
+
+PluginInstance.prototype.onUnload = function () {
+    for(var i in this.loaded) {
+        var name = this.loaded[i];
+        try {
+            delete require.cache[name];
+        }
+        catch (e) {
+
+        }
     }
 };
 
