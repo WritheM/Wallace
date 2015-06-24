@@ -27,7 +27,7 @@ PluginInstance.prototype.loadDir = function(path) {
     var files = fs.readdirSync(path);
     for(var i in files) {
         var file = files[i];
-        this.files.push(require.resolve(path));
+        this.files.push(require.resolve(file));
         require(path+"/"+file)(this);
     }
 };
