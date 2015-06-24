@@ -1,10 +1,26 @@
 {
   "author": [
     "ylt",
-    "pironig"
+    "pironic"
   ],
   "name": "basicBot",
   "description": "suite of basicBot commands",
-  "script": ["ping.js"],
-  "dependencies": ["plug"]
+  "script": ["main.js"],
+  "config": {
+    "ban": {
+        "permission": ["BOUNCER"]
+    },
+    "ping": {
+        "permission": ["NORMAL"]
+    },
+    "skip": {
+        "reasons": {
+            "theme": "This song does not fit the room theme. Check http://wiki.writhem.com/display/radio/Our+Music+Choices for more information.",
+            "op": "second sample"
+        },
+        "permission": ["BOUNCER"]
+    }
+  },
+
+    "dependencies": ["plug"]
 }

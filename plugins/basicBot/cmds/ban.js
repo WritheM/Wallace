@@ -5,10 +5,10 @@ module.exports = function (basicBot) {
             //TODO: check if arg is user object
             var uid = message.args[0].id;
             //this.plug.moderateBanUser(uid, plugAPI.BAN.HOUR);
-            this.plug.sendChat("abc");
+            this.plug.sendChat("abc: "+uid);
         }
         else {
-            message.from.sendReply("Command only available to staff");
+            message.from.sendEmote("Command only available to staff");
         }
     };
 
