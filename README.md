@@ -5,7 +5,7 @@ BotPlug
 [![npm](https://img.shields.io/npm/v/npm.svg)](https://github.com/WritheM/botPlug/#requirements)
 [![node.js](https://img.shields.io/node/v/gh-badges.svg)](https://github.com/WritheM/botPlug/#requirements)
 [![Github Releases](https://img.shields.io/github/release/WritheM/botPlug.svg)](https://github.com/WritheM/botPlug/releases)
-[![Codacy](https://img.shields.io/codacy/ce11553d61ea42bbbdbe96930c20de06.svg)](https://www.codacy.com/app/pironic/botPlug)
+[![Codacy](https://img.shields.io/codacy/ce11553d61ea42bbbdbe96930c20de06.svg)](https://www.codacy.com/app/WritheM/botPlug)
 [![GitHub issues](https://img.shields.io/github/issues/WritheM/botPlug.svg)](https://github.com/WritheM/botPlug/issues)
 [![Travis](https://img.shields.io/travis/WritheM/botPlug.svg)](https://travis-ci.org/WritheM/botPlug)
 
