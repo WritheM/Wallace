@@ -26,10 +26,10 @@ PluginInstance.prototype.events.onLoad = function (_plugin) {
 PluginInstance.prototype.loadDir = function (path) {
     var files = fs.readdirSync(path);
     for (var i in files) {
-        var file = files[i];
+        var file = path + "/" + files[i];
         var name = require.resolve(file);
         this.files.push(name);
-
+        
         //small hack, try unloading before loading
         // in case of error/plugin not unloading properly
         try {
@@ -39,7 +39,7 @@ PluginInstance.prototype.loadDir = function (path) {
 
         }
 
-        require(path + "/" + file)(this);
+        require(file)(this);
     }
 };
 
