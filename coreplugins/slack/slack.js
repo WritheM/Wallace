@@ -22,7 +22,9 @@ slack.init = function () {
     }
 
     if (this.config.usertoken) {
-        this.pollTimer = setInterval(function() { this.fetchUsers() }, (this.config.fetchInterval || 30) * 1000);
+        this.pollTimer = setInterval((function (slack) {
+            return slack.fetchUsers
+        })(this), (this.config.fetchInterval || 30) * 1000);
         this.fetchUsers();
     }
 
@@ -38,7 +40,7 @@ slack.events.onUnload = function () {
 
 slack.fetchUsers = function () {
     request("https://slack.com/api/users.list?token=" + this.config.usertoken, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+        if (!error && response.statusCode === 200) {
             this.slackUsers = JSON.parse(body);
         }
         else {
@@ -88,11 +90,11 @@ events.plug_chat = function (message) {
     var content = this.plugToSlack(message.message);
 
 
-    if (this.config.ignoreself == true) {
+    if (this.config.ignoreself === true) {
         if (message.command)
             return;
 
-        if (message.from.username == this.plug.getSelf().username)
+        if (message.from.username === this.plug.getSelf().username)
             return;
     }
 
@@ -175,11 +177,11 @@ slack.receivedSlackMessage = function (message) {
     if (!message.token || (this.config.server.token && message.token != this.config.server.token))
         return;
 
-    if (message.user_id == "USLACKBOT")
+    if (message.user_id === "USLACKBOT")
         return;
 
     // command
-    if (message.text[0] == "!") {
+    if (message.text[0] === "!") {
         var cmd = message.text.substr(1).split(' ')[0];
         var args = message.text.substr(1 + cmd.length + 1).split(' ');
 
@@ -210,7 +212,7 @@ var SlackUser = function (user, slack) {
     this.rank = 0;
 
     //no tidy way of doing this for now
-    if (admins.indexOf(user.user_name) != -1)
+    if (admins.indexOf(user.user_name) !== -1)
         this.rank = 100;
 };
 

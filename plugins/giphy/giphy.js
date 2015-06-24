@@ -33,7 +33,7 @@ giphy.get_gif = function (tags, func) {
 
     var query = qs.stringify(params);
     request(this.config.url + "?" + query, function (error, response, body) {
-        if (error || response.statusCode != 200) {
+        if (error || response.statusCode !== 200) {
             console.error("giphy: Got error: " + body);
         }
         else {

@@ -6,8 +6,8 @@ var plugAPI = require("plugapi");
 
 basicBot.init = function() {
     this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
-
-    basicBot.loadDir(__dirname+"/cmds");
 };
+
+basicBot.loadDir(__dirname+"/cmds");
 
 module.exports = basicBot;

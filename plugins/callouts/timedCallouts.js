@@ -29,14 +29,14 @@ timedCallouts.events.command_callouts = function (message) {
 
     console.log(message.args.length);
 
-    if (message.args == 0) {
+    if (message.args === 0) {
         // output the current callout count
         message.from.sendEmote("There are currently " + timedCallouts.config.callouts.length
         + " entries in the list of valid callouts. To see each, please type /callouts view #");
     }
     else {
         var args = message.args;
-        if (args[0] == "view") {
+        if (args[0] === "view") {
             if (!isNaN(args[1])) {
                 // rettrieve a certain number
                 message.from.sendEmote(timedCallouts.config.callouts[args[1] - 1]);
@@ -45,14 +45,14 @@ timedCallouts.events.command_callouts = function (message) {
                 message.from.sendEmote("Invalid callout number. The correct format for this command is /callouts view #");
             }
         }
-        else if (args[0] == "add") {
+        else if (args[0] === "add") {
             // add a callout
             args.splice(0, 1);
             var newCallout = args.join(' ');
             timedCallouts.config.callouts.push(newCallout);
             message.from.sendEmote("Added a callout: " + newCallout);
         }
-        else if (args[0] == "del") {
+        else if (args[0] === "del") {
             if (!isNaN(args[1])) {
                 // remove a callout
                 timedCallouts.config.callouts.splice(args[1] - 1, 1);

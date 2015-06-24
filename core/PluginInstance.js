@@ -29,7 +29,7 @@ PluginInstance.prototype.loadDir = function (path) {
         var file = path + "/" + files[i];
         var name = require.resolve(file);
         this.files.push(name);
-        
+
         //small hack, try unloading before loading
         // in case of error/plugin not unloading properly
         try {

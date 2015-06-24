@@ -6,7 +6,7 @@ module.exports = function (basicBot) {
             this.plug.moderateForceSkip();
 
             //TODO: impelment timeout so it does things in the proper order.
-            if (message.args != 0) {
+            if (message.args !== 0) {
                 this.plug.sendChat("/me @" + this.plug.getDJ().username+" "+ this.config.skip.reasons[message.args[0]]);
             }
 

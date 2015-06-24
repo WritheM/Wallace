@@ -26,7 +26,7 @@ events.onLoad = function (_plugin) {
 
     for (var i in PlugAPI.events) {
         var event = PlugAPI.events[i];
-        if (!(event in eventproxy) && event != "command") {
+        if (!(event in eventproxy) && event !== "command") {
             // javascript closure abuse: -
             // goal is to have "event" defined and to also pass that into the event
             // function
@@ -73,7 +73,7 @@ eventproxy.chat = function (message) {
 };
 
 eventproxy.command = function (message) {
-    if (this.event.indexOf(":") == -1) {
+    if (this.event.indexOf(":") === -1) {
         return;
     }
 

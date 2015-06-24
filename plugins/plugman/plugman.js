@@ -46,25 +46,25 @@ events.command_plugins = function (message) {
 
 events.command_plugin = function (message) {
     var plugin = manager.getPlugin(message.args[1]);
-    if (["info", "load", "unload", "reload"].indexOf(message.args[0]) != -1) {
+    if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
         if (!plugin) {
             message.from.sendReply("Error: Couldn't find plugin");
             return;
         }
     }
 
-    if (message.args[0] == "info") {
+    if (message.args[0] === "info") {
 
     }
-    else if (message.args[0] == "load") {
+    else if (message.args[0] === "load") {
         plugin.load();
         message.from.sendReply("Plugin loaded");
     }
-    else if (message.args[0] == "unload") {
+    else if (message.args[0] === "unload") {
         plugin.unload();
         message.from.sendReply("Plugin unloaded");
     }
-    else if (message.args[0] == "reload") {
+    else if (message.args[0] === "reload") {
         plugin.reload();
         message.from.sendReply("Plugin reloaded");
     }

@@ -1,6 +1,6 @@
 module.exports = function (basicBot) {
     basicBot.events.command_link = function (message) {
-        if (message.from.rank >= this.core.ranks.RESIDENTDJ || this.plug.getDJ().id == message.from.id) {
+        if (message.from.rank >= this.core.ranks.RESIDENTDJ || this.plug.getDJ().id === message.from.id) {
             var media = this.plug.getMedia();
             if (typeof media === 'undefined') {
                 message.from.sendEmote("The link to the currently playing song is: http://youtu.be/dQw4w9WgXcQ")

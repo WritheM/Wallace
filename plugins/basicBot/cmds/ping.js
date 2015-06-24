@@ -9,7 +9,7 @@ module.exports = function (basicBot) {
 
 			var response = "Pong! Your access level is currently: " + message.from.rank.toString();
 
-			if (rand == 0) {
+			if (rand === 0) {
 				response = this.randmsg[Math.floor(Math.random() * this.randmsg.length)];
 			}
 
