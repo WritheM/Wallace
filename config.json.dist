@@ -1,0 +1,34 @@
+{
+    "core": {
+        "paths" : [ "coreplugins", "plugins" ],
+        "plugins" : ["plug", "slack", "plugman"]
+    },
+    "plug": {
+        "auth": {
+            "email": "plug email",
+            "password": "*****",
+            "room": "room slug to join"
+        }
+    },
+    "slack": {
+        "webhookuri": "Your slack webhook url",
+        "username": "The name you want the relay to talk as",
+        "channel": "#the channel in slack you want the relay to post to",
+		"ignoreself": true,
+		"usertoken": "Your slack user token",
+		"server": {
+			"port": 80,
+			"host": "0.0.0.0"
+		}
+    },
+    "callouts": {
+        "shoutOutInterval": 60,
+        "callouts": [
+            "Welcome to the WritheM Radio Community! We are running \"BotPlug\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/botPlug",
+            "This a second example of a callout that will be posted to your plug community every 60 minutes."
+        ],
+        "permission": [
+            "guest"
+        ]
+    }
+}

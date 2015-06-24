@@ -5,7 +5,7 @@ var request = require("request");
 var plugAPI = require("plugapi");
 
 rrd.init = function() {
-    statsTimer = setInterval(function () {
+    rrd.statsTimer = setInterval(function () {
         this.save_stats();
     }, 30 * 1000);
     this.save_stats();
@@ -14,7 +14,7 @@ rrd.init = function() {
 };
 
 rrd.events.onUnload = function () {
-    clearInterval(statsTimer);
+    clearInterval(rrd.statsTimer);
 };
 
 rrd.events.plug_userJoin = function (user) {
@@ -25,18 +25,14 @@ rrd.events.plug_userLeave = function (user) {
     this.save_stats();
 };
 
-rrd.events.plug_chat = function (message) {
-
-};
-
 rrd.events.plug_advance = function (track) {
     this.save_stats();
 };
 
 rrd.save_stats = function () {
-    clearInterval(statsTimer);
-    statsTimer = setInterval(function () {
-        save_stats();
+    clearInterval(rrd.statsTimer);
+    rrd.statsTimer = setInterval(function () {
+        rrd.save_stats();
     }, 30 * 1000);
 
     if (config.url !== null
@@ -61,42 +57,40 @@ rrd.save_stats = function () {
         levels.sum = 0;
         for (var i = 0; i < users.length; ++i) {
             var rawrank = users[i].role;
-            if (users[i].gRole == plugAPI.GLOBAL_ROLES.ADMIN) {
+            if (users[i].gRole === plugAPI.GLOBAL_ROLES.ADMIN) {
                 ++data.admin
             } else if (parseInt(users[i].gRole) > 1) {
                 ++data.brandAmbassador;
-            } else if (rawrank == plugAPI.ROOM_ROLE.NONE) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.NONE) {
                 ++data.user;
-            } else if (rawrank == plugAPI.ROOM_ROLE.RESIDENTDJ) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.RESIDENTDJ) {
                 ++data.residentDJ;
-            } else if (rawrank == plugAPI.ROOM_ROLE.BOUNCER) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.BOUNCER) {
                 ++data.bouncer;
-            } else if (rawrank == plugAPI.ROOM_ROLE.MANAGER) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.MANAGER) {
                 ++data.manager;
-            } else if (rawrank == plugAPI.ROOM_ROLE.COHOST) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.COHOST) {
                 ++data.coHost;
-            } else if (rawrank == plugAPI.ROOM_ROLE.HOST) {
+            } else if (rawrank === plugAPI.ROOM_ROLE.HOST) {
                 ++data.host;
             } else {
                 ++data.user;
-                console.log(users[i])
+                console.log(users[i]);
             }
             ++levels.count;
             levels.sum += users[i].level;
         }
         data.avgLevel = levels.sum / levels.count;
 
-        var payload = JSON.stringify([data]);
-
         request.post({
             url: this.config.url,
             body: data
         }, function (err, httpResponse, body) {
-            if (error || response.statusCode != 200) {
+            if (error || response.statusCode !== 200) {
                 console.error("rrd error:" + body);
             }
         });
     }
-}
+};
 
 module.exports = rrd;
