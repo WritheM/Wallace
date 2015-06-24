@@ -17,6 +17,8 @@ timedCallouts.events.onLoad = function (plugin) {
 timedCallouts.events.onUnload = function () {
     clearTimeout(timedCallouts.timeoutID);
     timedCallouts.timeoutID = null;
+
+    PluginInstance.prototype.onUnload.call(this);
 };
 
 timedCallouts.events.command_callouts = function (message) {
