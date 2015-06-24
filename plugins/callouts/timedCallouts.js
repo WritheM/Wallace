@@ -19,28 +19,28 @@ timedCallouts.events.onUnload = function () {
     timedCallouts.timeoutID = null;
 };
 
-timedCallouts.events.command_callouts = function (request) {
-    if (request.from.role < 4) {
-        request.from.sendEmote("Sorry you do not have access to this command.");
+timedCallouts.events.command_callouts = function (message) {
+    if (message.from.role < 4) {
+        message.from.sendEmote("Sorry you do not have access to this command.");
         return false;
     }
 
-    console.log(request.args.length);
+    console.log(message.args.length);
 
-    if (request.args == 0) {
+    if (message.args == 0) {
         // output the current callout count
-        request.from.sendEmote("There are currently " + timedCallouts.config.callouts.length
+        message.from.sendEmote("There are currently " + timedCallouts.config.callouts.length
         + " entries in the list of valid callouts. To see each, please type /callouts view #");
     }
     else {
-        var args = request.args;
+        var args = message.args;
         if (args[0] == "view") {
             if (!isNaN(args[1])) {
                 // rettrieve a certain number
-                request.from.sendEmote(timedCallouts.config.callouts[args[1] - 1]);
+                message.from.sendEmote(timedCallouts.config.callouts[args[1] - 1]);
             }
             else {
-                request.from.sendEmote("Invalid callout number. The correct format for this command is /callouts view #");
+                message.from.sendEmote("Invalid callout number. The correct format for this command is /callouts view #");
             }
         }
         else if (args[0] == "add") {
@@ -48,20 +48,20 @@ timedCallouts.events.command_callouts = function (request) {
             args.splice(0, 1);
             var newCallout = args.join(' ');
             timedCallouts.config.callouts.push(newCallout);
-            request.from.sendEmote("Added a callout: " + newCallout);
+            message.from.sendEmote("Added a callout: " + newCallout);
         }
         else if (args[0] == "del") {
             if (!isNaN(args[1])) {
                 // remove a callout
                 timedCallouts.config.callouts.splice(args[1] - 1, 1);
-                request.from.sendEmote("Removed 1 callout.")
+                message.from.sendEmote("Removed 1 callout.")
             }
             else {
-                request.from.sendEmote("Invalid callout number. The correct format for this command is /callouts del #");
+                message.from.sendEmote("Invalid callout number. The correct format for this command is /callouts del #");
             }
         }
         else {
-            request.from.sendEmote("That command was not understood. The valid commands for /callouts are view|add|del")
+            message.from.sendEmote("That command was not understood. The valid commands for /callouts are view|add|del")
         }
     }
 
