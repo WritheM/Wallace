@@ -17,6 +17,9 @@ events.onLoad = function (_plugin) {
         password: config.auth.password
     });
 
+    plug.multiLine = true;
+    plug.multiLineLimit = 5;
+
     plug.connect(config.auth.room);
 
     //plug.on('roomJoin', eventproxy.roomJoin);
