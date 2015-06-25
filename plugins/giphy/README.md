@@ -10,7 +10,7 @@ The configuration for this plugin are non-mandatory, meaning that shown below is
         "api_key": "dc6zaTOxFJmzC",
         "rating": "pg-13",
         "url": "http://api.giphy.com/v1/gifs/random",
-        "permission": ["guest"]
+        "permission": ["NORMAL"]
     },
 
 # Commands

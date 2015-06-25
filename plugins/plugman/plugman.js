@@ -17,7 +17,7 @@ events.command_save = function (message) {
 
 events.command_plugins = function (message) {
     console.log(message);
-    if (message.args[0] == "list") {
+    if (message.args[0] === "list") {
         var loaded = [];
         var unloaded = [];
 
@@ -35,7 +35,7 @@ events.command_plugins = function (message) {
         message.from.sendReply("Loaded: " + loaded.join(", "));
         message.from.sendReply("Available: " + unloaded.join(", "));
     }
-    else if (message.args[0] == "refresh") {
+    else if (message.args[0] === "refresh") {
         manager.scanPlugins();
         message.from.sendReply("Plugins rescanned");
     }

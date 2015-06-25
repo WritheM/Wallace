@@ -20,12 +20,13 @@ PluginManager.prototype.start = function () {
 
     this.scanPlugins();
 
-    for (var i = 0; i < this.config.core.plugins.length; i++) {
-        var plugin = this.config.core.plugins[i];
+    for (var n = 0; n < this.config.core.plugins.length; n++) {
+        var plugin = this.config.core.plugins[n];
 
         var inst = this.getPlugin(plugin);
-        if (inst)
+        if (inst) {
             inst.load();
+        }
     }
 };
 
@@ -37,13 +38,13 @@ PluginManager.prototype.scanPlugins = function () {
     var newplugins = [];
 
     // iterate directories and scan meta.json files (use PluginInfo method)
-    for (var i = 0; i < this.paths.length; i++) {
-        var dir = this.paths[i];
+    for (var n = 0; n < this.paths.length; n++) {
+        var dir = this.paths[n];
         var files = fs.readdirSync(dir);
         for (var j = 0; j < files.length; j++) {
             var file = dir + "/" + files[j];
             if (fs.lstatSync(file).isDirectory()) {
-                var plugin = this.getPluginByPath(file);
+                plugin = this.getPluginByPath(file);
                 if (plugin != null) {
                     try {
                         plugin.reloadMeta(plugin);
@@ -57,7 +58,7 @@ PluginManager.prototype.scanPlugins = function () {
                 }
                 else {
                     try {
-                        var plugin = new PluginInfo(this, file);
+                        plugin = new PluginInfo(this, file);
                         newplugins.push(plugin);
                     }
                     catch (e) {
@@ -119,19 +120,22 @@ PluginManager.prototype.getDependencies = function (plugin, missing) {
     missing = missing || [];
 
     for (var i = 0; i < plugins.length; i++) {
-        var plugin = plugins[i];
-        if (!plugin.meta.dependencies)
+        plugin = plugins[i];
+        if (!plugin.meta.dependencies) {
             continue;
+        }
 
         for (var j in plugin.meta.dependencies) {
             var dependency = plugin.meta.dependencies[j];
             var cplugin = this.getPlugin(dependency);
             if (cplugin) {
-                if (plugins.indexOf(cplugin) === -1)
+                if (plugins.indexOf(cplugin) === -1) {
                     plugins.push(cplugin);
+                }
             }
-            else
+            else {
                 missing.push(dependency);
+            }
         }
     }
     return plugins.reverse();
@@ -142,8 +146,9 @@ PluginManager.prototype.getDependants = function (plugin) {
     for (var i = 0; i < this.plugins.length; i++) {
         var cplugin = this.plugins[i];
         var dependencies = this.getDependencies(cplugin);
-        if (dependencies.indexOf(plugin) !== -1)
+        if (dependencies.indexOf(plugin) !== -1) {
             dependants.push(cplugin);
+        }
     }
     return dependants;
 };
@@ -152,8 +157,9 @@ PluginManager.prototype.filterLoaded = function (plugins) {
     var out = [];
     for (var i = 0; i < plugins.length; i++) {
         var cplugin = plugins[i];
-        if (cplugin.loaded)
+        if (cplugin.loaded) {
             out.push(cplugin);
+        }
     }
     return out;
 };

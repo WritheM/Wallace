@@ -19,8 +19,8 @@ slack.init = function () {
     if (this.config.server !== undefined) {
         this.server = http.createServer((function (that) {
             return function () {
-                that.slackRequest.apply(that, arguments)
-            }
+                that.slackRequest.apply(that, arguments);
+            };
         })(this));
         this.server.listen(this.config.server.port, this.config.server.host);
     }
@@ -29,7 +29,7 @@ slack.init = function () {
         this.pollTimer = setInterval((function (slack) {
             return function () {
                 slack.fetchUsers.apply(slack, arguments);
-            }
+            };
         })(this), (this.config.fetchInterval || 30) * 1000);
         this.fetchUsers();
     }
@@ -38,10 +38,12 @@ slack.init = function () {
 };
 
 slack.events.onUnload = function () {
-    if (this.server)
+    if (this.server) {
         this.server.close();
-    if (this.pollTimer)
-        clearTimer(this.pollTimer)
+    }
+    if (this.pollTimer) {
+        clearTimer(this.pollTimer);
+    }
 };
 
 slack.fetchUsers = function () {
@@ -97,11 +99,13 @@ slack.events.plug_chat = function (message) {
 
 
     if (this.config.ignoreself === true) {
-        if (message.command)
+        if (message.command) {
             return;
+        }
 
-        if (message.from.username === this.plug.getSelf().username)
+        if (message.from.username === this.plug.getSelf().username) {
             return;
+        }
     }
 
     var parts = content.split(" ");

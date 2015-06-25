@@ -9,11 +9,11 @@ Make sure to include the following in your config.json and customize as required
     "callouts": {
         "shoutOutInterval": 60,
         "callouts": [
-            "Welcome to the WritheM Radio Community! We are running \"BotPlug\", created by ylt and pironic, which is open source and located at https://gihub.com/WritheM/botPlug",
+            "Welcome to the WritheM Radio Community! We are running \"BotPlug\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/botPlug",
             "This is a second example of a callout for your community!"
         ],
         "permission": [
-            "guest"
+            "NORMAL"
         ]
     }
 

@@ -25,7 +25,7 @@ function Core() {
                 type: "console"
             }],
             "replaceConsole": true
-        }
+        };
     }
 
     var log4js = require("log4js");

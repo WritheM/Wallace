@@ -46,8 +46,9 @@ events.onLoad = function (_plugin) {
     this.core = this.manager.core;
     this.config = _plugin.getConfig();
 
-    if (this.init)
+    if (this.init) {
         this.init();
+    }
 };
 
 events.onUnload = function () {

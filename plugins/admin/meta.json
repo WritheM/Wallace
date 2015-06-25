@@ -8,9 +8,9 @@
   "config": {
     "echo": {
         "permission": ["COHOST"]
-    },
-    "say": {
+      },
+      "say": {
         "permission": ["BOUNCER"]
-    }
+      }
   }
 }

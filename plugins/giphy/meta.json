@@ -5,7 +5,7 @@
   "config": {
     "api_key": "dc6zaTOxFJmzC",
     "rating": "pg-13",
-    "permission": ["guest"],
+    "permission": ["NORMAL"],
     "url": "http://api.giphy.com/v1/gifs/random"
   },
   "script": "giphy.js"

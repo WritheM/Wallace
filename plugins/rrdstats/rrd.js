@@ -58,8 +58,8 @@ rrd.save_stats = function () {
         for (var i = 0; i < users.length; ++i) {
             var rawrank = users[i].role;
             if (users[i].gRole === plugAPI.GLOBAL_ROLES.ADMIN) {
-                ++data.admin
-            } else if (parseInt(users[i].gRole) > 1) {
+                ++data.admin;
+            } else if (parseInt(users[i].gRole,10) > 1) {
                 ++data.brandAmbassador;
             } else if (rawrank === plugAPI.ROOM_ROLE.NONE) {
                 ++data.user;

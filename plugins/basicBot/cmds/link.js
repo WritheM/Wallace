@@ -3,7 +3,7 @@ module.exports = function (basicBot) {
         if (message.from.rank >= this.core.ranks.RESIDENTDJ || this.plug.getDJ().id === message.from.id) {
             var media = this.plug.getMedia();
             if (typeof media === 'undefined') {
-                message.from.sendEmote("The link to the currently playing song is: http://youtu.be/dQw4w9WgXcQ")
+                message.from.sendEmote("The link to the currently playing song is: http://youtu.be/dQw4w9WgXcQ");
             }
             else if (media.format === 1) {
                 message.from.sendEmote("The link to the currently playing song is: http://youtu.be/"+media.cid);

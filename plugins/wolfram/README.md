@@ -12,7 +12,10 @@ Soft boiled eggs are looked up only if there no match found on wolfram.
 Make sure to include the following in your config.json
 
     "wolfram": {
-        "url": "http://0.0.0.0/wolfram/?q="
+        "url": "http://0.0.0.0/wolfram/?q=",
+        "permission": [
+            "NORMAL"
+        ]
     }
 
 # Commands

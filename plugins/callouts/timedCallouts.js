@@ -56,14 +56,14 @@ timedCallouts.events.command_callouts = function (message) {
             if (!isNaN(args[1])) {
                 // remove a callout
                 timedCallouts.config.callouts.splice(args[1] - 1, 1);
-                message.from.sendEmote("Removed 1 callout.")
+                message.from.sendEmote("Removed 1 callout.");
             }
             else {
                 message.from.sendEmote("Invalid callout number. The correct format for this command is /callouts del #");
             }
         }
         else {
-            message.from.sendEmote("That command was not understood. The valid commands for /callouts are view|add|del")
+            message.from.sendEmote("That command was not understood. The valid commands for /callouts are view|add|del");
         }
     }
 
