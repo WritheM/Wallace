@@ -17,13 +17,19 @@ slack.init = function () {
 
 
     if (this.config.server !== undefined) {
-        this.server = http.createServer(this.slackRequest);
+        this.server = http.createServer((function (that) {
+            return function () {
+                that.slackRequest.apply(that, arguments)
+            }
+        })(this));
         this.server.listen(this.config.server.port, this.config.server.host);
     }
 
     if (this.config.usertoken) {
         this.pollTimer = setInterval((function (slack) {
-            return slack.fetchUsers
+            return function () {
+                slack.fetchUsers.apply(slack, arguments);
+            }
         })(this), (this.config.fetchInterval || 30) * 1000);
         this.fetchUsers();
     }
@@ -87,7 +93,7 @@ slack.events.plug_join = function (user) {
 };
 
 slack.events.plug_chat = function (message) {
-    var content = this.plugToSlack(message.message);
+    var content = slack.plugToSlack(message.message);
 
 
     if (this.config.ignoreself === true) {
@@ -104,7 +110,7 @@ slack.events.plug_chat = function (message) {
         content = "_" + parts.join(" ") + " _";
     }
 
-    this.slack.notify({
+    slack.slack.notify({
         username: message.from.username,
         icon_url: "https://www.d3s.co/plug/badges/" + message.from.badge + ".png",
         text: content
@@ -145,7 +151,7 @@ slack.events.plug_advance = function (track) {
         });
     }
 
-    this.slack.notify({
+    slack.slack.notify({
         username: "Events",
         attachments: message
     });
@@ -153,6 +159,7 @@ slack.events.plug_advance = function (track) {
 };
 
 slack.slackRequest = function (req, res) {
+    var that = this;
     if (req.method !== "POST") {
         res.writeHead("403", "Fuck off");
         res.end();
@@ -166,7 +173,7 @@ slack.slackRequest = function (req, res) {
     });
     req.on('end', function () {
         var qs = require('querystring');
-        this.receivedSlackMessage(qs.parse(body));
+        that.receivedSlackMessage(qs.parse(body));
     });
 
     res.writeHead(200);
@@ -217,15 +224,15 @@ var SlackUser = function (user, slack) {
 };
 
 SlackUser.prototype.sendChat = function (message) {
-    slack.notify({text: message});
+    slack.slack.notify({text: message});
 };
 
 SlackUser.prototype.sendReply = function (message) {
-    slack.notify({text: "[<@" + this.user.user_id + ">] " + message});
+    slack.slack.notify({text: "[<@" + this.user.user_id + ">] " + message});
 };
 
 SlackUser.prototype.sendEmote = function (message) {
-    slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
+    slack.slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
 };
 
 module.exports = slack;
