@@ -16,7 +16,7 @@ events.command_save = function (message) {
 
 
 events.command_plugins = function (message) {
-    if (message.from.rank >= this.core.ranks.MANAGER) {
+    if (message.from.rank >= manager.core.ranks.MANAGER) {
         if (message.args[0] == "list") {
             var loaded = [];
             var unloaded = [];
@@ -49,7 +49,7 @@ events.command_plugins = function (message) {
 };
 
 events.command_plugin = function (message) {
-    if (message.from.rank >= this.core.ranks.MANAGER) {
+    if (message.from.rank >= manager.core.ranks.MANAGER) {
         var plugin = manager.getPlugin(message.args[1]);
         if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
             if (!plugin) {
