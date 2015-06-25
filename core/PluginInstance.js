@@ -1,5 +1,7 @@
 var fs = require('fs');
 
+var events = {};
+
 function PluginCreateInstance(pluginInst) {
     var inst = new PluginInstance();
     inst.prototype = pluginInst;
@@ -9,18 +11,13 @@ function PluginCreateInstance(pluginInst) {
 var PluginInstance = function () {
     this.pinst = this;
     this.files = [];
-};
 
-PluginInstance.prototype.events = {};
+    this.events = {};
+    for(var k in events) {
+        this.events[k] = events[k];
+    }
 
-PluginInstance.prototype.events.onLoad = function (_plugin) {
-    this.plugin = _plugin;
-    this.manager = _plugin.manager;
-    this.core = this.manager.core;
-    this.config = _plugin.getConfig();
-
-    if (this.init)
-        this.init();
+    console.log(events, this.events);
 };
 
 PluginInstance.prototype.loadDir = function (path) {
@@ -43,7 +40,17 @@ PluginInstance.prototype.loadDir = function (path) {
     }
 };
 
-PluginInstance.prototype.onUnload = function () {
+events.onLoad = function (_plugin) {
+    this.plugin = _plugin;
+    this.manager = _plugin.manager;
+    this.core = this.manager.core;
+    this.config = _plugin.getConfig();
+
+    if (this.init)
+        this.init();
+};
+
+events.onUnload = function () {
     for (var i in this.files) {
         var name = this.files[i];
         try {
