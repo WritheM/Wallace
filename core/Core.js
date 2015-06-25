@@ -7,7 +7,7 @@ function Core() {
     Core.prototype.loadConfig();
 
 
-    //TODO: make into class
+    //TODO: make into class (issue #25)
     this.ranks = {
         "NORMAL": 0,
         "RESIDENTDJ": 20,

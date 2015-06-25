@@ -1,5 +1,7 @@
 var fs = require('fs');
 
+var events = {};
+
 function PluginCreateInstance(pluginInst) {
     var inst = new PluginInstance();
     inst.prototype = pluginInst;
@@ -9,11 +11,36 @@ function PluginCreateInstance(pluginInst) {
 var PluginInstance = function () {
     this.pinst = this;
     this.files = [];
+
+    this.events = {};
+    for(var k in events) {
+        this.events[k] = events[k];
+    }
+
+    console.log(events, this.events);
 };
 
-PluginInstance.prototype.events = {};
+PluginInstance.prototype.loadDir = function (path) {
+    var files = fs.readdirSync(path);
+    for (var i in files) {
+        var file = path + "/" + files[i];
+        var name = require.resolve(file);
+        this.files.push(name);
 
-PluginInstance.prototype.events.onLoad = function (_plugin) {
+        //small hack, try unloading before loading
+        // in case of error/plugin not unloading properly
+        try {
+            delete require.cache[name];
+        }
+        catch (e) {
+
+        }
+
+        require(file)(this);
+    }
+};
+
+events.onLoad = function (_plugin) {
     this.plugin = _plugin;
     this.manager = _plugin.manager;
     this.core = this.manager.core;
@@ -23,18 +50,9 @@ PluginInstance.prototype.events.onLoad = function (_plugin) {
         this.init();
 };
 
-PluginInstance.prototype.loadDir = function(path) {
-    var files = fs.readdirSync(path);
-    for(var i in files) {
-        var file = files[i];
-        this.files.push(require.resolve(path));
-        require(path+"/"+file)(this);
-    }
-};
-
-PluginInstance.prototype.onUnload = function () {
-    for(var i in this.loaded) {
-        var name = this.loaded[i];
+events.onUnload = function () {
+    for (var i in this.files) {
+        var name = this.files[i];
         try {
             delete require.cache[name];
         }

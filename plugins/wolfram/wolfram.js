@@ -9,7 +9,7 @@ wolfram.command_wa = function (request) {
         && config.url.length > 0) {
 
         request(config.url + encodeURIComponent(request.args.join(" ")), function (error, response, body) {
-            if (error || response.statusCode != 200) {
+            if (error || response.statusCode !== 200) {
                 console.error("!wa: Got Error:" + body);
             }
             else {
