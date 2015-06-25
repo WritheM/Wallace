@@ -16,60 +16,69 @@ events.command_save = function (message) {
 
 
 events.command_plugins = function (message) {
-    console.log(message);
-    if (message.args[0] == "list") {
-        var loaded = [];
-        var unloaded = [];
+    if (message.from.rank >= this.core.ranks.MANAGER) {
+        if (message.args[0] == "list") {
+            var loaded = [];
+            var unloaded = [];
 
-        for (var i = 0; i < manager.plugins.length; i++) {
-            var plugin = manager.plugins[i];
-            console.log(plugin);
-            if (plugin.loaded) {
-                loaded.push(plugin.meta.name);
+            for (var i = 0; i < manager.plugins.length; i++) {
+                var plugin = manager.plugins[i];
+                console.log(plugin);
+                if (plugin.loaded) {
+                    loaded.push(plugin.meta.name);
+                }
+                else {
+                    unloaded.push(plugin.meta.name);
+                }
             }
-            else {
-                unloaded.push(plugin.meta.name);
-            }
+
+            message.from.sendReply("Loaded: " + loaded.join(", "));
+            message.from.sendReply("Available: " + unloaded.join(", "));
         }
-
-        message.from.sendReply("Loaded: " + loaded.join(", "));
-        message.from.sendReply("Available: " + unloaded.join(", "));
-    }
-    else if (message.args[0] == "refresh") {
-        manager.scanPlugins();
-        message.from.sendReply("Plugins rescanned");
+        else if (message.args[0] == "refresh") {
+            manager.scanPlugins();
+            message.from.sendReply("Plugins rescanned");
+        }
+        else {
+            message.from.sendReply("Usage: !plugins list/refresh");
+        }
     }
     else {
-        message.from.sendReply("Usage: !plugins list/refresh");
+        message.from.sendEmote("Command only available to staff");
     }
 };
 
 events.command_plugin = function (message) {
-    var plugin = manager.getPlugin(message.args[1]);
-    if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
-        if (!plugin) {
-            message.from.sendReply("Error: Couldn't find plugin");
-            return;
+    if (message.from.rank >= this.core.ranks.MANAGER) {
+        var plugin = manager.getPlugin(message.args[1]);
+        if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
+            if (!plugin) {
+                message.from.sendReply("Error: Couldn't find plugin");
+                return;
+            }
+        }
+
+        if (message.args[0] === "info") {
+
+        }
+        else if (message.args[0] === "load") {
+            plugin.load();
+            message.from.sendReply("Plugin loaded");
+        }
+        else if (message.args[0] === "unload") {
+            plugin.unload();
+            message.from.sendReply("Plugin unloaded");
+        }
+        else if (message.args[0] === "reload") {
+            plugin.reload();
+            message.from.sendReply("Plugin reloaded");
+        }
+        else {
+            message.from.sendReply("Usage: !plugin info/load/unload/reload [plugin Name]");
         }
     }
-
-    if (message.args[0] === "info") {
-
-    }
-    else if (message.args[0] === "load") {
-        plugin.load();
-        message.from.sendReply("Plugin loaded");
-    }
-    else if (message.args[0] === "unload") {
-        plugin.unload();
-        message.from.sendReply("Plugin unloaded");
-    }
-    else if (message.args[0] === "reload") {
-        plugin.reload();
-        message.from.sendReply("Plugin reloaded");
-    }
     else {
-        message.from.sendReply("Usage: !plugin info/load/unload/reload [plugin Name]");
+        message.from.sendEmote("Command only available to staff");
     }
 };
 
