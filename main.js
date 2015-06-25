@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-GLOBAL.BOTPLUGVERSION = '0.0.1';
+GLOBAL.BOTPLUGVERSION = '0.1.0-RC1';
 
 var Core = require("./core/Core.js");
 
