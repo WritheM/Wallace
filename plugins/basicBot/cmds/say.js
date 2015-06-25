@@ -4,7 +4,6 @@ module.exports = function (basicBot) {
         var text = message.message.substr(message.command.length + 2);
         basicBot.plug.sendChat(message.from.username+": "+text);
 
-        if (typeof message.plug !== 'undefined')
-            basicBot.plug.moderateDeleteChat(message.raw.cid);
+        basicBot.plug.moderateDeleteChat(message.raw.cid);
     };
 };
