@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require("fs");
 var PluginInfo = require("./PluginInfo");
 
 function PluginManager(_core) {
@@ -36,6 +36,7 @@ PluginManager.prototype.addPath = function (path) {
 
 PluginManager.prototype.scanPlugins = function () {
     var newplugins = [];
+    var plugin = null;
 
     // iterate directories and scan meta.json files (use PluginInfo method)
     for (var n = 0; n < this.paths.length; n++) {
@@ -71,7 +72,7 @@ PluginManager.prototype.scanPlugins = function () {
 
     // unload plugins that no-longer exist.
     for (var i = 0; i < this.plugins.length; i++) {
-        var plugin = this.plugins[i];
+        plugin = this.plugins[i];
         if (newplugins.indexOf(plugin) === -1) {
             console.log(plugin.meta.name + " no longer exists, unload");
             plugin.unload();

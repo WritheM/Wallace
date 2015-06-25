@@ -41,7 +41,7 @@ rrd.save_stats = function () {
         var users = this.plug.getUsers();
         //console.log(users);
         var data = {};
-        data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === 'undefined' ? 0 : 1);
+        data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === "undefined" ? 0 : 1);
         data.listeners = users.length;
         data.guests = this.plug.getGuests();
         data.user = 0;

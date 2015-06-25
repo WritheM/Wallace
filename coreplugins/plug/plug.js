@@ -5,12 +5,13 @@ var plug;
 var config;
 
 var PlugUser = require("./PlugUser.js");
+var eventproxy = {};
 
 events.onLoad = function (_plugin) {
     plugin = _plugin;
     config = plugin.getConfig();
 
-    var PlugAPI = require('plugapi');
+    var PlugAPI = require("plugapi");
 
     plug = new PlugAPI({
         email: config.auth.email,
@@ -22,7 +23,7 @@ events.onLoad = function (_plugin) {
 
     plug.connect(config.auth.room);
 
-    //plug.on('roomJoin', eventproxy.roomJoin);
+    //plug.on("roomJoin", eventproxy.roomJoin);
 
     for (var i in PlugAPI.events) {
         var event = PlugAPI.events[i];
@@ -49,8 +50,6 @@ events.onLoad = function (_plugin) {
 
     module.exports.plug = plug;
 };
-
-var eventproxy = {};
 
 eventproxy.generic = function (event, arg) {
     //console.log("generic", event, arg);

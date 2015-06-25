@@ -1,15 +1,15 @@
 var PluginInstance = require(__core + "PluginInstance.js");
 var slack = new PluginInstance();
 
-var http = require('http');
-var request = require('request');
-var fs = require('fs');
-var path = require('path');
+var http = require("http");
+var request = require("request");
+var fs = require("fs");
+var path = require("path");
 
 slack.init = function () {
     this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
 
-    var Slack = require('node-slackr');
+    var Slack = require("node-slackr");
     this.slack = new Slack(this.config.webhookuri, {
         channel: this.config.channel,
         username: this.config.username
@@ -109,7 +109,7 @@ slack.events.plug_chat = function (message) {
     }
 
     var parts = content.split(" ");
-    if (parts[0] == "/me") {
+    if (parts[0] === "/me") {
         parts.shift();
         content = "_" + parts.join(" ") + " _";
     }
@@ -171,12 +171,12 @@ slack.slackRequest = function (req, res) {
         return;
     }
 
-    var body = '';
-    req.on('data', function (data) {
+    var body = "";
+    req.on("data", function (data) {
         body += data;
     });
-    req.on('end', function () {
-        var qs = require('querystring');
+    req.on("end", function () {
+        var qs = require("querystring");
         that.receivedSlackMessage(qs.parse(body));
     });
 
@@ -193,8 +193,8 @@ slack.receivedSlackMessage = function (message) {
 
     // command
     if (message.text[0] === "!") {
-        var cmd = message.text.substr(1).split(' ')[0];
-        var args = message.text.substr(1 + cmd.length + 1).split(' ');
+        var cmd = message.text.substr(1).split(" ")[0];
+        var args = message.text.substr(1 + cmd.length + 1).split(" ");
 
         this.manager.fireEvent("command_" + cmd, {
             command: cmd,
@@ -223,8 +223,9 @@ var SlackUser = function (user, slack) {
     this.rank = 0;
 
     //no tidy way of doing this for now
-    if (admins.indexOf(user.user_name) !== -1)
+    if (admins.indexOf(user.user_name) !== -1) {
         this.rank = 100;
+    }
 };
 
 SlackUser.prototype.sendChat = function (message) {

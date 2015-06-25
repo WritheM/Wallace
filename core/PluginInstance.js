@@ -1,12 +1,6 @@
-var fs = require('fs');
+var fs = require("fs");
 
 var events = {};
-
-function PluginCreateInstance(pluginInst) {
-    var inst = new PluginInstance();
-    inst.prototype = pluginInst;
-    return inst;
-}
 
 var PluginInstance = function () {
     this.pinst = this;
@@ -62,5 +56,11 @@ events.onUnload = function () {
         }
     }
 };
+
+function PluginCreateInstance(pluginInst) {
+    var inst = new PluginInstance();
+    inst.prototype = pluginInst;
+    return inst;
+}
 
 module.exports = PluginInstance;

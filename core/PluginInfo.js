@@ -1,4 +1,4 @@
-var fs = require('fs');
+var fs = require("fs");
 
 function PluginInfo(manager, directory) {
     this.manager = manager;
@@ -11,16 +11,17 @@ function PluginInfo(manager, directory) {
 }
 
 PluginInfo.prototype.reloadMeta = function () {
-    var file = this.directory + '/meta.json';
+    var file = this.directory + "/meta.json";
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 };
 
 PluginInfo.prototype._load = function () {
-    if (this.loaded)
+    if (this.loaded) {
         return true;
+    }
 
     // get plugin script path
-    var path = '../' + this.directory + '/' + this.meta.script;
+    var path = "../" + this.directory + "/" + this.meta.script;
     try {
         var plugin = require(path);
 
@@ -46,7 +47,7 @@ PluginInfo.prototype._load = function () {
 };
 
 PluginInfo.prototype._unload = function () {
-    var path = '../' + this.directory + '/' + this.meta.script;
+    var path = "../" + this.directory + "/" + this.meta.script;
 
     this.fireEvent("onUnload");
 
@@ -101,9 +102,11 @@ PluginInfo.prototype.getConfig = function () {
     // no existing userconfig, clone it before returning
 
     var conf = {};
-    if ("config" in this.meta)
+    if ("config" in this.meta) {
         conf = this.meta.config;
-    return manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
+    }
+    manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
+    return manconf;
 };
 
 PluginInfo.prototype.fireEvent = function (eventname) {
