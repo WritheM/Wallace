@@ -88,7 +88,7 @@ rrd.save_stats = function () {
         request.post({
             url: this.config.url,
             body: data
-        }, function (err, httpResponse, body) {
+        }, function (error, httpResponse, body) {
             if (error || response.statusCode !== 200) {
                 console.error("rrd error:" + body);
             }
