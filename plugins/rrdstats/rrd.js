@@ -92,7 +92,7 @@ rrd.save_stats = function () {
             if (error || response.statusCode !== 200) {
                 console.error("rrd error:" + body);
             }
-        };
+        });
         link = null;
 
         var req = http.request(options, function (resp) {
