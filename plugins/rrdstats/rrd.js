@@ -93,22 +93,6 @@ rrd.save_stats = function () {
                 console.error("rrd error:" + body);
             }
         });
-        link = null;
-
-        var req = http.request(options, function (resp) {
-            //console.log('rrdstats response code: '+resp.statusCode);
-            resp.on('data', function (chunk) {
-                //console.log('BODY: ' + chunk);
-                //console.log('HEADERS: '+JSON.stringify(resp.headers));
-            })
-
-
-        });
-        req.on('error', function (e) {
-            console.log('rrdstats error caught: ' + e.message);
-        });
-        req.write(payload);
-        req.end();
     }
 };
 
