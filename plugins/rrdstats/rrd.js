@@ -38,9 +38,9 @@ rrd.save_stats = function () {
     var http = require('http');
     var url = require('url');
 
-    if (config.url !== null
-        && typeof config.url !== "undefined"
-        && config.url.length > 0) {
+    if (this.config.url !== null
+        && typeof this.config.url !== "undefined"
+        && this.config.url.length > 0) {
         var users = this.plug.getUsers();
         //console.log(users);
         var data = {};
