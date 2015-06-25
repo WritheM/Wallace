@@ -5,10 +5,10 @@ var request = require("request");
 var qs = require("qs");
 
 wolfram.command_wa = function (request) {
-    if (config.url !== null
-        && config.url.length > 0) {
+    if (this.config.url !== null
+        && this.config.url.length > 0) {
 
-        request(config.url + encodeURIComponent(request.args.join(" ")), function (error, response, body) {
+        request(this.config.url + encodeURIComponent(request.args.join(" ")), function (error, response, body) {
             if (error || response.statusCode !== 200) {
                 console.error("!wa: Got Error:" + body);
             }
@@ -18,7 +18,7 @@ wolfram.command_wa = function (request) {
         });
     }
     else {
-        console.log("url set as: " + config.url);
+        console.log("url set as: " + this.config.url);
     }
 };
 
