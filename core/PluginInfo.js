@@ -106,7 +106,7 @@ PluginInfo.prototype.getConfig = function () {
         conf = this.meta.config;
     }
     manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
-    return manconf;
+    return [this.meta.name];
 };
 
 PluginInfo.prototype.fireEvent = function (eventname) {
