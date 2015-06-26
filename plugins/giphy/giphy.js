@@ -4,18 +4,18 @@ var giphy = new PluginInstance();
 var request = require("request");
 var qs = require("querystring");
 
-giphy.events.command_gif = function (request) {
+giphy.events.command_gif = function (message) {
     var tags = null;
-    if (request.args.length > 0) {
-        tags = request.args.join(" ");
+    if (message.args.length > 0) {
+        tags = message.args.join(" ");
     }
 
     this.get_gif(tags, function (id) {
         if (typeof id !== 'undefined') {
-            request.from.sendReply("http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
+            message.from.sendReply("http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
         }
         else {
-            request.from.sendReply("Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
+            message.from.sendReply("Invalid tags, try something different. [Tags: " + (tags ? tags : "Random GIF") + "]");
         }
     });
 

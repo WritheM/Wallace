@@ -41,7 +41,7 @@ rrd.save_stats = function () {
         var users = this.plug.getUsers();
         //console.log(users);
         var data = {};
-        data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === "undefined" ? 0 : 1);
+        data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === 'undefined' ? 0 : 1);
         data.listeners = users.length;
         data.guests = this.plug.getGuests();
         data.user = 0;
@@ -78,12 +78,15 @@ rrd.save_stats = function () {
                 console.log(users[i]);
             }
             ++levels.count;
-            levels.sum += users[i].level;
+            levels.sum = levels.sum + users[i].level;
+            data.avgLevel = levels.sum / levels.count;
         }
-        data.avgLevel = levels.sum / levels.count;
 
         request.post({
             url: this.config.url,
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: data
         }, function (err, httpResponse, body) {
             if (error || response.statusCode !== 200) {
