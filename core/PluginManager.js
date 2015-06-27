@@ -1,5 +1,5 @@
 var fs = require("fs");
-var PluginInfo = require("./PluginInfo");
+var PluginLoader = require("./PluginLoader");
 
 function PluginManager(_core) {
     this.paths = [];
@@ -38,7 +38,7 @@ PluginManager.prototype.scanPlugins = function () {
     var newplugins = [];
     var plugin = null;
 
-    // iterate directories and scan meta.json files (use PluginInfo method)
+    // iterate directories and scan meta.json files (use PluginLoader method)
     for (var n = 0; n < this.paths.length; n++) {
         var dir = this.paths[n];
         var files = fs.readdirSync(dir);
@@ -59,7 +59,7 @@ PluginManager.prototype.scanPlugins = function () {
                 }
                 else {
                     try {
-                        plugin = new PluginInfo(this, file);
+                        plugin = new PluginLoader(this, file);
                         newplugins.push(plugin);
                     }
                     catch (e) {

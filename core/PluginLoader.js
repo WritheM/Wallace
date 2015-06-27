@@ -1,6 +1,6 @@
 var fs = require("fs");
 
-function PluginInfo(manager, directory) {
+function PluginLoader(manager, directory) {
     this.manager = manager;
     this.directory = directory;
 
@@ -10,12 +10,12 @@ function PluginInfo(manager, directory) {
     this.reloadMeta();
 }
 
-PluginInfo.prototype.reloadMeta = function () {
+PluginLoader.prototype.reloadMeta = function () {
     var file = this.directory + "/meta.json";
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 };
 
-PluginInfo.prototype._load = function () {
+PluginLoader.prototype._load = function () {
     if (this.loaded) {
         return true;
     }
@@ -46,7 +46,7 @@ PluginInfo.prototype._load = function () {
     }
 };
 
-PluginInfo.prototype._unload = function () {
+PluginLoader.prototype._unload = function () {
     var path = "../" + this.directory + "/" + this.meta.script;
 
     this.fireEvent("onUnload");
@@ -64,7 +64,7 @@ PluginInfo.prototype._unload = function () {
     }
 };
 
-PluginInfo.prototype.load = function () {
+PluginLoader.prototype.load = function () {
     var deps = this.manager.getDependencies(this);
     for (var i = 0; i < deps.length; i++) {
         var dep = deps[i];
@@ -72,7 +72,7 @@ PluginInfo.prototype.load = function () {
     }
 };
 
-PluginInfo.prototype.unload = function () {
+PluginLoader.prototype.unload = function () {
     var deps = this.manager.filterLoaded(this.manager.getDependants(this));
     for (var i = 0; i < deps.length; i++) {
         var dep = deps[i];
@@ -81,7 +81,7 @@ PluginInfo.prototype.unload = function () {
     this._unload();
 };
 
-PluginInfo.prototype.reload = function () {
+PluginLoader.prototype.reload = function () {
     var deps = this.manager.filterLoaded(this.manager.getDependants(this));
 
     this.unload();
@@ -94,7 +94,7 @@ PluginInfo.prototype.reload = function () {
     }
 };
 
-PluginInfo.prototype.getConfig = function () {
+PluginLoader.prototype.getConfig = function () {
     var manconf = this.manager.getConfig();
     if (this.meta.name in manconf) {
         return manconf[this.meta.name];
@@ -109,7 +109,7 @@ PluginInfo.prototype.getConfig = function () {
     return [this.meta.name];
 };
 
-PluginInfo.prototype.fireEvent = function (eventname) {
+PluginLoader.prototype.fireEvent = function (eventname) {
     if (!this.loaded) {
         return;
     }
@@ -127,4 +127,4 @@ PluginInfo.prototype.fireEvent = function (eventname) {
     }
 };
 
-module.exports = PluginInfo;
+module.exports = PluginLoader;
