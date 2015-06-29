@@ -1,4 +1,5 @@
 var fs = require("fs");
+var PluginConfig = require("./PluginConfig.js");
 
 function PluginLoader(manager, directory) {
     this.manager = manager;
@@ -96,17 +97,15 @@ PluginLoader.prototype.reload = function () {
 
 PluginLoader.prototype.getConfig = function () {
     var manconf = this.manager.getConfig();
-    if (this.meta.name in manconf) {
-        return manconf[this.meta.name];
-    }
-    // no existing userconfig, clone it before returning
 
     var conf = {};
     if ("config" in this.meta) {
         conf = this.meta.config;
     }
-    manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
-    return [this.meta.name];
+
+    //this.config.util.extendDeep(this.config, )
+    manconf.util.setModuleDefaults(this.meta.name, conf);
+    return new PluginConfig(manconf, this.meta.name);
 };
 
 PluginLoader.prototype.fireEvent = function (eventname) {

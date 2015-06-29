@@ -85,7 +85,7 @@ PluginManager.prototype.scanPlugins = function () {
 
 // temporary until a proper config system is in place
 PluginManager.prototype.getConfig = function () {
-    return this.core.loadConfig();
+    return this.core.config;
 };
 
 PluginManager.prototype.getPlugin = function (pluginName) {
