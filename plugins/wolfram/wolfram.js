@@ -3,8 +3,7 @@ var wolfram = new PluginInstance();
 
 var request = require("request");
 
-wolfram.command_wa = function (message) {
-    console.log("wa detected");
+wolfram.events.command_wa = function (message) {
     if (this.config.url !== null
         && this.config.url.length > 0) {
 
@@ -13,7 +12,7 @@ wolfram.command_wa = function (message) {
                 console.error("!wa: Got Error:" + body);
             }
             else {
-                request.from.sendEmote("/me " + body);
+                message.from.sendEmote(body);
             }
         });
     }
