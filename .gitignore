@@ -6,6 +6,8 @@
 
 #bot configuration, contains passwords
 config.json
+config/*
+!config/default.*
 
 #nodejs modules
 node_modules/
