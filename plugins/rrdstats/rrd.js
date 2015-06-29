@@ -5,12 +5,12 @@ var request = require("request");
 var plugAPI = require("plugapi");
 
 rrd.init = function() {
+    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+
     rrd.statsTimer = setInterval(function () {
         this.save_stats();
     }, 30 * 1000);
     this.save_stats();
-
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
 };
 
 rrd.events.onUnload = function () {
@@ -35,9 +35,9 @@ rrd.save_stats = function () {
         rrd.save_stats();
     }, 30 * 1000);
 
-    if (config.url !== null
-        && typeof config.url !== "undefined"
-        && config.url.length > 0) {
+    if (this.config.url !== null
+        && typeof this.config.url !== "undefined"
+        && this.config.url.length > 0) {
         var users = this.plug.getUsers();
         //console.log(users);
         var data = {};
@@ -78,19 +78,19 @@ rrd.save_stats = function () {
                 console.log(users[i]);
             }
             ++levels.count;
-            levels.sum = levels.sum + users[i].level;
-            data.avgLevel = levels.sum / levels.count;
+            levels.sum += users[i].level;
         }
+        data.avgLevel = levels.sum / levels.count;
 
         request.post({
             url: this.config.url,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: data
-        }, function (err, httpResponse, body) {
+            json: [data]
+        }, function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                console.error("rrd error:" + body);
+                console.error("rrd error:" , error, response, body);
             }
         });
     }
