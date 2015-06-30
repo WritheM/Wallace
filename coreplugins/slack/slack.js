@@ -66,8 +66,10 @@ slack.plugToSlack = function (message) {
     }
 
     for (var k in this.slackEmotes) {
-        var emote = this.slackEmotes[k];
-        message = message.replace(k, ":" + emote + ":");
+        if (this.slackEmotes.hasOwnProperty(k)) {
+            var emote = this.slackEmotes[k];
+            message = message.replace(k, ":" + emote + ":");
+        }
     }
 
     return message;
@@ -83,8 +85,10 @@ slack.slackToPlug = function (message) {
         }
     }
     for (var k in this.slackEmotes) {
-        var emote = this.slackEmotes[k];
-        message = message.replace(":" + emote + ":", k);
+        if (this.slackEmotes.hasOwnProperty(k)) {
+            var emote = this.slackEmotes[k];
+            message = message.replace(":" + emote + ":", k);
+        }
     }
 
     return message;
@@ -185,11 +189,13 @@ slack.slackRequest = function (req, res) {
 };
 
 slack.receivedSlackMessage = function (message) {
-    if (!message.token || (this.config.server.token && message.token != this.config.server.token))
+    if (!message.token || (this.config.server.token && message.token !== this.config.server.token)) {
         return;
+    }
 
-    if (message.user_id === "USLACKBOT")
+    if (message.user_id === "USLACKBOT") {
         return;
+    }
 
     // command
     if (message.text[0] === "!") {

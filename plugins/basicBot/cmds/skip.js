@@ -1,7 +1,7 @@
 module.exports = function (basicBot) {
     basicBot.events.command_skip = function (message) {
         var dj = this.plug.getDJ();
-        if (typeof dj !== 'undefined' && (message.from.rank >= this.core.ranks.BOUNCER || dj.id === message.from.id)) {
+        if (typeof dj !== "undefined" && (message.from.rank >= this.core.ranks.BOUNCER || dj.id === message.from.id)) {
             this.plug.sendChat("/me [" + message.from.username+" used skip, it was very effective!]");
             this.plug.moderateForceSkip();
 

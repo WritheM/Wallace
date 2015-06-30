@@ -8,7 +8,9 @@ var PluginInstance = function () {
 
     this.events = {};
     for(var k in events) {
-        this.events[k] = events[k];
+        if (events.hasOwnProperty(k)) {
+            this.events[k] = events[k];
+        }
     }
 
     console.log(events, this.events);
@@ -16,7 +18,7 @@ var PluginInstance = function () {
 
 PluginInstance.prototype.loadDir = function (path) {
     var files = fs.readdirSync(path);
-    for (var i in files) {
+    for(var i = 0; i < files.length; i++) {
         var file = path + "/" + files[i];
         var name = require.resolve(file);
         this.files.push(name);
@@ -46,7 +48,7 @@ events.onLoad = function (_plugin) {
 };
 
 events.onUnload = function () {
-    for (var i in this.files) {
+    for (var i = 0; i < this.files.length; i++) {
         var name = this.files[i];
         try {
             delete require.cache[name];

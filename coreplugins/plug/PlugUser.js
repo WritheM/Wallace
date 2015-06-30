@@ -4,7 +4,9 @@ var PlugUser = function (user, plug) {
 
     //copy over user info
     for (var prop in user) {
-        this[prop] = user[prop];
+        if (user.hasOwnProperty(prop)) {
+            this[prop] = user[prop];
+        }
     }
 
     // rank is on a scale 0-100, whereas plug uses 0-5

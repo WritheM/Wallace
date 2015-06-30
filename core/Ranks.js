@@ -84,7 +84,7 @@ function Rank(short, info) {
 
 Rank.prototype.isMatch = function (name) {
     name = name.toLowerCase();
-    if (name == this.short || name == this.name || this.matches.indexOf(name) !== -1) {
+    if (name === this.short || name === this.name || this.matches.indexOf(name) !== -1) {
         return true;
     }
 };

@@ -11,7 +11,7 @@ giphy.events.command_gif = function (message) {
     }
 
     this.get_gif(tags, function (id) {
-        if (typeof id !== 'undefined') {
+        if (typeof id !== "undefined") {
             message.from.sendReply("http://media.giphy.com/media/" + id + "/giphy.gif [Tags: " + (tags ? tags : "Random GIF") + "]");
         }
         else {

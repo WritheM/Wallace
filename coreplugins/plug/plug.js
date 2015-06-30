@@ -20,7 +20,7 @@ plugin.init = function () {
 
     //plug.on("roomJoin", eventproxy.roomJoin);
 
-    for (var i in PlugAPI.events) {
+    for (var i = 0; i < PlugAPI.events.length; i++) {
         var event = PlugAPI.events[i];
         if (!(event in this.eventproxy) && event !== "command") {
             // javascript closure abuse: -
