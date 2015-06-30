@@ -5,6 +5,7 @@ var http = require("http");
 var request = require("request");
 var fs = require("fs");
 var path = require("path");
+var SlackUser = require("./SlackUser.js");
 
 slack.init = function () {
     this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
@@ -215,35 +216,9 @@ slack.receivedSlackMessage = function (message) {
 
     this.plugin.manager.fireEvent("chat", {
         message: message.text,
-        from: new SlackUser(message, slack)
+        from: new SlackUser(message, this)
     });
 
-};
-
-var admins = ["ylt", "pironic"];
-
-var SlackUser = function (user, slack) {
-    this.user = user;
-    this.slack = slack;
-
-    this.rank = 0;
-
-    //no tidy way of doing this for now
-    if (admins.indexOf(user.user_name) !== -1) {
-        this.rank = 100;
-    }
-};
-
-SlackUser.prototype.sendChat = function (message) {
-    slack.slack.notify({text: message});
-};
-
-SlackUser.prototype.sendReply = function (message) {
-    slack.slack.notify({text: "[<@" + this.user.user_id + ">] " + message});
-};
-
-SlackUser.prototype.sendEmote = function (message) {
-    slack.slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
 };
 
 module.exports = slack;
