@@ -4,7 +4,7 @@ var rrd = new PluginInstance();
 var request = require("request");
 var plugAPI = require("plugapi");
 
-rrd.init = function() {
+rrd.init = function () {
     this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
 
     rrd.statsTimer = setInterval(function () {
@@ -29,7 +29,7 @@ rrd.events.plug_advance = function (track) {
     this.save_stats();
 };
 
-rrd.get_stats = function() {
+rrd.get_stats = function () {
     var users = this.plug.getUsers();
     //console.log(users);
     var data = {};
@@ -51,30 +51,40 @@ rrd.get_stats = function() {
         var rawrank = users[i].role;
         if (users[i].gRole === plugAPI.GLOBAL_ROLES.ADMIN) {
             ++data.admin;
-        } else if (parseInt(users[i].gRole,10) > 1) {
+        } else if (parseInt(users[i].gRole, 10) > 1) {
             ++data.brandAmbassador;
-        } else if (rawrank === plugAPI.ROOM_ROLE.NONE) {
-            ++data.user;
-        } else if (rawrank === plugAPI.ROOM_ROLE.RESIDENTDJ) {
-            ++data.residentDJ;
-        } else if (rawrank === plugAPI.ROOM_ROLE.BOUNCER) {
-            ++data.bouncer;
-        } else if (rawrank === plugAPI.ROOM_ROLE.MANAGER) {
-            ++data.manager;
-        } else if (rawrank === plugAPI.ROOM_ROLE.COHOST) {
-            ++data.coHost;
-        } else if (rawrank === plugAPI.ROOM_ROLE.HOST) {
-            ++data.host;
         } else {
-            ++data.user;
-            console.log(users[i]);
+            switch (rawrank) {
+                case plugAPI.ROOM_ROLE.NONE:
+                    ++data.user;
+                    break;
+                case plugAPI.ROOM_ROLE.RESIDENTDJ:
+                    ++data.residentDJ;
+                    break;
+                case plugAPI.ROOM_ROLE.BOUNCER:
+                    ++data.bouncer;
+                    break;
+                case plugAPI.ROOM_ROLE.MANAGER:
+                    ++data.manager;
+                    break;
+                case plugAPI.ROOM_ROLE.COHOST:
+                    ++data.coHost;
+                    break;
+                case plugAPI.ROOM_ROLE.HOST:
+                    ++data.host;
+                    break;
+                default:
+                    ++data.user;
+                    console.log(users[i]);
+                    break;
+            }
         }
         ++levels.count;
         levels.sum += users[i].level;
     }
     data.avgLevel = levels.sum / levels.count;
     return data;
-}
+};
 
 rrd.save_stats = function () {
     clearInterval(rrd.statsTimer);
@@ -96,7 +106,7 @@ rrd.save_stats = function () {
             json: [data]
         }, function (error, response, body) {
             if (error || response.statusCode !== 200) {
-                console.error("rrd error:" , error, response, body);
+                console.error("rrd error:", error, response, body);
             }
         });
     }
