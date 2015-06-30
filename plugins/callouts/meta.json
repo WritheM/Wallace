@@ -1,5 +1,5 @@
 {
-  "author": "pironic",
+  "author": "Michael Writhe",
   "name": "callouts",
   "description": "Callouts Administration. valid arguments are view|add|del or do not pass anything to view how many callouts there are.",
   "config": {

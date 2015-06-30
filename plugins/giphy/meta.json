@@ -1,5 +1,8 @@
 {
-  "author": "pironic",
+  "author": [
+      "Michael Writhe",
+      "Joe Carter"
+  ],
   "name": "giphy",
   "description": "Giphy.com integration. Search for a gif that belongs to a set of tags, or return a random gif.",
   "config": {

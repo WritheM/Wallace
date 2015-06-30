@@ -35,6 +35,7 @@ PluginLoader.prototype._load = function () {
         // if here, plugin loaded successfully
 
         this.loaded = true;
+        this.addAuthor(this.meta.author);
 
         this.plugin.events.onLoad.call(this.plugin, this);
         console.log("Loaded " + this.meta.name);
@@ -124,6 +125,22 @@ PluginLoader.prototype.fireEvent = function (eventname) {
     }
     catch (e) {
         console.log("Event handler crashed", e);
+    }
+};
+
+PluginLoader.prototype.addAuthor = function(author) {
+    if (author instanceof Array) {
+        author.forEach(function(auth) {
+            PluginLoader.prototype.addAuthor(auth);
+        });
+    }
+    else if (typeof author == "string") {
+        if (!GLOBAL.PLUGIN_CONTRIBUTORS) {
+            GLOBAL.PLUGIN_CONTRIBUTORS = [];
+        }
+        if (GLOBAL.PLUGIN_CONTRIBUTORS.indexOf(author) == -1) {
+            GLOBAL.PLUGIN_CONTRIBUTORS.push(author);
+        }
     }
 };
 
