@@ -48,7 +48,7 @@ timedCallouts.events.command_callouts = function (message) {
         else if (args[0] === "add") {
             // add a callout
             args.splice(0, 1);
-            var newCallout = args.join(' ');
+            var newCallout = args.join(" ");
             timedCallouts.config.callouts.push(newCallout);
             message.from.sendEmote("Added a callout: " + newCallout);
         }

@@ -126,7 +126,8 @@ PluginManager.prototype.getDependencies = function (plugin, missing) {
             continue;
         }
 
-        for (var j in plugin.meta.dependencies) {
+        //for (var j in plugin.meta.dependencies) {
+        for (var j = 0; j < plugin.meta.dependencies.length; j++) {
             var dependency = plugin.meta.dependencies[j];
             var cplugin = this.getPlugin(dependency);
             if (cplugin) {

@@ -29,6 +29,53 @@ rrd.events.plug_advance = function (track) {
     this.save_stats();
 };
 
+rrd.get_stats = function() {
+    var users = this.plug.getUsers();
+    //console.log(users);
+    var data = {};
+    data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === "undefined" ? 0 : 1);
+    data.listeners = users.length;
+    data.guests = this.plug.getGuests();
+    data.user = 0;
+    data.residentDJ = 0;
+    data.bouncer = 0;
+    data.manager = 0;
+    data.coHost = 0;
+    data.host = 0;
+    data.brandAmbassador = 0;
+    data.admin = 0;
+    var levels = {};
+    levels.count = 0;
+    levels.sum = 0;
+    for (var i = 0; i < users.length; ++i) {
+        var rawrank = users[i].role;
+        if (users[i].gRole === plugAPI.GLOBAL_ROLES.ADMIN) {
+            ++data.admin;
+        } else if (parseInt(users[i].gRole,10) > 1) {
+            ++data.brandAmbassador;
+        } else if (rawrank === plugAPI.ROOM_ROLE.NONE) {
+            ++data.user;
+        } else if (rawrank === plugAPI.ROOM_ROLE.RESIDENTDJ) {
+            ++data.residentDJ;
+        } else if (rawrank === plugAPI.ROOM_ROLE.BOUNCER) {
+            ++data.bouncer;
+        } else if (rawrank === plugAPI.ROOM_ROLE.MANAGER) {
+            ++data.manager;
+        } else if (rawrank === plugAPI.ROOM_ROLE.COHOST) {
+            ++data.coHost;
+        } else if (rawrank === plugAPI.ROOM_ROLE.HOST) {
+            ++data.host;
+        } else {
+            ++data.user;
+            console.log(users[i]);
+        }
+        ++levels.count;
+        levels.sum += users[i].level;
+    }
+    data.avgLevel = levels.sum / levels.count;
+    return data;
+}
+
 rrd.save_stats = function () {
     clearInterval(rrd.statsTimer);
     rrd.statsTimer = setInterval(function () {
@@ -38,54 +85,13 @@ rrd.save_stats = function () {
     if (this.config.url !== null
         && typeof this.config.url !== "undefined"
         && this.config.url.length > 0) {
-        var users = this.plug.getUsers();
-        //console.log(users);
-        var data = {};
-        data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === "undefined" ? 0 : 1);
-        data.listeners = users.length;
-        data.guests = this.plug.getGuests();
-        data.user = 0;
-        data.residentDJ = 0;
-        data.bouncer = 0;
-        data.manager = 0;
-        data.coHost = 0;
-        data.host = 0;
-        data.brandAmbassador = 0;
-        data.admin = 0;
-        var levels = {};
-        levels.count = 0;
-        levels.sum = 0;
-        for (var i = 0; i < users.length; ++i) {
-            var rawrank = users[i].role;
-            if (users[i].gRole === plugAPI.GLOBAL_ROLES.ADMIN) {
-                ++data.admin;
-            } else if (parseInt(users[i].gRole,10) > 1) {
-                ++data.brandAmbassador;
-            } else if (rawrank === plugAPI.ROOM_ROLE.NONE) {
-                ++data.user;
-            } else if (rawrank === plugAPI.ROOM_ROLE.RESIDENTDJ) {
-                ++data.residentDJ;
-            } else if (rawrank === plugAPI.ROOM_ROLE.BOUNCER) {
-                ++data.bouncer;
-            } else if (rawrank === plugAPI.ROOM_ROLE.MANAGER) {
-                ++data.manager;
-            } else if (rawrank === plugAPI.ROOM_ROLE.COHOST) {
-                ++data.coHost;
-            } else if (rawrank === plugAPI.ROOM_ROLE.HOST) {
-                ++data.host;
-            } else {
-                ++data.user;
-                console.log(users[i]);
-            }
-            ++levels.count;
-            levels.sum += users[i].level;
-        }
-        data.avgLevel = levels.sum / levels.count;
+
+        var data = this.get_stats();
 
         request.post({
             url: this.config.url,
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             json: [data]
         }, function (error, response, body) {
