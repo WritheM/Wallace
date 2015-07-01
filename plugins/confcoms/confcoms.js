@@ -2,20 +2,17 @@ var PluginInstance = require(__core + "PluginInstance.js");
 var confcoms = new PluginInstance();
 
 function addCommand (command, response) {
-    var func = "command_" + command;
-    confcoms.events[func] = function() {
+    confcoms.events["command_"+command] = function(message) {
         message.from.sendReply(response);
     }
 }
 
-confcoms.init = function(message) {
-    console.log(this.config.commands);
-/*
-    for(var i = 0;this.config.commands.length <= i;i++) {
-        //TODO: this is not a functional function that functions yet.
-        console.log(this.config.commands[i]);
-        addCommand(this.config.commands[i], this.config.commands[i]);
-    }*/
+confcoms.init = function() {
+    for(var command in this.config.commands) {
+        if (this.config.commands.hasOwnProperty(command)) {
+            addCommand(command, this.config.commands[command]);
+        }
+    }
 }
 
 confcoms.events.command_about = function (message) {

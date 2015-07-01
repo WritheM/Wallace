@@ -11,10 +11,7 @@ Make sure to include the following in your config.json and customize as required
             "autowoot": "We recommend PlugCubed for autowooting: http://plugcubed.net/",
             "ba": "A Brand Ambassador is the voice of the plug.dj users. They promote events, engage the community and share the plug.dj message around the world. For more info: https://plug.dj/ba",
             "rcs": "Radiant's RCS is a suite of tools to upgrade and enhance your plug.dj experience. Download it here: https://rcs.radiant.dj/ Direct USERSCRIPT link: https://code.radiant.mu/rs.user.js"
-        },
-        "permission": [
-            "NORMAL"
-        ]
+        }
     }
 
 # Commands
