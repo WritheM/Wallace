@@ -134,11 +134,11 @@ PluginLoader.prototype.addAuthor = function(author) {
             PluginLoader.prototype.addAuthor(auth);
         });
     }
-    else if (typeof author == "string") {
+    else if (typeof author === "string") {
         if (!GLOBAL.PLUGIN_CONTRIBUTORS) {
             GLOBAL.PLUGIN_CONTRIBUTORS = [];
         }
-        if (GLOBAL.PLUGIN_CONTRIBUTORS.indexOf(author) == -1) {
+        if (GLOBAL.PLUGIN_CONTRIBUTORS.indexOf(author) === -1) {
             GLOBAL.PLUGIN_CONTRIBUTORS.push(author);
         }
     }

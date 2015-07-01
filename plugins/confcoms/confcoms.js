@@ -4,7 +4,7 @@ var confcoms = new PluginInstance();
 function addCommand (command, response) {
     confcoms.events["command_"+command] = function(message) {
         message.from.sendReply(response);
-    }
+    };
 }
 
 confcoms.init = function() {
@@ -13,7 +13,7 @@ confcoms.init = function() {
             addCommand(command, this.config.commands[command]);
         }
     }
-}
+};
 
 confcoms.events.command_about = function (message) {
     console.log(GLOBAL.PLUGIN_CONTRIBUTORS);
@@ -21,7 +21,9 @@ confcoms.events.command_about = function (message) {
     if (GLOBAL.PLUGIN_CONTRIBUTORS) {
         contributors = "and running plugins designed by: " + GLOBAL.PLUGIN_CONTRIBUTORS.join(", ");
     }
-    message.from.sendReply("I am running botPlug v"+GLOBAL.BOTPLUGVERSION+" created by Michael Writhe and Joe Carter, which is open source and available at http://github.com/writhem/botPlug "+ contributors);
+    var about = "I am running botPlug v"+GLOBAL.BOTPLUGVERSION+" created by Michael Writhe and Joe Carter, ";
+    about = about + "which is open source and available at http://github.com/writhem/botPlug "+ contributors;
+    message.from.sendReply(about);
 };
 
 module.exports = confcoms;
