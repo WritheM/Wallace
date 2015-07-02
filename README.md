@@ -9,9 +9,6 @@ Wallace
 [![GitHub issues](https://img.shields.io/github/issues/WritheM/Wallace.svg)](https://github.com/WritheM/Wallace/issues)
 [![Travis](https://img.shields.io/travis/WritheM/Wallace.svg)](https://travis-ci.org/WritheM/Wallace)
 
-
-Name change pending, read more and suggest your own via: http://wiki.writhem.com/pages/viewpage.action?pageId=4980797
-
 ---
 
 Installation
