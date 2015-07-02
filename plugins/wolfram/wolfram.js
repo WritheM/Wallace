@@ -17,7 +17,7 @@ wolfram.events.command_wa = function (message) {
         });
         }
         else {
-            message.from.sendEmote("Searched for nothing. Did you mean `Nihilism`?")
+            message.from.sendEmote("Searched for nothing. Did you mean `Nihilism`?");
         }
     }
     else {
