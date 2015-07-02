@@ -29,7 +29,7 @@ timedCallouts.events.command_callouts = function (message) {
 
     console.log(message.args.length);
 
-    if (message.args === 0) {
+    if (message.args.length === 0) {
         // output the current callout count
         message.from.sendEmote("There are currently " + timedCallouts.config.callouts.length
         + " entries in the list of valid callouts. To see each, please type /callouts view #");

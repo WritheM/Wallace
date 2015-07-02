@@ -1,4 +1,4 @@
-# rrdstats plugin for botPlug
+# rrdstats plugin for Wallace
 
 This plugin provides the basic stats of the broadcast to your preconfigured RRD API.
 

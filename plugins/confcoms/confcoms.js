@@ -21,8 +21,8 @@ confcoms.events.command_about = function (message) {
     if (GLOBAL.PLUGIN_CONTRIBUTORS) {
         contributors = "and running plugins designed by: " + GLOBAL.PLUGIN_CONTRIBUTORS.join(", ");
     }
-    var about = "I am running botPlug v"+GLOBAL.BOTPLUGVERSION+" created by Michael Writhe and Joe Carter, ";
-    about = about + "which is open source and available at http://github.com/writhem/botPlug "+ contributors;
+    var about = "I am running Wallace v"+GLOBAL.WALLACEVERSION+" created by Michael Writhe and Joe Carter, ";
+    about = about + "which is open source and available at http://github.com/writhem/Wallace "+ contributors;
     message.from.sendReply(about);
 };
 

@@ -17,7 +17,7 @@ events.command_save = function (message) {
 
 events.command_plugins = function (message) {
     if (message.from.rank >= manager.core.ranks.MANAGER) {
-        if (message.args[0] === "list") {
+        if (message.args.length <= 0 || message.args[0] === "list") {
             var loaded = [];
             var unloaded = [];
 

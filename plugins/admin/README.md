@@ -1,4 +1,4 @@
-# admin plugin for botPlug
+# admin plugin for Wallace
 
 This plugin provides you and your staff abilities to control the plug community via the bot. This means that you can now control the plug community from any service the bot is located in.
 

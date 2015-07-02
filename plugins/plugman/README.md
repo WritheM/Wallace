@@ -1,4 +1,4 @@
-# Plugin Manager for botPlug
+# Plugin Manager for Wallace
 
 This plugin provides you with the ability to load/unload and refresh plugins from any of the services the bot resides in.
 

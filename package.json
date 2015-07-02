@@ -1,5 +1,5 @@
 {
-  "name": "botplug",
+  "name": "wallace",
   "version": "0.1.0",
   "description": "",
   "readme": "README.md",
@@ -10,7 +10,7 @@
   "author": "Joe Carter <youlikethaaaat@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/writhem/botPlug.git"
+    "url": "git+https://github.com/writhem/Wallace.git"
   },
   "license": "MIT",
   "dependencies": {

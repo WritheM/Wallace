@@ -1,4 +1,4 @@
-# callouts plugin for botPlug
+# callouts plugin for Wallace
 
 This plugin provides you the ability to set a single or multiple scheduled messages that will be said on an interval you specify into your plug community.
 
@@ -9,7 +9,7 @@ Make sure to include the following in your config.json and customize as required
     "callouts": {
         "shoutOutInterval": 60,
         "callouts": [
-            "Welcome to the WritheM Radio Community! We are running \"BotPlug\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/botPlug",
+            "Welcome to the WritheM Radio Community! We are running \"Wallace\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/Wallace",
             "This is a second example of a callout for your community!"
         ],
         "permission": [

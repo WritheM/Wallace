@@ -1,4 +1,4 @@
-# basicBot plugin for botPlug
+# basicBot plugin for Wallace
 
 This plugin provides you with most of the commands that come with [basicBot](https://github.com/Yemasthui/basicBot).
 

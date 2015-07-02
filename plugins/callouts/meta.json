@@ -5,7 +5,7 @@
   "config": {
     "shoutOutInterval": 60,
     "callouts": [
-        "Welcome to our Community! We are running \"botPlug\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/botPlug",
+        "Welcome to our Community! We are running \"Wallace\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/Wallace",
         "This is a second example of a callout for your community!"
     ],
     "permission": ["NORMAL"]
