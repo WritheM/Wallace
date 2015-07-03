@@ -1,0 +1,16 @@
+{
+  "author": "Michael Writhe",
+  "name": "wolfram",
+  "version": "0.0.1",
+  "description": "Search Wolfram|Alpha for an answer to your question.",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "wallace": {
+    "config": {
+      "permission": ["NORMAL"],
+      "url": null
+    }
+  },
+  "main": "wolfram.js"
+}
