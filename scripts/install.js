@@ -17,9 +17,15 @@ catch (e) {
 var dirs = [];
 
 for (var i in plugin_dirs) {
+    if (!plugin_dirs.hasOwnProperty(i)) {
+        continue;
+    }
     var dir = plugin_dirs[i];
     var files = fs.readdirSync(dir);
     for (var j in files) {
+        if (!files.hasOwnProperty(j)) {
+            continue;
+        }
         var plugin = files[j];
         var cwd = path.resolve(dir + "/" + plugin);
         dirs.push(cwd);
