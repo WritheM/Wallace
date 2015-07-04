@@ -11,7 +11,7 @@ function PluginLoader(manager, directory) {
 }
 
 PluginLoader.prototype.reloadMeta = function () {
-    var file = this.directory + "/meta.json";
+    var file = this.directory + "/package.json";
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 };
 
@@ -21,7 +21,7 @@ PluginLoader.prototype._load = function () {
     }
 
     // get plugin script path
-    var path = "../" + this.directory + "/" + this.meta.script;
+    var path = "../" + this.directory + "/";
     try {
         var plugin = require(path);
 
@@ -48,7 +48,7 @@ PluginLoader.prototype._load = function () {
 };
 
 PluginLoader.prototype._unload = function () {
-    var path = "../" + this.directory + "/" + this.meta.script;
+    var path = "../" + this.directory + "/";
 
     this.fireEvent("onUnload");
 

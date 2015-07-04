@@ -122,13 +122,13 @@ PluginManager.prototype.getDependencies = function (plugin, missing) {
 
     for (var i = 0; i < plugins.length; i++) {
         plugin = plugins[i];
-        if (!plugin.meta.dependencies) {
+        if (!plugin.meta.wallace || !plugin.meta.wallace.dependencies) {
             continue;
         }
 
         //for (var j in plugin.meta.dependencies) {
-        for (var j = 0; j < plugin.meta.dependencies.length; j++) {
-            var dependency = plugin.meta.dependencies[j];
+        for (var j = 0; j < plugin.meta.wallace.dependencies.length; j++) {
+            var dependency = plugin.meta.wallace.dependencies[j];
             var cplugin = this.getPlugin(dependency);
             if (cplugin) {
                 if (plugins.indexOf(cplugin) === -1) {

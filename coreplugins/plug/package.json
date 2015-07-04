@@ -1,0 +1,20 @@
+{
+  "name": "plug",
+  "author": "Joe Carter",
+  "version": "0.0.1",
+  "license": "MIT",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "main": "plug.js",
+  "wallace": {
+    "longname": "Plug service",
+    "config": {
+      "auth": {
+        "email": "******@gmail.com",
+        "password": "******",
+        "room": "3425163633978028428"
+      }
+    }
+  }
+}
