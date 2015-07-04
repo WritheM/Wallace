@@ -6,9 +6,6 @@
   "peerDependencies": {
     "wallace": "*"
   },
-  "dependencies": {
-    "plugapi": "*"
-  },
   "main": "plug.js",
   "wallace": {
     "longname": "Plug service",

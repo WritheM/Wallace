@@ -103,8 +103,8 @@ PluginLoader.prototype.getConfig = function () {
     // no existing userconfig, clone it before returning
 
     var conf = {};
-    if ("config" in this.meta) {
-        conf = this.meta.config;
+    if ("wallace" in this.meta && "config" in this.meta.wallace) {
+        conf = this.meta.wallace.config;
     }
     manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
     return [this.meta.name];
