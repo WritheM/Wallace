@@ -18,10 +18,10 @@
     "node-slackr": ">=0.1.0",
     "log4js": ">=0.6.25",
     "request": ">=2.58.0",
-    "config": ">=1.14.0"
+    "async": ">=1.3.0"
   },
-  "permission": [
-    "MANAGER"
-  ],
+  "scripts": {
+    "postinstall": "scripts/install.js"
+  },
   "main": "main.js"
 }
