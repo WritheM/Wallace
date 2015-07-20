@@ -8,7 +8,7 @@ var path = require("path");
 var SlackUser = require("./SlackUser.js");
 
 slack.init = function () {
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
     var Slack = require("node-slackr");
     this.slack = new Slack(this.config.webhookuri, {
@@ -131,7 +131,7 @@ slack.events.plug_advance = function (track) {
 
     var message = [];
 
-    if (track.lastPlay !== undefined && track.lastPlay.dj !== null) {
+    if (track.lastPlay !== undefined && track.lastPlay.dj) {
         message.push({
             text: "*Last play:-* Woots: " + track.lastPlay.score.positive + ", Grabs: " + track.lastPlay.score.grabs
             + ", Mehs: " + track.lastPlay.score.negative,
@@ -141,7 +141,7 @@ slack.events.plug_advance = function (track) {
             mrkdwn_in: ["text", "pretext"]
         });
     }
-    if (track.currentDJ !== null) {
+    if (track.currentDJ) {
         message.push({
             text: "*" + track.currentDJ.username + "* has started playing *" + track.media.author + "* - *"
             + track.media.title + "*",

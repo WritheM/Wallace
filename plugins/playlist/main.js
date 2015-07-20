@@ -5,7 +5,7 @@ var playlist = new PluginInstance();
 var plugAPI = require("plugapi");
 
 playlist.init = function() {
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 };
 
 var subcommands = {};

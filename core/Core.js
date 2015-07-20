@@ -22,6 +22,7 @@ function Core() {
     }
 
     var log4js = require("log4js");
+    this.log4js = log4js;
     log4js.configure(this.config.core.logger);
     this.logger = log4js.getLogger();
 

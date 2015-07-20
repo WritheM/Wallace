@@ -7,7 +7,7 @@ var google = require("googleapis");
 var youtube = google.youtube("v3");
 
 mediaskip.init = function () {
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
     mediaskip.events.plug_advance.call(this, {"media": this.plug.getMedia()});
 };

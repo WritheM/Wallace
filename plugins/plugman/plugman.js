@@ -7,7 +7,7 @@ var events = {};
 events.onLoad = function (_plugin) {
     plugin = _plugin;
     manager = plugin.manager;
-    plug = manager.getPlugin("plug").plugin.plug;
+    plug = manager.getPlugin("plug").plug;
 };
 
 events.command_save = function (message) {
@@ -50,7 +50,7 @@ events.command_plugins = function (message) {
 
 events.command_plugin = function (message) {
     if (message.from.rank >= manager.core.ranks.MANAGER) {
-        var plugin = manager.getPlugin(message.args[1]);
+        var plugin = manager.getPluginLoader(message.args[1]);
         if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
             if (!plugin) {
                 message.from.sendReply("Error: Could not find plugin");

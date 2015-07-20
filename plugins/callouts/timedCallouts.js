@@ -92,7 +92,7 @@ timedCallouts.doShoutout = function () {
     if (message && message.trim().length) {
         console.log("scheduledShoutout: " + message);
 
-        var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plugin.plug.sendChat;
+        var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plug.sendChat;
         sendChat(message);
     }
 

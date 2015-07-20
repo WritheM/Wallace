@@ -1,49 +1,83 @@
-var PlugAPI = require("plugapi");
+var Plugged = require("plugged");
 var PlugUser = require("./PlugUser.js");
+var PlugRoom = require("./PlugRoom.js");
 
 var PluginInstance = require(__core + "PluginInstance.js");
 var plugin = new PluginInstance();
 
-
 plugin.eventproxy = {};
 
 plugin.init = function () {
-    this.plug = new PlugAPI({
-        email: this.config.auth.email,
-        password: this.config.auth.password
+    initPlugged();
+}
+
+function initPlugged() {
+    var that = this;
+
+    var logger = plugin.core.log4js.getLogger("plugged");
+
+    var plugged = new Plugged({
+        log: logger
     });
 
-    this.plug.multiLine = true;
-    this.plug.multiLineLimit = 5;
+    plugged.login(plugin.config.auth);
+    plugged.on(plugged.LOGIN_SUCCESS, function () {
+        plugged.connect(plugin.config.auth.room);
+    });
+    plugged.on(plugged.CONN_PART, function () {
+        plugged.login(plugin.config.auth);
+    });
+    plugged.on(plugged.SOCK_ERROR, function () {
+        plugged.login(plugin.config.auth);
+    });
+    plugged.on(plugged.CONN_ERROR, function () {
+        setTimeout(function() {
+            plugged.login(plugin.config.auth);
+        }, 5000);
+    });
+    plugged.on(plugged.LOGIN_ERROR, function () {
+        setTimeout(function() {
+            plugged.login(plugin.config.auth);
+        }, 5000);
+    });
 
-    this.plug.connect(this.config.auth.room);
+    plugged.on(plugged.ROOM_JOIN, function () {
+        setTimeout(function() {
+            plugged.sendChat("Wallace online");
+        }, 1000);
 
-    //plug.on("roomJoin", eventproxy.roomJoin);
+    });
 
-    for (var i in PlugAPI.events) {
-        if (PlugAPI.events.hasOwnProperty(i)) {
-            var event = PlugAPI.events[i];
-            if (!(event in this.eventproxy) && event !== "command") {
-                // javascript closure abuse: -
-                // goal is to have "event" defined and to also pass that into the event
-                // function
+    //rrdstats fixes
+    plugged.getGuests = function() {
+        return plugged.state.room.meta.guests;
+    };
+    plugged.getWaitList = plugged.getWaitlist; //case
+    plugged.getDJ = plugged.getCurrentDJ;
 
-                this.plug.on(event, function (event) {
-                    return function (arg) {
-                        plugin.eventproxy.generic(event, arg);
-                    };
-                }(event));
-            }
-            else {
-                this.plug.on(event, this.eventproxy[event]);
-            }
+    plugged.getMedia = plugged.getCurrentMedia;
+
+
+    plugin.plugged = plugged;
+    plugin.plug = plugged; //TEMP
+
+    //monkey patch emit: http://stackoverflow.com/a/18087021
+    plugged.emit_old = plugged.emit;
+    plugged.emit = function() {
+        var event = arguments[0];
+
+        if (event in plugin.eventproxy) {
+            var args = Array.prototype.slice.call(arguments, 1);
+            plugin.eventproxy[event].apply(plugin, args);
         }
-    }
+        else {
+            plugin.eventproxy.generic.apply(plugin, arguments);
+        }
 
+        plugged.emit_old.apply(plugged, arguments);
+    };
 
-    //plugAPI has a bug, raw command event double fires
-    // bind specific command event also and filter out plain within func
-    this.plug.on("command:*", this.eventproxy["command"]);
+    plugin.room = new PlugRoom(plugin);
 };
 
 plugin.eventproxy.generic = function (event, arg) {
@@ -52,18 +86,68 @@ plugin.eventproxy.generic = function (event, arg) {
     plugin.manager.fireEvent("plug_" + event, arg);
 };
 
+plugin.eventproxy.advance = function (booth, playback, previous) {
+    var event = playback;
+    event.currentDJ = plugin.plugged.getUserByID(booth.dj);
+    event.lastPlay = previous;
+    console.log("Event", "advance", event);
+    plugin.manager.fireEvent("plug_advance", event);
+};
+
 plugin.eventproxy.roomJoin = function (room) {
     console.log("Joined " + room);
 
     plugin.manager.fireEvent("plug_roomJoin", room);
 };
 
-plugin.eventproxy.chat = function (message) {
-    //var user = new PlugUser(message.from);
-    message.from = new PlugUser(message.from, plugin.plug);
+plugin.eventproxy.chat = function (messageData) {
+    messageData.from = new PlugUser(plugin.plugged.getUserByID(messageData.id), plugin.plug);
 
-    plugin.manager.fireEvent("plug_chat", message);
-    plugin.manager.fireEvent("chat", message);
+    //copied and pasted from plugAPI
+    //TODO: rewrite with saner approach
+    var commandPrefix = "!";
+    var i, cmd, lastIndex, allUsers, random;
+
+    if (messageData.message.indexOf(commandPrefix) === 0) {
+        cmd = messageData.message.substr(commandPrefix.length).split(' ')[0];
+        messageData.command = cmd;
+        messageData.args = messageData.message.substr(commandPrefix.length + cmd.length + 1);
+
+        // Mentions => Mention placeholder
+        lastIndex = messageData.args.indexOf('@');
+        allUsers = plugin.plugged.getUsers();
+        random = Math.ceil(Math.random() * 1E10);
+        while (lastIndex > -1) {
+            var test = messageData.args.substr(lastIndex), found = null;
+            for (i in allUsers) {
+                if (allUsers.hasOwnProperty(i) && test.indexOf(allUsers[i].username) === 1) {
+                    if (found === null || allUsers[i].username.length > found.username.length) {
+                        found = allUsers[i];
+                    }
+                }
+            }
+            if (found !== null) {
+                messageData.args = messageData.args.substr(0, lastIndex) + '%MENTION-' + random + '-' + messageData.mentions.length + '%' + messageData.args.substr(lastIndex + found.username.length + 1);
+                messageData.mentions.push(found);
+            }
+            lastIndex = messageData.args.indexOf('@', lastIndex + 1);
+        }
+
+        messageData.args = messageData.args.split(' ');
+
+        // Mention placeholder => User object
+        for (i in messageData.mentions) {
+            if (messageData.mentions.hasOwnProperty(i)) {
+                messageData.args[messageData.args.indexOf('%MENTION-' + random + '-' + i + '%')] = messageData.mentions[i];
+            }
+        }
+
+        plugin.manager.fireEvent("plug_command_" + messageData.command, messageData);
+        plugin.manager.fireEvent("command_" + messageData.command, messageData);
+    }
+
+    plugin.manager.fireEvent("plug_chat", messageData);
+    plugin.manager.fireEvent("chat", messageData);
 };
 
 plugin.eventproxy.command = function (message) {
@@ -75,11 +159,6 @@ plugin.eventproxy.command = function (message) {
 
     plugin.manager.fireEvent("plug_command_" + message.command, message);
     plugin.manager.fireEvent("command_" + message.command, message);
-};
-
-
-plugin.events.plug_chat = function (message) {
-    console.log("PlugChat: [@" + message.from.username + "] ", message.message);
 };
 
 module.exports = plugin;
