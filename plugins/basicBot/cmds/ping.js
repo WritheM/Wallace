@@ -16,7 +16,7 @@ module.exports = function (basicBot) {
 			message.from.sendEmote(response);
 		}
 		else {
-			message.from.sendEmote("Command only available to staff");
+			message.from.sendReply("Command only available to staff", {emote:true});
 		}
     };
 };

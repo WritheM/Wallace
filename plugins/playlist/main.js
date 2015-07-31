@@ -20,7 +20,7 @@ playlist.events.command_playlist = function(message) {
         func(message);
     }
     else {
-        message.from.sendEmote("Command only available to staff");
+        message.from.sendReply("Command only available to staff", {emote:true});
     }
 };
 
@@ -80,7 +80,7 @@ playlist.events.command_grab = function(message) {
         playlist.plug.grab();
     }
     else {
-        message.from.sendEmote("Command only available to staff");
+        message.from.sendReply("Command only available to staff", {emote:true});
     }
 };
 

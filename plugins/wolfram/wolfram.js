@@ -12,12 +12,12 @@ wolfram.events.command_wa = function (message) {
                 console.error("!wa: Got Error:" + body);
             }
             else {
-                message.from.sendEmote(body);
+                message.from.sendReply(body, {emote:true});
             }
         });
         }
         else {
-            message.from.sendEmote("Searched for nothing. Did you mean `Nihilism`?");
+            message.from.sendReply("Searched for nothing. Did you mean `Nihilism`?", {emote:true});
         }
     }
     else {

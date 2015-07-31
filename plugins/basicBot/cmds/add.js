@@ -7,7 +7,7 @@ module.exports = function (basicBot) {
             this.plug.moderateAddDJ(message.args[0].id);
         }
         else {
-            message.from.sendEmote("Command only available to staff");
+            message.from.sendReply("Command only available to staff", {emote:true});
         }
     };
 };

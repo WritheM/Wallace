@@ -95,14 +95,8 @@ plugin.eventproxy.advance = function (booth, playback, previous) {
     plugin.manager.fireEvent("plug_advance", event);
 };
 
-plugin.eventproxy.roomJoin = function (room) {
-    console.debug("Joined " + room);
-
-    plugin.manager.fireEvent("plug_roomJoin", room);
-};
-
 plugin.eventproxy.chat = function (messageData) {
-    messageData.from = new PlugUser(plugin.plugged.getUserByID(messageData.id), plugin.plug);
+    messageData.from = new PlugUser(this, plugin.plugged.getUserByID(messageData.id));
 
     //copied and pasted from plugAPI
     //TODO: rewrite with saner approach
@@ -149,17 +143,6 @@ plugin.eventproxy.chat = function (messageData) {
 
     plugin.manager.fireEvent("plug_chat", messageData);
     plugin.manager.fireEvent("chat", messageData);
-};
-
-plugin.eventproxy.command = function (message) {
-    if (this.event.indexOf(":") === -1) {
-        return;
-    }
-
-    message.from = new PlugUser(message.from, plugin.plug);
-
-    plugin.manager.fireEvent("plug_command_" + message.command, message);
-    plugin.manager.fireEvent("command_" + message.command, message);
 };
 
 module.exports = plugin;

@@ -44,7 +44,7 @@ events.command_plugins = function (message) {
         }
     }
     else {
-        message.from.sendEmote("Command only available to staff");
+        message.from.sendReply("Command only available to staff", {emote:true});
     }
 };
 
@@ -78,7 +78,7 @@ events.command_plugin = function (message) {
         }
     }
     else {
-        message.from.sendEmote("Command only available to staff");
+        message.from.sendReply("Command only available to staff", {emote:true});
     }
 };
 

@@ -8,7 +8,7 @@ module.exports = function (basicBot) {
             this.plug.sendChat("abc: "+uid);
         }
         else {
-            message.from.sendEmote("Command only available to staff");
+            message.from.sendReply("Command only available to staff", {emote:true});
         }
     };
 

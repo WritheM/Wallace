@@ -4,7 +4,7 @@ module.exports = function (basicBot) {
             //message.from.sendEmote("Not implemented yet");
         }
         else {
-            message.from.sendEmote("Command only available to staff");
+            message.from.sendReply("Command only available to staff", {emote:true});
         }
     };
 };
