@@ -18,21 +18,13 @@ slack.init = function () {
 
 
     if (this.config.server !== undefined) {
-        this.server = http.createServer((function (that) {
-            return function () {
-                that.slackRequest.apply(that, arguments);
-            };
-        })(this));
+        this.server = http.createServer(this.slackRequest.bind(this));
         this.server.listen(this.config.server.port, this.config.server.host);
     }
 
     if (this.config.usertoken) {
-        this.pollTimer = setInterval((function (slack) {
-            return function () {
-                slack.fetchUsers.apply(slack, arguments);
-            };
-        })(this), (this.config.fetchInterval || 30) * 1000);
-        this.fetchUsers();
+        this.pollTimer = setInterval(this.fetchUsers.bind(this), (this.config.fetchInterval || 30) * 1000);
+        this.fetchUsers.bind(this)();
     }
 
     this.slackEmotes = JSON.parse(fs.readFileSync(path.join(__dirname, "emotes.json")));
@@ -43,14 +35,16 @@ slack.events.onUnload = function () {
         this.server.close();
     }
     if (this.pollTimer) {
-        clearTimer(this.pollTimer);
+        clearTimeout(this.pollTimer);
     }
 };
 
 slack.fetchUsers = function () {
+    //console.log("users", this);
+    console.log("fetching users");
     request("https://slack.com/api/users.list?token=" + this.config.usertoken, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            this.slackUsers = JSON.parse(body);
+            slack.slackUsers = JSON.parse(body);
         }
         else {
             console.log(response);
@@ -59,6 +53,10 @@ slack.fetchUsers = function () {
 };
 
 slack.plugToSlack = function (message) {
+    function escape(text) {
+        return (text).replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, '\\$1');
+    }
+
     if (this.slackUsers) {
         for (var i = 0; i < this.slackUsers.members.length; i++) {
             var user = this.slackUsers.members[i];
@@ -69,22 +67,59 @@ slack.plugToSlack = function (message) {
     for (var k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
             var emote = this.slackEmotes[k];
-            message = message.replace(k, ":" + emote + ":");
+            var replace = new RegExp("(^|\\s)" + escape(k) + "(?=$|\\s)", "g");
+            message = message.replace(replace, "$1:" + emote + ":");
         }
     }
-
     return message;
 };
 
 slack.slackToPlug = function (message) {
-    if (this.slackUsers) {
+    /*if (this.slackUsers) {
         for (var i = 0; i < this.slackUsers.members.length; i++) {
             var user = this.slackUsers.members[i];
             //TODO: replace with a regex
             message = message.replace("<@" + user.id + "|" + user.name + ">", "@" + user.name);
             message = message.replace("<@" + user.id + ">", "@" + user.name);
         }
-    }
+    }*/
+
+    //console.log("message", this);
+
+    message = message.replace(/<(.*?)>/g, (function (match, p1) {
+        console.log(match);
+        var parts = p1.split("|");
+        var link = parts[0];
+        var text = parts[1];
+
+        if (link[0] == "@") { //userid
+            if (this.slackUsers) {
+                //find and return the user
+                for (var i = 0; i < this.slackUsers.members.length; i++) {
+                    var user = this.slackUsers.members[i];
+                    if ("@" + user.id == link) {
+                        return "@" + user.name;
+                    }
+                }
+            }
+            //we haven't found the user, try returning just the text
+            if (text) {
+                return text;
+            }
+            else {
+                //else.. make do with the id :/
+                return link;
+            }
+        }
+        else { //regular link
+            if (text && text != link) {
+                return link + "(" + text + ")";
+            }
+            return link;
+        }
+    }).bind(this));
+
+
     for (var k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
             var emote = this.slackEmotes[k];
@@ -211,7 +246,7 @@ slack.receivedSlackMessage = function (message) {
         });
     }
     else {
-        this.plug.sendChat("<`" + message.user_name + "@slack`> " + this.slackToPlug(message.text));
+        this.plug.sendChat("<`" + message.user_name + "@slack`> " + this.slackToPlug.bind(slack)(message.text));
     }
 
     this.plugin.manager.fireEvent("chat", {
