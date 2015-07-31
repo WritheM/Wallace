@@ -13,7 +13,7 @@ mediaskip.init = function () {
 };
 
 mediaskip.events.plug_advance = function (advance) {
-    if (!advance.media)
+    if (!advance.media || !advance.media.cid)
         return;
 
     if (advance.media.format == 1) {
