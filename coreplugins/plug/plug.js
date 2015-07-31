@@ -42,10 +42,8 @@ function initPlugged() {
         }, 5000);
     });
 
-    plugged.on(plugged.ROOM_JOIN, function () {
-        setTimeout(function() {
-            plugged.sendChat("Wallace online");
-        }, 1000);
+    plugged.on(plugged.JOINED_ROOM, function () {
+        plugged.sendChat("/me Wallace v"+WALLACEVERSION+" online");
         plugin.room = new PlugRoom(plugin);
         plugin.playlists = new PlugPlaylists(plugin);
     });
@@ -82,7 +80,10 @@ function initPlugged() {
 
 plugin.eventproxy.generic = function (event, arg) {
     //console.log("generic", event, arg);
-    console.log("Event", event, arg);
+    var ignore = ["sockOpen"];
+    if (ignore.indexOf(event) == -1) {
+        console.debug("Event", event, arg);
+    }
     plugin.manager.fireEvent("plug_" + event, arg);
 };
 
@@ -90,12 +91,12 @@ plugin.eventproxy.advance = function (booth, playback, previous) {
     var event = playback;
     event.currentDJ = plugin.plugged.getUserByID(booth.dj);
     event.lastPlay = previous;
-    console.log("Event", "advance", event);
+    console.debug("Event", "advance", event);
     plugin.manager.fireEvent("plug_advance", event);
 };
 
 plugin.eventproxy.roomJoin = function (room) {
-    console.log("Joined " + room);
+    console.debug("Joined " + room);
 
     plugin.manager.fireEvent("plug_roomJoin", room);
 };

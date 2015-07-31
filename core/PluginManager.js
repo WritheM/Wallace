@@ -74,7 +74,7 @@ PluginManager.prototype.scanPlugins = function () {
     for (var i = 0; i < this.plugins.length; i++) {
         plugin = this.plugins[i];
         if (newplugins.indexOf(plugin) === -1) {
-            console.log(plugin.meta.name + " no longer exists, unload");
+            console.info(plugin.meta.name + " no longer exists, unload");
             plugin.unload();
         }
     }

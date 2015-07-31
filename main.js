@@ -1,7 +1,16 @@
 #!/usr/bin/env node
 
-GLOBAL.WALLACEVERSION = "0.1.5-beta";
+GLOBAL.WALLACEVERSION = "Err";
 GLOBAL.PLUGIN_CONTRIBUTORS = [];
+
+
+var fs = require("fs");
+
+try {
+    var p = JSON.parse(fs.readFileSync(__dirname+"/package.json"));
+    GLOBAL.WALLACEVERSION = p.version;
+}
+catch(e) {}
 
 var Core = require("./core/Core.js");
 

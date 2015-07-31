@@ -10,7 +10,6 @@ function PlugPlaylists(plugin) {
         console.log("playlist args", arguments)
         for(var i in playlists) {
             var playlist = playlists[i];
-            console.log("playlist", playlist);
             this.playlists.push(new PlugPlaylist(this.plugin, playlist));
         }
     }).bind(this));

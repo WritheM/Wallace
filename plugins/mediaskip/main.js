@@ -15,9 +15,8 @@ mediaskip.init = function () {
 mediaskip.events.plug_advance = function (advance) {
     if (!advance.media)
         return;
-    console.log("mediaskip");
+
     if (advance.media.format == 1) {
-        console.log("mediaskip: youtube");
         youtube.videos.list({
             "part": "contentDetails",
             "id": advance.media.cid,

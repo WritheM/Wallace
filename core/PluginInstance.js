@@ -13,7 +13,7 @@ var PluginInstance = function () {
         }
     }
 
-    console.log(events, this.events);
+    //console.log(events, this.events);
 };
 
 PluginInstance.prototype.loadDir = function (path) {
