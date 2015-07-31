@@ -1,6 +1,7 @@
 var Plugged = require("plugged");
 var PlugUser = require("./PlugUser.js");
 var PlugRoom = require("./PlugRoom.js");
+var PlugPlaylists = require("./PlugPlaylists.js");
 
 var PluginInstance = require(__core + "PluginInstance.js");
 var plugin = new PluginInstance();
@@ -45,7 +46,8 @@ function initPlugged() {
         setTimeout(function() {
             plugged.sendChat("Wallace online");
         }, 1000);
-
+        plugin.room = new PlugRoom(plugin);
+        plugin.playlists = new PlugPlaylists(plugin);
     });
 
     //rrdstats fixes
@@ -76,8 +78,6 @@ function initPlugged() {
 
         plugged.emit_old.apply(plugged, arguments);
     };
-
-    plugin.room = new PlugRoom(plugin);
 };
 
 plugin.eventproxy.generic = function (event, arg) {

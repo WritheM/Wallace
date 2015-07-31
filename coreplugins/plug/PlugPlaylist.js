@@ -2,7 +2,7 @@ function PlugPlaylist(plugin, details) {
     this.plugin = plugin;
     this.plug = plugin.plug;
 
-    this.list = undefined;
+    this.plist = undefined;
 
     this.name = details.name;
     this.active = details.active;
@@ -11,34 +11,61 @@ function PlugPlaylist(plugin, details) {
 }
 
 PlugPlaylist.prototype.list = function(callback) {
-    if (this.list !== undefined) {
-        callback(this.list);
-        return this.list;
+    if (this.plist !== undefined) {
+        if (callback) {
+            callback(this.plist);
+        }
+        return this.plist;
     }
 
     if (this.id > -1) {
         this.plug.getPlaylist(this.id, (function(err, data) {
             if (!err) {
-                this.list = data;
+                //this.plist = data;
+                this._setPlaylist(data);
+                if (callback) {
+                    callback(this.plist);
+                }
             }
         }).bind(this));
     }
 };
 
-PlugPlaylist.prototype.addMedia = function(media) {
-    var addMedia = function(media) {
-        this.list.append(media);
-    };
+PlugPlaylist.prototype._setPlaylist = function(media) {
+    this.plist = media; //TODO: use PlugMedia
+};
+
+PlugPlaylist.prototype.addMedia = function(media, append, callback) {
     if (this.id == -1) {
-        addMedia(media);
+        if (append) {
+            this.plist = this.plist.concat(media);
+        }
+        else {
+            this.plist = media.concat(this.plist);
+        }
+        if(callback)  {
+            callback(true);
+        }
     }
     else {
-        this.plug.addMedia(media.id, function(err, data) {
+        this.plug.addMedia(this.id, media, append, (function(err, data) {
             if (!err) {
-                media.id = data.id;
-                addMedia(media);
+                media.playlistID = data.id;
+
+                //just invalidate the playlist
+                // issue is that we've got no media id
+                // if anything cares, they can refetch it via list method
+                this.plist = undefined;
+                if (callback) {
+                    callback(true, data);
+                }
             }
-        }.bind(this));
+            else {
+                if (callback) {
+                    callback(false, data);
+                }
+            }
+        }).bind(this));
     }
 };
 
@@ -62,8 +89,19 @@ PlugPlaylist.prototype.delMedia = function(media) {
     }
 };
 
+PlugPlaylist.prototype.shuffle = function(callback) {
+    this.plug.shufflePlaylist(this.id, (function(err, data) {
+        if (!err) {
+            this._setPlaylist(data);
+            if (callback) {
+                callback(this.plist);
+            }
+        }
+    }).bind(this));
+};
+
 //done after a play
-PlugPlaylist.prototype.rotate = function() {
+PlugPlaylist.prototype._rotate = function() {
     var first = this.list.shift();
     this.list.push(first);
 };

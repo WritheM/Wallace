@@ -6,9 +6,11 @@ function PlugPlaylists(plugin) {
 
     this.playlists = [];
 
-
-    this.plug.getPlaylists((function(playlists) {
-        for(var playlist in playlists) {
+    this.plug.getPlaylists((function(err, playlists) {
+        console.log("playlist args", arguments)
+        for(var i in playlists) {
+            var playlist = playlists[i];
+            console.log("playlist", playlist);
             this.playlists.push(new PlugPlaylist(this.plugin, playlist));
         }
     }).bind(this));
