@@ -80,6 +80,10 @@ PlugRoom.prototype.sendChat = function(message, options) {
 
     var parts = message.split("\n");
     for(var i in parts) {
+        if (!parts.hasOwnProperty(i)) {
+            continue;
+        }
+
         var part = parts[i];
 
         if (options.rtl) {
@@ -102,14 +106,6 @@ PlugRoom.prototype.sendChat = function(message, options) {
                     case ")":
                         return "(";
                 }
-            });
-        }
-        if (options.rofl) {
-            var state = true;
-            part.replace(new RegExp(".{"+options.rofl+"}", "g"), function(str) {
-                state = !state;
-                if (state) return "\u202E"+str;
-                else  return "\u202D"+str;
             });
         }
         if (options.emote) {

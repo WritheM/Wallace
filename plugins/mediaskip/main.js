@@ -16,7 +16,7 @@ mediaskip.events.plug_advance = function (advance) {
     if (!advance.media || !advance.media.cid)
         return;
 
-    if (advance.media.format == 1) {
+    if (advance.media.format === 1) {
         youtube.videos.list({
             "part": "contentDetails",
             "id": advance.media.cid,
@@ -33,6 +33,9 @@ mediaskip.events.plug_advance = function (advance) {
                     var missing = [];
                     if (typeof details.regionRestriction.allowed !== "undefined") {
                         for (var i in mediaskip.config.regions) {
+                            if (!mediaskip.config.regions.hasOwnProperty(i)) {
+                                continue;
+                            }
                             var region = mediaskip.config.regions[i];
                             if (details.regionRestriction.allowed.indexOf(region) === -1) {
                                 missing.push(region);
@@ -41,6 +44,9 @@ mediaskip.events.plug_advance = function (advance) {
                     }
                     if (typeof details.regionRestriction.blocked !== "undefined") {
                         for (var i in mediaskip.config.regions) {
+                            if (!mediaskip.config.regions.hasOwnProperty(i)) {
+                                continue;
+                            }
                             var region = mediaskip.config.regions[i];
                             if (details.regionRestriction.blocked.indexOf(region) !== -1) {
                                 missing.push(region);

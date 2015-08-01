@@ -10,7 +10,7 @@ plugin.eventproxy = {};
 
 plugin.init = function () {
     initPlugged();
-}
+};
 
 function initPlugged() {
     var that = this;
@@ -81,7 +81,7 @@ function initPlugged() {
 plugin.eventproxy.generic = function (event, arg) {
     //console.log("generic", event, arg);
     var ignore = ["sockOpen"];
-    if (ignore.indexOf(event) == -1) {
+    if (ignore.indexOf(event) === -1) {
         console.debug("Event", event, arg);
     }
     plugin.manager.fireEvent("plug_" + event, arg);
@@ -107,10 +107,13 @@ plugin.parseMessage = function (message, options) {
     function matchName(query, i, users) {
         var matches = [];
         for(var iuser in users) {
+            if (!users.hasOwnProperty(iuser)) {
+                continue;
+            }
             var user = users[iuser];
 
             var cmpname = user.username.split(" ").slice(0, i).join(" ");
-            if (cmpname == query) {
+            if (cmpname === query) {
                 matches.push(user);
             }
         }
@@ -119,7 +122,7 @@ plugin.parseMessage = function (message, options) {
 
     var users = this.plug.getUsers();
 
-    users.sort(function(a, b) {
+    users.sort(function(a, b) {sa
         return b.username.length - a.username.length;
     });
 
@@ -127,14 +130,14 @@ plugin.parseMessage = function (message, options) {
     for (var i = 0; i < parts.length; i++) {
         var part = parts[i];
 
-        if (options.quotes && part[0] == "\"") {
+        if (options.quotes && part[0] === "\"") {
 
             for (var j = 1; j <= 10 && i + j < parts.length; j++) {
                 console.log(part);
-                if (part[part.length - 1] == "\"") {
+                if (part[part.length - 1] === "\"") {
 
                     parts.splice(i + 1, j - 1);
-                    if (options.keepquotes == true) {
+                    if (options.keepquotes === true) {
                         parts[i] = part;
                     }
                     else {
@@ -147,7 +150,7 @@ plugin.parseMessage = function (message, options) {
             }
         }
 
-        else if (options.users && part[0] == "@") {
+        else if (options.users && part[0] === "@") {
             part = part.slice(1);
 
             var matches = users;
@@ -155,8 +158,8 @@ plugin.parseMessage = function (message, options) {
                 matches = matchName(part, j, matches);
 
                 if (matches.length > 0) {
-                    if (matches.length == 1) { //is this the name we're looking for?
-                        if (matches[0].username == part) {
+                    if (matches.length === 1) { //is this the name we're looking for?
+                        if (matches[0].username === part) {
                             parts.splice(i + 1, j - 1);
                             parts[i] = "@" + part;
                         }
@@ -183,14 +186,14 @@ plugin.eventproxy.chat = function (messageData) {
     var commandPrefix = "!";
 
     //messageData.raw = messageData.message;
-    if (messageData.message == "") {
+    if (messageData.message === "") {
         messageData.args = [];
     }
     else {
         messageData.args = this.parseMessage(messageData.message);
     }
 
-    if (messageData.message[0] == commandPrefix) {
+    if (messageData.message[0] === commandPrefix) {
         messageData.command = messageData.command = messageData.args[0].substring(commandPrefix.length);
         messageData.args = messageData.args.slice(1);
         //messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
@@ -200,7 +203,7 @@ plugin.eventproxy.chat = function (messageData) {
             if (this.args.length < index) {
                 return undefined;
             }
-            else if (this.args[index][0] != "@") {
+            else if (this.args[index][0] !== "@") {
                 return undefined;
             }
             else {

@@ -7,8 +7,10 @@ function PlugPlaylists(plugin) {
     this.playlists = [];
 
     this.plug.getPlaylists((function(err, playlists) {
-        console.log("playlist args", arguments)
         for(var i in playlists) {
+            if (!playlists.hasOwnProperty(i)) {
+                continue;
+            }
             var playlist = playlists[i];
             this.playlists.push(new PlugPlaylist(this.plugin, playlist));
         }

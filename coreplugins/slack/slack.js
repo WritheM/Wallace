@@ -5,6 +5,9 @@ var http = require("http");
 var request = require("request");
 var fs = require("fs");
 var path = require("path");
+var Entities = require('html-entities').XmlEntities;
+var entities = new Entities();
+
 var SlackUser = require("./SlackUser.js");
 
 slack.init = function () {
@@ -53,7 +56,7 @@ slack.fetchUsers = function () {
 
 slack.plugToSlack = function (message) {
     function escape(text) {
-        return (text).replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, '\\$1');
+        return (text).replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
     }
 
     if (this.slackUsers) {
@@ -90,12 +93,12 @@ slack.slackToPlug = function (message) {
         var link = parts[0];
         var text = parts[1];
 
-        if (link[0] == "@") { //userid
+        if (link[0] === "@") { //userid
             if (this.slackUsers) {
                 //find and return the user
                 for (var i = 0; i < this.slackUsers.members.length; i++) {
                     var user = this.slackUsers.members[i];
-                    if ("@" + user.id == link) {
+                    if ("@" + user.id === link) {
                         return "@" + user.name;
                     }
                 }
@@ -110,7 +113,7 @@ slack.slackToPlug = function (message) {
             }
         }
         else { //regular link
-            if (text && text != link) {
+            if (text && text !== link) {
                 return link + "(" + text + ")";
             }
             return link;
@@ -148,7 +151,7 @@ slack.events.plug_sendchat = function(message, options) {
     if (!options.hidden) {
         slack.events.plug_chat.bind(this)(messageData);
     }
-    
+
 };
 
 slack.events.plug_chat = function (message) {
@@ -245,6 +248,8 @@ slack.receivedSlackMessage = function (message) {
     if (message.user_id === "USLACKBOT") {
         return;
     }
+
+    message.text = entities.decode(message.text);
 
     // command
     if (message.text[0] === "!") {

@@ -14,7 +14,7 @@ var PlugUser = function (plugin, user) {
 };
 
 PlugUser.prototype.sendChat = function (message, options) {
-    this.room.sendChat(message, options)
+    this.room.sendChat(message, options);
 };
 
 PlugUser.prototype.sendReply = function (message, options) {
@@ -54,7 +54,7 @@ PlugUser.prototype.setRole = function (role, callback) {
     var plug = this.plug;
     role = role || plug.USERROLE.NONE;
 
-    if (role == plug.USERROLE.NONE) {
+    if (role === plug.USERROLE.NONE) {
         plug.removeStaff(this.id, callback);
     }
     else {
@@ -79,7 +79,7 @@ PlugUser.prototype.mute = function (time, reason, callback) {
 PlugUser.prototype.addToWaitlist = function (callback) {
     //"add"ing self to waitlist makes message in chat
     // so just "join".
-    if (this.id == this.plug.getSelf().id) {
+    if (this.id === this.plug.getSelf().id) {
         this.plug.joinWaitlist(callback);
     }
     else {
@@ -92,7 +92,7 @@ PlugUser.prototype.removeWaitlist = function (callback) {
     //ditto ^
     callback = callback || function() {};
 
-    if (this.id == this.plug.getSelf().id) {
+    if (this.id === this.plug.getSelf().id) {
         this.plug.leaveWaitlist(callback);
     }
     else {
@@ -102,7 +102,7 @@ PlugUser.prototype.removeWaitlist = function (callback) {
 
 PlugUser.prototype.moveDJ = function(position, callback) {
     var oldpos = this.getWaitlistPosition();
-    if (oldpos && oldpos != position) {
+    if (oldpos && oldpos !== position) {
         this.plug.moveDJ(this.id, callback);
     }
 };
@@ -117,18 +117,21 @@ PlugUser.prototype.isFriend = function() {
 
 PlugUser.prototype.isCurrentDJ = function() {
     var dj = this.plug.getCurrentDJ();
-    if (dj == null) {
-        return true;
+    if (dj === null) {
+        return false;
     }
-    return dj.id == this.id;
+    return dj.id === this.id;
 };
 
 PlugUser.prototype.getWaitlistPosition = function() {
     var waitlist = this.plug.getWaitlist();
     for (var i in waitlist) {
+        if (waitlist.hasOwnProperty(i)) {
+            continue;
+        }
         var user = waitlist[i];
 
-        if (user.id == this.id) {
+        if (user.id === this.id) {
             return i;
         }
     };

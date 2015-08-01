@@ -76,7 +76,7 @@ PlugPlaylist.prototype.delMedia = function(media) {
             this.list.splice(index, 1);
         }
     };
-    if (this.id == -1) {
+    if (this.id === -1) {
         delMedia(media);
     }
     else {
