@@ -54,9 +54,9 @@ mediaskip.events.plug_advance = function (advance) {
                         }
                     }
                     if (missing.length > 0) {
-                        mediaskip.plug.sendChat("/me [Skipped] Video unavailable in: " + missing.join(" "));
-                        mediaskip.plug.sendChat("/me http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=" + advance.media.cid);
-                        mediaskip.plug.moderateForceSkip();
+                        mediaskip.plug.room.sendChat("/me [Skipped] Video unavailable in: " + missing.join(" "));
+                        mediaskip.plug.room.sendChat("/me http://polsy.org.uk/stuff/ytrestrict.cgi?ytid=" + advance.media.cid);
+                        mediaskip.plugged.skipDJ(mediaskip.plugged.getCurrentDJ().id);
                     }
 
                 }

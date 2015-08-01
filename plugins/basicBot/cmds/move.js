@@ -3,8 +3,13 @@ module.exports = function (basicBot) {
         if (message.from.rank >= this.core.ranks.BOUNCER) {
             var user = message.getUser(0);
             var target = message.getUser(1);
-            var position = target?target.getWaitlistPosition():parseInt(message.args[1]);
-            var waitlist = this.plug.room.getWaitlist();
+            var position;
+            if (target !== undefined) {
+                position = target.getWaitlistPosition();
+            }
+            else {
+                position = parseInt(message.args[1]);
+            }
 
             if (!user) {
                 message.sendReply("Error, couldn't find user");
