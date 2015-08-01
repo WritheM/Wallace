@@ -1,4 +1,9 @@
 var Plugged = require("plugged");
+var FileCookieStore = require('tough-cookie-filestore');
+var tough = require("tough-cookie");
+var cookie = require("request/lib/cookies");
+var fs = require("fs");
+
 var PlugUser = require("./PlugUser.js");
 var PlugRoom = require("./PlugRoom.js");
 var PlugPlaylists = require("./PlugPlaylists.js");
@@ -21,25 +26,56 @@ function initPlugged() {
         log: logger
     });
 
-    plugged.login(plugin.config.auth);
+    var cookies = "";
+    try {
+        cookies = JSON.parse(fs.readFileSync("cookiejar.json"));
+    }
+    catch (e) {
+
+    }
+
+    if (cookies) {
+        var jar = tough.CookieJar.deserializeSync(cookies);
+        console.log(cookie);
+        var rjar = cookie.jar();
+        rjar._jar = jar;
+        plugged.setJar(rjar);
+        //tough.CookieJar.deserializeSync(cookies)
+    }
+
+    plugged.getAuthToken(function(err, token) {
+        if (!err) {
+            plugged.login(plugin.config.auth, token);
+        }
+        else {
+            plugged.login(plugin.config.auth);
+        }
+    });
+
+
     plugged.on(plugged.LOGIN_SUCCESS, function () {
         plugged.connect(plugin.config.auth.room);
+        var cookies = JSON.stringify(plugged.getJar()._jar.toJSON());
+        fs.writeFileSync("cookiejar.json", cookies);
     });
     plugged.on(plugged.CONN_PART, function () {
         plugged.login(plugin.config.auth);
     });
     plugged.on(plugged.SOCK_ERROR, function () {
         plugged.login(plugin.config.auth);
+        plugged.setJar(null);
     });
     plugged.on(plugged.CONN_ERROR, function () {
         setTimeout(function () {
             plugged.login(plugin.config.auth);
         }, 5000);
+        plugged.setJar(null);
     });
     plugged.on(plugged.LOGIN_ERROR, function () {
         setTimeout(function () {
             plugged.login(plugin.config.auth);
         }, 5000);
+        plugged.setJar(null);
     });
 
     plugged.on(plugged.JOINED_ROOM, function () {
