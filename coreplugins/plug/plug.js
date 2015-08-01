@@ -193,7 +193,7 @@ plugin.eventproxy.chat = function (messageData) {
     if (messageData.message[0] == commandPrefix) {
         messageData.command = messageData.command = messageData.args[0].substring(commandPrefix.length);
         messageData.args = messageData.args.slice(1);
-        messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
+        //messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
 
 
         messageData.getUser = function(index) {

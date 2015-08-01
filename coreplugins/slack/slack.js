@@ -132,19 +132,34 @@ slack.events.plug_join = function (user) {
 
 };
 
+slack.events.plug_sendchat = function(message, options) {
+    options.hidden = options.hidden || false;
+
+    var messageData = {
+        from: this.plug.getSelf(),
+        message: message,
+        internal: true
+    };
+
+    if (options.emote) {
+         messageData.message = "/me " + messageData.message;
+    }
+
+    if (!options.hidden) {
+        slack.events.plug_chat.bind(this)(messageData);
+    }
+    
+};
+
 slack.events.plug_chat = function (message) {
     var content = slack.plugToSlack(message.message);
 
 
-    if (this.config.ignoreself === true) {
-        if (message.command) {
-            return;
-        }
 
-        if (message.from.username === this.plug.getSelf().username) {
-            return;
-        }
+    if (!message.internal && message.from.username === this.plug.getSelf().username) {
+        return;
     }
+
 
     var parts = content.split(" ");
     if (parts[0] === "/me") {
