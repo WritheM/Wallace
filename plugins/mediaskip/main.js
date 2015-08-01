@@ -10,7 +10,7 @@ mediaskip.init = function () {
     this.plug = this.manager.getPlugin("plug")
     this.plugged = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
-    mediaskip.events.plug_advance.call(this, {"media": this.plug.getMedia()});
+    mediaskip.events.plug_advance.call(this, {"media": this.plugged.getMedia()});
 };
 
 mediaskip.events.plug_advance = function (advance) {
@@ -25,7 +25,7 @@ mediaskip.events.plug_advance = function (advance) {
         }, function (err, results) {
             if (results.items.length === 0) {
                 this.plug.room.sendChat("/me [Skipped] Video unavailable");
-                this.plug.skipDJ.skipDJ();
+                this.plug.skipDJ();
             }
             else {
                 var video = results.items[0];
