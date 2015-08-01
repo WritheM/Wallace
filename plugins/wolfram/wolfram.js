@@ -12,7 +12,7 @@ wolfram.events.command_wa = function (message) {
                 console.error("!wa: Got Error:" + body);
             }
             else {
-                message.from.sendReply(body, {emote:true});
+                message.from.sendReply(body.replace(/[\r\n]/g, ""), {emote:true});
             }
         });
         }
