@@ -7,7 +7,7 @@
   "name": "basicBot",
   "description": "suite of basicBot commands",
   "peerDependencies": {
-    "wallace": "*"
+
   },
   "main": "main.js",
   "wallace": {

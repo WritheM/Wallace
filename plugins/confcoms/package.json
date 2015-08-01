@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Config Commands loader. Enter your commands in a single config.json to add new response based commands.",
   "peerDependencies": {
-    "wallace": "*"
+
   },
   "wallace": {
     "config": {

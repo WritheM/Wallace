@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Will forward to the RRD API for basic stat storage.",
   "peerDependencies": {
-    "wallace": "*"
+
   },
   "wallace": {
     "config": {

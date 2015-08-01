@@ -8,7 +8,7 @@
   "name": "giphy",
   "description": "Giphy.com integration. Search for a gif that belongs to a set of tags, or return a random gif.",
   "peerDependencies": {
-    "wallace": "*"
+
   },
   "wallace": {
     "config": {

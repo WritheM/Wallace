@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "Callouts Administration. valid arguments are view|add|del or do not pass anything to view how many callouts there are.",
   "peerDependencies": {
-    "wallace": "*"
+
   },
   "wallace": {
     "config": {

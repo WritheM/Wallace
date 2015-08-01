@@ -162,7 +162,7 @@ plugin.parseMessage = function (message, options) {
 
     var users = this.plug.getUsers();
 
-    users.sort(function(a, b) {sa
+    users.sort(function(a, b) {
         return b.username.length - a.username.length;
     });
 
