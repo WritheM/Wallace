@@ -14,5 +14,9 @@ catch(e) {}
 
 var Core = require("./core/Core.js");
 
+process.on('uncaughtException', function (err) {
+    console.error(err);
+});
+
 GLOBAL.core = new Core();
 
