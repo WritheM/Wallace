@@ -41,6 +41,7 @@ events.onLoad = function (_plugin) {
     this.manager = _plugin.manager;
     this.core = this.manager.core;
     this.config = _plugin.getConfig();
+    this.logger = this.core.log4js.getLogger(_plugin.meta.name);
 
     if (this.init) {
         this.init();

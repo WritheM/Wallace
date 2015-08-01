@@ -32,24 +32,24 @@ function initPlugged() {
         plugged.login(plugin.config.auth);
     });
     plugged.on(plugged.CONN_ERROR, function () {
-        setTimeout(function() {
+        setTimeout(function () {
             plugged.login(plugin.config.auth);
         }, 5000);
     });
     plugged.on(plugged.LOGIN_ERROR, function () {
-        setTimeout(function() {
+        setTimeout(function () {
             plugged.login(plugin.config.auth);
         }, 5000);
     });
 
     plugged.on(plugged.JOINED_ROOM, function () {
-        plugged.sendChat("/me Wallace v"+WALLACEVERSION+" online");
+        plugged.sendChat("/me Wallace v" + WALLACEVERSION + " online");
         plugin.room = new PlugRoom(plugin);
         plugin.playlists = new PlugPlaylists(plugin);
     });
 
     //rrdstats fixes
-    plugged.getGuests = function() {
+    plugged.getGuests = function () {
         return plugged.state.room.meta.guests;
     };
     plugged.getWaitList = plugged.getWaitlist; //case
@@ -63,7 +63,7 @@ function initPlugged() {
 
     //monkey patch emit: http://stackoverflow.com/a/18087021
     plugged.emit_old = plugged.emit;
-    plugged.emit = function() {
+    plugged.emit = function () {
         var event = arguments[0];
 
         if (event in plugin.eventproxy) {
@@ -95,47 +95,98 @@ plugin.eventproxy.advance = function (booth, playback, previous) {
     plugin.manager.fireEvent("plug_advance", event);
 };
 
-plugin.eventproxy.chat = function (messageData) {
-    messageData.from = new PlugUser(this, plugin.plugged.getUserByID(messageData.id));
 
-    //copied and pasted from plugAPI
-    //TODO: rewrite with saner approach
-    var commandPrefix = "!";
-    var i, cmd, lastIndex, allUsers, random;
+plugin.parseMessage = function (message, options) {
+    if (!options) {
+        options = {};
+    }
+    options.keepquotes = options.keepquotes || false;
+    options.quotes = options.quotes || true;
+    options.users = options.users || true;
 
-    if (messageData.message.indexOf(commandPrefix) === 0) {
-        cmd = messageData.message.substr(commandPrefix.length).split(' ')[0];
-        messageData.command = cmd;
-        messageData.args = messageData.message.substr(commandPrefix.length + cmd.length + 1);
+    function matchName(query, i, users) {
+        var matches = [];
+        for(var iuser in users) {
+            var user = users[iuser];
 
-        // Mentions => Mention placeholder
-        lastIndex = messageData.args.indexOf('@');
-        allUsers = plugin.plugged.getUsers();
-        random = Math.ceil(Math.random() * 1E10);
-        while (lastIndex > -1) {
-            var test = messageData.args.substr(lastIndex), found = null;
-            for (i in allUsers) {
-                if (allUsers.hasOwnProperty(i) && test.indexOf(allUsers[i].username) === 1) {
-                    if (found === null || allUsers[i].username.length > found.username.length) {
-                        found = allUsers[i];
+            var cmpname = user.username.split(" ").slice(0, i).join(" ");
+            if (cmpname == query) {
+                matches.push(user);
+            }
+        }
+        return matches;
+    }
+
+    var users = this.plug.getUsers();
+
+    users.sort(function(a, b) {
+        return b.username.length - a.username.length;
+    });
+
+    var parts = message.split(" ");
+    for (var i = 0; i < parts.length; i++) {
+        var part = parts[i];
+
+        if (options.quotes && part[0] == "\"") {
+
+            for (var j = 1; j <= 10 && i + j < parts.length; j++) {
+                console.log(part);
+                if (part[part.length - 1] == "\"") {
+
+                    parts.splice(i + 1, j - 1);
+                    if (options.keepquotes == true) {
+                        parts[i] = part;
+                    }
+                    else {
+                        parts[i] = part.substring(1, part.length - 1);
+                    }
+
+                    break;
+                }
+                part = part + " " + parts[i + j];
+            }
+        }
+
+        else if (options.users && part[0] == "@") {
+            part = part.slice(1);
+
+            var matches = users;
+            for (var j = 1; j <= 10 && i + j < parts.length; j++) {
+                matches = matchName(part, j, matches);
+
+                if (matches.length > 0) {
+                    if (matches.length == 1) { //is this the name we're looking for?
+                        if (matches[0].username == part) {
+                            parts.splice(i + 1, j - 1);
+                            parts[i] = "@" + part;
+                        }
                     }
                 }
-            }
-            if (found !== null) {
-                messageData.args = messageData.args.substr(0, lastIndex) + '%MENTION-' + random + '-' + messageData.mentions.length + '%' + messageData.args.substr(lastIndex + found.username.length + 1);
-                messageData.mentions.push(found);
-            }
-            lastIndex = messageData.args.indexOf('@', lastIndex + 1);
-        }
+                else {
+                    break;
+                }
 
-        messageData.args = messageData.args.split(' ');
-
-        // Mention placeholder => User object
-        for (i in messageData.mentions) {
-            if (messageData.mentions.hasOwnProperty(i)) {
-                messageData.args[messageData.args.indexOf('%MENTION-' + random + '-' + i + '%')] = messageData.mentions[i];
+                part = part + " " + parts[i + j];
             }
+
         }
+    }
+    return parts;
+};
+
+
+plugin.eventproxy.chat = function (messageData) {
+    messageData.from = plugin.room.getUserById(messageData.id);
+
+    var commandPrefix = "!";
+
+    //messageData.raw = messageData.message;
+    messageData.args = this.parseMessage(messageData.message);
+
+    if (messageData.message[0] == commandPrefix) {
+        messageData.command = messageData.command = messageData.args[0].substring(commandPrefix.length);
+        messageData.args = messageData.args.slice(1);
+        messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
 
         plugin.manager.fireEvent("plug_command_" + messageData.command, messageData);
         plugin.manager.fireEvent("command_" + messageData.command, messageData);

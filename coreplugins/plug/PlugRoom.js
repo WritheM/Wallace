@@ -9,14 +9,14 @@ function PlugRoom(plugin) {
 
 PlugRoom.prototype.getUsers = function() {
     var _users = this.plug.getUsers();
-    console.log("Users: "+_users);
     var users = [];
     for(var user in _users) {
         if (!_users.hasOwnProperty(user)) {
             continue;
         }
-        users.push(new PlugUser(this.plugin, user));
+        users.push(new PlugUser(this.plugin, _users[user]));
     }
+
     return users;
 };
 
@@ -36,6 +36,9 @@ PlugRoom.prototype.getUserByName = function(name, checkCache) {
     var user = this.plug.getUserByName(name, checkCache);
     if (user) {
         return new PlugUser(this.plugin, user);
+    }
+    else if(name[0] == "@") {
+        return this.getUserByName(name.substring(1));
     }
     else {
         return undefined;
@@ -115,6 +118,7 @@ PlugRoom.prototype.sendChat = function(message, options) {
 
         this.plug.sendChat(part);
     }
+    this.plugin.manager.fireEvent("plug_sendchat", message, options);
 };
 
 module.exports = PlugRoom;

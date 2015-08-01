@@ -83,7 +83,7 @@ PlugUser.prototype.addToWaitlist = function (callback) {
         this.plug.joinWaitlist(callback);
     }
     else {
-        this.plug.addToWaitlist(user.id, callback);
+        this.plug.addToWaitlist(this.id, callback);
     }
 };
 

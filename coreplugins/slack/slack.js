@@ -41,13 +41,12 @@ slack.events.onUnload = function () {
 
 slack.fetchUsers = function () {
     //console.log("users", this);
-    console.log("fetching users");
     request("https://slack.com/api/users.list?token=" + this.config.usertoken, function (error, response, body) {
         if (!error && response.statusCode === 200) {
             slack.slackUsers = JSON.parse(body);
         }
         else {
-            console.log(response);
+            console.error(response);
         }
     });
 };
@@ -87,7 +86,6 @@ slack.slackToPlug = function (message) {
     //console.log("message", this);
 
     message = message.replace(/<(.*?)>/g, (function (match, p1) {
-        console.log(match);
         var parts = p1.split("|");
         var link = parts[0];
         var text = parts[1];
