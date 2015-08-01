@@ -5,14 +5,14 @@ module.exports = function (basicBot) {
             this.plug.sendChat("/me [" + message.from.username+" used skip, it was very effective!]");
             this.plug.moderateForceSkip();
 
-            //TODO: impelment timeout so it does things in the proper order.
+            //TODO: implement timeout so it does things in the proper order.
             if (message.args.length !== 0) {
                 this.plug.sendChat("/me @" + this.plug.getDJ().username+" "+ this.config.skip.reasons[message.args[0]]);
             }
 
         }
         else {
-            message.from.sendEmote("Command only available to current DJ and staff, while there is someone in the DJ Booth");
+            message.from.sendReply("Command only available to current DJ and staff, while there is someone in the DJ Booth", {emote: true});
         }
     };
 };

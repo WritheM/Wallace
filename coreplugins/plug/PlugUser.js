@@ -90,6 +90,8 @@ PlugUser.prototype.addToWaitlist = function (callback) {
 
 PlugUser.prototype.removeWaitlist = function (callback) {
     //ditto ^
+    callback = callback || function() {};
+
     if (this.id == this.plug.getSelf().id) {
         this.plug.leaveWaitlist(callback);
     }

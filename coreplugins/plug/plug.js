@@ -177,7 +177,9 @@ plugin.parseMessage = function (message, options) {
 
 plugin.eventproxy.chat = function (messageData) {
     messageData.from = plugin.room.getUserById(messageData.id);
-
+    messageData.delete = function() {
+        plugin.plug.deleteMessage(this.cid);
+    };
     var commandPrefix = "!";
 
     //messageData.raw = messageData.message;
