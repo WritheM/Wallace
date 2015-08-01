@@ -7,7 +7,8 @@ var google = require("googleapis");
 var youtube = google.youtube("v3");
 
 mediaskip.init = function () {
-    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug")
+    this.plugged = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
     mediaskip.events.plug_advance.call(this, {"media": this.plug.getMedia()});
 };
@@ -23,8 +24,8 @@ mediaskip.events.plug_advance = function (advance) {
             "key": this.config.key_youtube
         }, function (err, results) {
             if (results.items.length === 0) {
-                this.plug.sendChat("/me [Skipped] Video unavailable");
-                this.plug.moderateForceSkip();
+                this.plug.room.sendChat("/me [Skipped] Video unavailable");
+                this.plug.skipDJ.skipDJ();
             }
             else {
                 var video = results.items[0];

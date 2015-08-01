@@ -7,9 +7,7 @@ timedCallouts.vars = {
     storedRequest: null
 };
 
-timedCallouts.events.onLoad = function (plugin) {
-    timedCallouts.config = plugin.getConfig();
-
+timedCallouts.init = function (plugin) {
     timedCallouts.scheduleShoutout();
     timedCallouts.storedRequest = plugin;
 };
@@ -92,7 +90,7 @@ timedCallouts.doShoutout = function () {
     if (message && message.trim().length) {
         console.log("scheduledShoutout: " + message);
 
-        var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").plug.sendChat;
+        var sendChat = timedCallouts.storedRequest.manager.getPlugin("plug").room.sendChat;
         sendChat(message);
     }
 

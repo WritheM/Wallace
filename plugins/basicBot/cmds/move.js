@@ -18,7 +18,7 @@ module.exports = function (basicBot) {
                 message.sendReply("Invalid position");
             }
             else {
-                user.moveDJ(position);
+                user.moveDJ(position, function() { });
             }
         }
         else {

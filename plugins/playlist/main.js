@@ -25,7 +25,7 @@ playlist.events.command_playlist = function(message) {
 };
 
 subcommands.list = function(message) {
-    playlist.plug.getPlaylists(function(playlists) {
+    playlist.plug.getPlaylists(function(err, playlists) {
         var list = [];
         for (var i in playlists) {
             if (!playlists.hasOwnProperty(i)) {
