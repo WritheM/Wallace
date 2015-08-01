@@ -5,10 +5,13 @@ var http = require("http");
 var request = require("request");
 var fs = require("fs");
 var path = require("path");
+var Entities = require('html-entities').XmlEntities;
+var entities = new Entities();
+
 var SlackUser = require("./SlackUser.js");
 
 slack.init = function () {
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
     var Slack = require("node-slackr");
     this.slack = new Slack(this.config.webhookuri, {
@@ -18,21 +21,13 @@ slack.init = function () {
 
 
     if (this.config.server !== undefined) {
-        this.server = http.createServer((function (that) {
-            return function () {
-                that.slackRequest.apply(that, arguments);
-            };
-        })(this));
+        this.server = http.createServer(this.slackRequest.bind(this));
         this.server.listen(this.config.server.port, this.config.server.host);
     }
 
     if (this.config.usertoken) {
-        this.pollTimer = setInterval((function (slack) {
-            return function () {
-                slack.fetchUsers.apply(slack, arguments);
-            };
-        })(this), (this.config.fetchInterval || 30) * 1000);
-        this.fetchUsers();
+        this.pollTimer = setInterval(this.fetchUsers.bind(this), (this.config.fetchInterval || 30) * 1000);
+        this.fetchUsers.bind(this)();
     }
 
     this.slackEmotes = JSON.parse(fs.readFileSync(path.join(__dirname, "emotes.json")));
@@ -43,22 +38,27 @@ slack.events.onUnload = function () {
         this.server.close();
     }
     if (this.pollTimer) {
-        clearTimer(this.pollTimer);
+        clearTimeout(this.pollTimer);
     }
 };
 
 slack.fetchUsers = function () {
+    //console.log("users", this);
     request("https://slack.com/api/users.list?token=" + this.config.usertoken, function (error, response, body) {
         if (!error && response.statusCode === 200) {
-            this.slackUsers = JSON.parse(body);
+            slack.slackUsers = JSON.parse(body);
         }
         else {
-            console.log(response);
+            console.error(response);
         }
     });
 };
 
 slack.plugToSlack = function (message) {
+    function escape(text) {
+        return (text).replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
+    }
+
     if (this.slackUsers) {
         for (var i = 0; i < this.slackUsers.members.length; i++) {
             var user = this.slackUsers.members[i];
@@ -69,22 +69,58 @@ slack.plugToSlack = function (message) {
     for (var k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
             var emote = this.slackEmotes[k];
-            message = message.replace(k, ":" + emote + ":");
+            var replace = new RegExp("(^|\\s)" + escape(k) + "(?=$|\\s)", "g");
+            message = message.replace(replace, "$1:" + emote + ":");
         }
     }
-
     return message;
 };
 
 slack.slackToPlug = function (message) {
-    if (this.slackUsers) {
+    /*if (this.slackUsers) {
         for (var i = 0; i < this.slackUsers.members.length; i++) {
             var user = this.slackUsers.members[i];
             //TODO: replace with a regex
             message = message.replace("<@" + user.id + "|" + user.name + ">", "@" + user.name);
             message = message.replace("<@" + user.id + ">", "@" + user.name);
         }
-    }
+    }*/
+
+    //console.log("message", this);
+
+    message = message.replace(/<(.*?)>/g, (function (match, p1) {
+        var parts = p1.split("|");
+        var link = parts[0];
+        var text = parts[1];
+
+        if (link[0] === "@") { //userid
+            if (this.slackUsers) {
+                //find and return the user
+                for (var i = 0; i < this.slackUsers.members.length; i++) {
+                    var user = this.slackUsers.members[i];
+                    if ("@" + user.id === link) {
+                        return "@" + user.name;
+                    }
+                }
+            }
+            //we haven't found the user, try returning just the text
+            if (text) {
+                return text;
+            }
+            else {
+                //else.. make do with the id :/
+                return link;
+            }
+        }
+        else { //regular link
+            if (text && text !== link) {
+                return link + "(" + text + ")";
+            }
+            return link;
+        }
+    }).bind(this));
+
+
     for (var k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
             var emote = this.slackEmotes[k];
@@ -99,19 +135,34 @@ slack.events.plug_join = function (user) {
 
 };
 
+slack.events.plug_sendchat = function(message, options) {
+    options.hidden = options.hidden || false;
+
+    var messageData = {
+        from: this.plug.getSelf(),
+        message: message,
+        internal: true
+    };
+
+    if (options.emote) {
+         messageData.message = "/me " + messageData.message;
+    }
+
+    if (!options.hidden) {
+        slack.events.plug_chat.bind(this)(messageData);
+    }
+
+};
+
 slack.events.plug_chat = function (message) {
     var content = slack.plugToSlack(message.message);
 
 
-    if (this.config.ignoreself === true) {
-        if (message.command) {
-            return;
-        }
 
-        if (message.from.username === this.plug.getSelf().username) {
-            return;
-        }
+    if (!message.internal && message.from.username === this.plug.getSelf().username) {
+        return;
     }
+
 
     var parts = content.split(" ");
     if (parts[0] === "/me") {
@@ -131,7 +182,7 @@ slack.events.plug_advance = function (track) {
 
     var message = [];
 
-    if (track.lastPlay !== undefined && track.lastPlay.dj !== null) {
+    if (track.lastPlay !== undefined && track.lastPlay.dj) {
         message.push({
             text: "*Last play:-* Woots: " + track.lastPlay.score.positive + ", Grabs: " + track.lastPlay.score.grabs
             + ", Mehs: " + track.lastPlay.score.negative,
@@ -141,7 +192,7 @@ slack.events.plug_advance = function (track) {
             mrkdwn_in: ["text", "pretext"]
         });
     }
-    if (track.currentDJ !== null) {
+    if (track.currentDJ) {
         message.push({
             text: "*" + track.currentDJ.username + "* has started playing *" + track.media.author + "* - *"
             + track.media.title + "*",
@@ -198,6 +249,8 @@ slack.receivedSlackMessage = function (message) {
         return;
     }
 
+    message.text = entities.decode(message.text);
+
     // command
     if (message.text[0] === "!") {
         var cmd = message.text.substr(1).split(" ")[0];
@@ -211,7 +264,7 @@ slack.receivedSlackMessage = function (message) {
         });
     }
     else {
-        this.plug.sendChat("<`" + message.user_name + "@slack`> " + this.slackToPlug(message.text));
+        this.plug.sendChat("<`" + message.user_name + "@slack`> " + this.slackToPlug.bind(slack)(message.text));
     }
 
     this.plugin.manager.fireEvent("chat", {

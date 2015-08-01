@@ -1,0 +1,13 @@
+{
+  "author": "Joe Carter",
+  "name": "playlist",
+  "version": "0.0.1",
+  "description": "Playlist",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "main": "main.js",
+  "wallace": {
+    "dependencies": []
+  }
+}

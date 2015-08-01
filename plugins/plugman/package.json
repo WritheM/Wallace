@@ -1,0 +1,13 @@
+{
+  "author": "Joe Carter",
+  "name": "plugman",
+  "version": "0.0.1",
+  "description": "Plugman",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "main": "plugman.js",
+  "wallace": {
+    "dependencies": []
+  }
+}

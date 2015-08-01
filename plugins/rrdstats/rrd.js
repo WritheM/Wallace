@@ -5,7 +5,7 @@ var request = require("request");
 var plugAPI = require("plugapi");
 
 rrd.init = function () {
-    this.plug = this.manager.getPlugin("plug").plugin.plug; //TODO: implement better method
+    this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
     rrd.statsTimer = setInterval(function () {
         this.save_stats();

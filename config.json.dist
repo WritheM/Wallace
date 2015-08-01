@@ -24,7 +24,7 @@
     "callouts": {
         "shoutOutInterval": 60,
         "callouts": [
-            "Welcome to the WritheM Radio Community! We are running \"BotPlug\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/botPlug",
+            "Welcome to the WritheM Radio Community! We are running \"Wallace\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/Wallace",
             "This a second example of a callout that will be posted to your plug community every 60 minutes."
         ],
         "permission": [

@@ -13,10 +13,10 @@ module.exports = function (basicBot) {
 				response = this.randmsg[Math.floor(Math.random() * this.randmsg.length)];
 			}
 
-			message.from.sendEmote(response);
+			message.from.sendReply(response, {emote: true});
 		}
 		else {
-			message.from.sendEmote("Command only available to staff");
+			message.from.sendReply("Command only available to staff", {emote:true});
 		}
     };
 };

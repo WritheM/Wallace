@@ -1,4 +1,4 @@
-# wolfram|alpha plugin for botPlug
+# wolfram|alpha plugin for Wallace
 
 This plugin provides your users the ability to query wolfram|alpha for information from it's database as well as provide some of your own answers, as defined in easter.php.
 

@@ -1,0 +1,20 @@
+{
+  "author": "Michael Writhe",
+  "name": "callouts",
+  "version": "0.0.1",
+  "description": "Callouts Administration. valid arguments are view|add|del or do not pass anything to view how many callouts there are.",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "wallace": {
+    "config": {
+      "shoutOutInterval": 60,
+      "callouts": [
+        "Welcome to our Community! We are running \"Wallace\", created by ylt and pironic, which is open source and located at https://github.com/WritheM/Wallace",
+        "This is a second example of a callout for your community!"
+      ],
+      "permission": ["NORMAL"]
+    }
+  },
+  "main": "timedCallouts.js"
+}

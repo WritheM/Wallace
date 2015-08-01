@@ -1,24 +1,21 @@
-BotPlug
+Wallace
 ---
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/WritheM/botPlug/master/LICENSE.md)
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://github.com/WritheM/botPlug/#requirements)
-[![node.js](https://img.shields.io/node/v/gh-badges.svg)](https://github.com/WritheM/botPlug/#requirements)
-[![Github Releases](https://img.shields.io/github/release/WritheM/botPlug.svg)](https://github.com/WritheM/botPlug/releases)
-[![Codacy](https://img.shields.io/codacy/ce11553d61ea42bbbdbe96930c20de06.svg)](https://www.codacy.com/app/WritheM/botPlug)
-[![GitHub issues](https://img.shields.io/github/issues/WritheM/botPlug.svg)](https://github.com/WritheM/botPlug/issues)
-[![Travis](https://img.shields.io/travis/WritheM/botPlug.svg)](https://travis-ci.org/WritheM/botPlug)
-
-
-Name change pending, read more and suggest your own via: http://wiki.writhem.com/pages/viewpage.action?pageId=4980797
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/WritheM/Wallace/master/LICENSE.md)
+[![npm](https://img.shields.io/npm/v/npm.svg)](https://github.com/WritheM/Wallace/#requirements)
+[![node.js](https://img.shields.io/node/v/gh-badges.svg)](https://github.com/WritheM/Wallace/#requirements)
+[![Github Releases](https://img.shields.io/github/release/WritheM/Wallace.svg)](https://github.com/WritheM/Wallace/releases)
+[![Codacy](https://img.shields.io/codacy/ce11553d61ea42bbbdbe96930c20de06.svg)](https://www.codacy.com/app/WritheM/Wallace)
+[![GitHub issues](https://img.shields.io/github/issues/WritheM/Wallace.svg)](https://github.com/WritheM/Wallace/issues)
+[![Travis](https://img.shields.io/travis/WritheM/Wallace.svg)](https://travis-ci.org/WritheM/Wallace)
 
 ---
 
 Installation
 ---
 
-    git clone https://github.com/WritheM/botPlug.git
-    cd botPlug
+    git clone https://github.com/WritheM/Wallace.git
+    cd Wallace
     npm install
 
 Requirements

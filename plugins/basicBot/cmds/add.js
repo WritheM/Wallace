@@ -3,10 +3,21 @@ var plugAPI = require("plugapi");
 module.exports = function (basicBot) {
     basicBot.events.command_add = function (message) {
         if (message.from.rank >= this.core.ranks.BOUNCER) {
-            this.plug.moderateAddDJ(message.args[0].id);
+
+            var user = message.from;
+            if (message.args.length > 0) {
+                user = message.getUser(0);
+            }
+
+            if (!user) {
+                message.from.sendReply("Error: couldn't find user.");
+            }
+            else {
+                user.addToWaitlist();
+            }
         }
         else {
-            message.from.sendEmote("Command only available to staff");
+            message.from.sendReply("Command only available to staff", {emote:true});
         }
     };
 };

@@ -1,0 +1,22 @@
+{
+  "author": "Michael Writhe",
+  "contributors": [
+    "Michael Writhe",
+    "Joe Carter"
+  ],
+  "version": "0.0.1",
+  "name": "giphy",
+  "description": "Giphy.com integration. Search for a gif that belongs to a set of tags, or return a random gif.",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "wallace": {
+    "config": {
+      "api_key": "dc6zaTOxFJmzC",
+      "rating": "pg-13",
+      "permission": ["NORMAL"],
+      "url": "http://api.giphy.com/v1/gifs/random"
+    }
+  },
+  "main": "giphy.js"
+}

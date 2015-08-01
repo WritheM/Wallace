@@ -11,7 +11,7 @@ function PluginLoader(manager, directory) {
 }
 
 PluginLoader.prototype.reloadMeta = function () {
-    var file = this.directory + "/meta.json";
+    var file = this.directory + "/package.json";
     this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
 };
 
@@ -21,7 +21,7 @@ PluginLoader.prototype._load = function () {
     }
 
     // get plugin script path
-    var path = "../" + this.directory + "/" + this.meta.script;
+    var path = "../" + this.directory + "/";
     try {
         var plugin = require(path);
 
@@ -35,6 +35,7 @@ PluginLoader.prototype._load = function () {
         // if here, plugin loaded successfully
 
         this.loaded = true;
+        this.addAuthor(this.meta.author);
 
         this.plugin.events.onLoad.call(this.plugin, this);
         console.log("Loaded " + this.meta.name);
@@ -47,7 +48,7 @@ PluginLoader.prototype._load = function () {
 };
 
 PluginLoader.prototype._unload = function () {
-    var path = "../" + this.directory + "/" + this.meta.script;
+    var path = "../" + this.directory + "/";
 
     this.fireEvent("onUnload");
 
@@ -102,8 +103,8 @@ PluginLoader.prototype.getConfig = function () {
     // no existing userconfig, clone it before returning
 
     var conf = {};
-    if ("config" in this.meta) {
-        conf = this.meta.config;
+    if ("wallace" in this.meta && "config" in this.meta.wallace) {
+        conf = this.meta.wallace.config;
     }
     manconf[this.meta.name] = JSON.parse(JSON.stringify(conf));
     return [this.meta.name];
@@ -124,6 +125,22 @@ PluginLoader.prototype.fireEvent = function (eventname) {
     }
     catch (e) {
         console.log("Event handler crashed", e);
+    }
+};
+
+PluginLoader.prototype.addAuthor = function(author) {
+    if (author instanceof Array) {
+        author.forEach(function(auth) {
+            PluginLoader.prototype.addAuthor(auth);
+        });
+    }
+    else if (typeof author === "string") {
+        if (!GLOBAL.PLUGIN_CONTRIBUTORS) {
+            GLOBAL.PLUGIN_CONTRIBUTORS = [];
+        }
+        if (GLOBAL.PLUGIN_CONTRIBUTORS.indexOf(author) === -1) {
+            GLOBAL.PLUGIN_CONTRIBUTORS.push(author);
+        }
     }
 };
 

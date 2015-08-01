@@ -1,0 +1,24 @@
+{
+  "author": "Joe Carter",
+  "name": "mediaskip",
+  "version": "0.0.1",
+  "description": "Autoskip unavailable media",
+  "peerDependencies": {
+    "wallace": "*"
+  },
+  "dependencies": {
+    "googleapis": "*"
+  },
+  "main": "main.js",
+  "wallace": {
+    "dependencies": ["plug"],
+    "config":{
+      "key_youtube": "",
+      "regions": [
+        "US",
+        "GB",
+        "CA"
+      ]
+    }
+  }
+}

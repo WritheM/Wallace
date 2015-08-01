@@ -1,4 +1,4 @@
-# gifphy plugin for botPlug
+# gifphy plugin for Wallace
 
 This plugin provides your users the ability to query giphy.com for a random gif or the gif with the tags they specify.
 
