@@ -126,7 +126,7 @@ PlugUser.prototype.isCurrentDJ = function() {
 PlugUser.prototype.getWaitlistPosition = function() {
     var waitlist = this.plug.getWaitlist();
     for (var i in waitlist) {
-        if (waitlist.hasOwnProperty(i)) {
+        if (!waitlist.hasOwnProperty(i)) {
             continue;
         }
         var user = waitlist[i];

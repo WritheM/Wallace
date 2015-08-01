@@ -3,7 +3,7 @@ module.exports = function (basicBot) {
         if (message.from.rank >= this.core.ranks.BOUNCER) {
             var user = message.getUser(0);
             var target = message.getUser(1);
-            var position;
+            var position = 0;
             if (target !== undefined) {
                 position = target.getWaitlistPosition();
             }
@@ -12,10 +12,10 @@ module.exports = function (basicBot) {
             }
 
             if (!user) {
-                message.sendReply("Error, couldn't find user");
+                message.from.sendReply("Error, couldn't find user");
             }
             else if (isNaN(position) || position < 0) {
-                message.sendReply("Invalid position");
+                message.from.sendReply("Invalid position");
             }
             else {
                 user.moveDJ(position, function() { });
