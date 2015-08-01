@@ -4,11 +4,12 @@ module.exports = function (basicBot) {
             var user = message.getUser(0);
             var target = message.getUser(1);
             var position = target?target.getWaitlistPosition():parseInt(message.args[1]);
+            var waitlist = this.plug.room.getWaitlist();
 
             if (!user) {
                 message.sendReply("Error, couldn't find user");
             }
-            else if (!isFinite(position)) {
+            else if (isNaN(position) || position < 0) {
                 message.sendReply("Invalid position");
             }
             else {
