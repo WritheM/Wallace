@@ -181,12 +181,31 @@ plugin.eventproxy.chat = function (messageData) {
     var commandPrefix = "!";
 
     //messageData.raw = messageData.message;
-    messageData.args = this.parseMessage(messageData.message);
+    if (messageData.message == "") {
+        messageData.args = [];
+    }
+    else {
+        messageData.args = this.parseMessage(messageData.message);
+    }
 
     if (messageData.message[0] == commandPrefix) {
         messageData.command = messageData.command = messageData.args[0].substring(commandPrefix.length);
         messageData.args = messageData.args.slice(1);
         messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
+
+
+        messageData.getUser = function(index) {
+            if (this.args.length < index) {
+                return undefined;
+            }
+            else if (this.args[index][0] != "@") {
+                return undefined;
+            }
+            else {
+                return plugin.room.getUserByName(this.args[index].substring(1));
+            }
+        };
+
 
         plugin.manager.fireEvent("plug_command_" + messageData.command, messageData);
         plugin.manager.fireEvent("command_" + messageData.command, messageData);
