@@ -43,15 +43,19 @@ function initPlugged() {
         //tough.CookieJar.deserializeSync(cookies)
     }
 
-    plugged.getAuthToken(function(err, token) {
-        if (!err) {
-            plugged.login(plugin.config.auth, token);
-        }
-        else {
-            plugged.login(plugin.config.auth);
-        }
-    });
 
+    plugin.relogin = function() {
+        plugged.getAuthToken(function(err, token) {
+            if (!err) {
+                plugged.login(plugin.config.auth, token);
+            }
+            else {
+                plugged.login(plugin.config.auth);
+            }
+        });
+    };
+
+    plugin.relogin();
 
     plugged.on(plugged.LOGIN_SUCCESS, function () {
         plugged.connect(plugin.config.auth.room);
@@ -59,18 +63,18 @@ function initPlugged() {
         fs.writeFileSync("cookiejar.json", cookies);
     });
     plugged.on(plugged.CONN_PART, function () {
-        plugged.login(plugin.config.auth);
+        plugin.relogin();
     });
     plugged.on(plugged.SOCK_ERROR, function () {
-        plugged.login(plugin.config.auth);
-        plugged.setJar(null);
+        plugin.relogin();
     });
     plugged.on(plugged.CONN_ERROR, function () {
         setTimeout(function () {
-            plugged.login(plugin.config.auth);
+            plugin.relogin();
         }, 5000);
-        plugged.setJar(null);
     });
+
+    //definite case where a relogin is needed
     plugged.on(plugged.LOGIN_ERROR, function () {
         setTimeout(function () {
             plugged.login(plugin.config.auth);
