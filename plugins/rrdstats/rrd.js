@@ -30,8 +30,9 @@ rrd.events.plug_advance = function (track) {
 };
 
 rrd.get_stats = function () {
-    var users = this.plug.getUsers();
-    //console.log(users);
+    var users = this.plug.getUsers().slice();
+    users.push(this.plug.getSelf());
+
     var data = {};
     data.djs = this.plug.getWaitList().length + (typeof this.plug.getDJ() === "undefined" ? 0 : 1);
     data.listeners = users.length;
