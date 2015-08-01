@@ -10,3 +10,6 @@ config.json
 #nodejs modules
 node_modules/
 npm-debug.log
+
+#cookiejar
+cookiejar.json
