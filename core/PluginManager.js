@@ -1,5 +1,5 @@
-var fs = require("fs");
-var PluginLoader = require("./PluginLoader");
+let fs = require("fs");
+let PluginLoader = require("./PluginLoader");
 
 class PluginManager {
     constructor(_core) {
@@ -14,17 +14,17 @@ class PluginManager {
     }
 
     start() {
-        for (var i = 0; i < this.config.core.paths.length; i++) {
-            var path = this.config.core.paths[i];
+        for (let i = 0; i < this.config.core.paths.length; i++) {
+            let path = this.config.core.paths[i];
             this.addPath(path);
         }
 
         this.scanPlugins();
 
-        for (var n = 0; n < this.config.core.plugins.length; n++) {
-            var plugin = this.config.core.plugins[n];
+        for (let n = 0; n < this.config.core.plugins.length; n++) {
+            let plugin = this.config.core.plugins[n];
 
-            var inst = this.getPluginLoader(plugin);
+            let inst = this.getPluginLoader(plugin);
             if (inst) {
                 inst.load();
             }
@@ -36,15 +36,15 @@ class PluginManager {
     }
 
     scanPlugins() {
-        var newplugins = [];
-        var plugin = null;
+        let newplugins = [];
+        let plugin = null;
 
         // iterate directories and scan meta.json files (use PluginLoader method)
-        for (var n = 0; n < this.paths.length; n++) {
-            var dir = this.paths[n];
-            var files = fs.readdirSync(dir);
-            for (var j = 0; j < files.length; j++) {
-                var file = dir + "/" + files[j];
+        for (let n = 0; n < this.paths.length; n++) {
+            let dir = this.paths[n];
+            let files = fs.readdirSync(dir);
+            for (let j = 0; j < files.length; j++) {
+                let file = dir + "/" + files[j];
                 if (fs.lstatSync(file).isDirectory()) {
                     plugin = this.getPluginByPath(file);
                     if (plugin != null) {
@@ -72,7 +72,7 @@ class PluginManager {
         }
 
         // unload plugins that no-longer exist.
-        for (var i = 0; i < this.plugins.length; i++) {
+        for (let i = 0; i < this.plugins.length; i++) {
             plugin = this.plugins[i];
             if (newplugins.indexOf(plugin) === -1) {
                 console.info(plugin.meta.name + " no longer exists, unload");
@@ -91,8 +91,8 @@ class PluginManager {
 
     getPluginLoader(pluginName) {
         pluginName = pluginName.toLowerCase();
-        for (var i = 0; i < this.plugins.length; i++) {
-            var plugin = this.plugins[i];
+        for (let i = 0; i < this.plugins.length; i++) {
+            let plugin = this.plugins[i];
             if (plugin.meta.name.toLowerCase() === pluginName) {
                 return plugin;
             }
@@ -100,7 +100,7 @@ class PluginManager {
     }
 
     getPlugin(pluginName) {
-        var plugin = this.getPluginLoader(pluginName);
+        let plugin = this.getPluginLoader(pluginName);
         if (!plugin || !plugin.loaded) {
             return undefined;
         }
@@ -108,8 +108,8 @@ class PluginManager {
     }
 
     getPluginByPath(path) {
-        for (var i = 0; i < this.plugins.length; i++) {
-            var plugin = this.plugins[i];
+        for (let i = 0; i < this.plugins.length; i++) {
+            let plugin = this.plugins[i];
             if (plugin.directory === path) {
                 return plugin;
             }
@@ -117,8 +117,8 @@ class PluginManager {
     }
 
     fireEvent() {
-        for (var i = 0; i < this.plugins.length; i++) {
-            var plugin = this.plugins[i];
+        for (let i = 0; i < this.plugins.length; i++) {
+            let plugin = this.plugins[i];
             if (plugin.loaded) {
                 plugin.fireEvent.apply(plugin, arguments);
             }
@@ -126,19 +126,19 @@ class PluginManager {
     }
 
     getDependencies(plugin, missing) {
-        var plugins = [plugin];
+        let plugins = [plugin];
         missing = missing || [];
 
-        for (var i = 0; i < plugins.length; i++) {
+        for (let i = 0; i < plugins.length; i++) {
             plugin = plugins[i];
             if (!plugin.meta.wallace || !plugin.meta.wallace.dependencies) {
                 continue;
             }
 
-            //for (var j in plugin.meta.dependencies) {
-            for (var j = 0; j < plugin.meta.wallace.dependencies.length; j++) {
-                var dependency = plugin.meta.wallace.dependencies[j];
-                var cplugin = this.getPluginLoader(dependency);
+            //for (let j in plugin.meta.dependencies) {
+            for (let j = 0; j < plugin.meta.wallace.dependencies.length; j++) {
+                let dependency = plugin.meta.wallace.dependencies[j];
+                let cplugin = this.getPluginLoader(dependency);
                 if (cplugin) {
                     if (plugins.indexOf(cplugin) === -1) {
                         plugins.push(cplugin);
@@ -153,10 +153,10 @@ class PluginManager {
     }
 
     getDependants(plugin) {
-        var dependants = [];
-        for (var i = 0; i < this.plugins.length; i++) {
-            var cplugin = this.plugins[i];
-            var dependencies = this.getDependencies(cplugin);
+        let dependants = [];
+        for (let i = 0; i < this.plugins.length; i++) {
+            let cplugin = this.plugins[i];
+            let dependencies = this.getDependencies(cplugin);
             if (dependencies.indexOf(plugin) !== -1) {
                 dependants.push(cplugin);
             }
@@ -165,9 +165,9 @@ class PluginManager {
     }
 
     filterLoaded(plugins) {
-        var out = [];
-        for (var i = 0; i < plugins.length; i++) {
-            var cplugin = plugins[i];
+        let out = [];
+        for (let i = 0; i < plugins.length; i++) {
+            let cplugin = plugins[i];
             if (cplugin.loaded) {
                 out.push(cplugin);
             }

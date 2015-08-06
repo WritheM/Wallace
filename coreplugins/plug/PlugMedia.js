@@ -7,12 +7,12 @@ function PlugMedia(plugin, media) {
 }
 
 //not tested:
-var keys = ["author", "cid", "duration", "format", "id", "image", "title"];
-for(var i in keys) {
+let keys = ["author", "cid", "duration", "format", "id", "image", "title"];
+for(let i in keys) {
     if (!keys.hasOwnProperty(i)) {
         continue;
     }
-    var key = keys[i];
+    let key = keys[i];
     (function(key) {
         Object.defineProperty(PlugMedia, key, {
             get: function() {

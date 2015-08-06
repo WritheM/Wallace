@@ -1,15 +1,15 @@
-var Plugged = require("plugged");
-var FileCookieStore = require('tough-cookie-filestore');
-var tough = require("tough-cookie");
-var cookie = require("request/lib/cookies");
-var fs = require("fs");
+let Plugged = require("plugged");
+let FileCookieStore = require('tough-cookie-filestore');
+let tough = require("tough-cookie");
+let cookie = require("request/lib/cookies");
+let fs = require("fs");
 
-var PlugUser = require("./PlugUser.js");
-var PlugRoom = require("./PlugRoom.js");
-var PlugPlaylists = require("./PlugPlaylists.js");
+let PlugUser = require("./PlugUser.js");
+let PlugRoom = require("./PlugRoom.js");
+let PlugPlaylists = require("./PlugPlaylists.js");
 
-var PluginInstance = require(__core + "PluginInstance.js");
-var plugin = new PluginInstance();
+let PluginInstance = require(__core + "PluginInstance.js");
+let plugin = new PluginInstance();
 
 plugin.eventproxy = {};
 
@@ -18,15 +18,15 @@ plugin.init = function () {
 };
 
 function initPlugged() {
-    var that = this;
+    let that = this;
 
-    var logger = plugin.core.log4js.getLogger("plugged");
+    let logger = plugin.core.log4js.getLogger("plugged");
 
-    var plugged = new Plugged({
+    let plugged = new Plugged({
         log: logger
     });
 
-    var cookies = "";
+    let cookies = "";
     try {
         cookies = JSON.parse(fs.readFileSync("cookiejar.json"));
     }
@@ -35,9 +35,9 @@ function initPlugged() {
     }
 
     if (cookies) {
-        var jar = tough.CookieJar.deserializeSync(cookies);
+        let jar = tough.CookieJar.deserializeSync(cookies);
         console.log(cookie);
-        var rjar = cookie.jar();
+        let rjar = cookie.jar();
         rjar._jar = jar;
         plugged.setJar(rjar);
         //tough.CookieJar.deserializeSync(cookies)
@@ -59,7 +59,7 @@ function initPlugged() {
 
     plugged.on(plugged.LOGIN_SUCCESS, function () {
         plugged.connect(plugin.config.auth.room);
-        var cookies = JSON.stringify(plugged.getJar()._jar.toJSON());
+        let cookies = JSON.stringify(plugged.getJar()._jar.toJSON());
         fs.writeFileSync("cookiejar.json", cookies);
     });
     plugged.on(plugged.CONN_PART, function () {
@@ -104,10 +104,10 @@ function initPlugged() {
     //monkey patch emit: http://stackoverflow.com/a/18087021
     plugged.emit_old = plugged.emit;
     plugged.emit = function () {
-        var event = arguments[0];
+        let event = arguments[0];
 
         if (event in plugin.eventproxy) {
-            var args = Array.prototype.slice.call(arguments, 1);
+            let args = Array.prototype.slice.call(arguments, 1);
             plugin.eventproxy[event].apply(plugin, args);
         }
         else {
@@ -120,7 +120,7 @@ function initPlugged() {
 
 plugin.eventproxy.generic = function (event, arg) {
     //console.log("generic", event, arg);
-    var ignore = ["sockOpen"];
+    let ignore = ["sockOpen"];
     if (ignore.indexOf(event) === -1) {
         console.debug("Event", event, arg);
     }
@@ -128,7 +128,7 @@ plugin.eventproxy.generic = function (event, arg) {
 };
 
 plugin.eventproxy.advance = function (booth, playback, previous) {
-    var event = playback;
+    let event = playback;
     event.currentDJ = plugin.plugged.getUserByID(booth.dj);
     event.lastPlay = previous;
     console.debug("Event", "advance", event);
@@ -145,14 +145,14 @@ plugin.parseMessage = function (message, options) {
     options.users = options.users || true;
 
     function matchName(query, i, users) {
-        var matches = [];
-        for(var iuser in users) {
+        let matches = [];
+        for(let iuser in users) {
             if (!users.hasOwnProperty(iuser)) {
                 continue;
             }
-            var user = users[iuser];
+            let user = users[iuser];
 
-            var cmpname = user.username.split(" ").slice(0, i).join(" ");
+            let cmpname = user.username.split(" ").slice(0, i).join(" ");
             if (cmpname === query) {
                 matches.push(user);
             }
@@ -160,19 +160,19 @@ plugin.parseMessage = function (message, options) {
         return matches;
     }
 
-    var users = this.plug.getUsers();
+    let users = this.plug.getUsers();
 
     users.sort(function(a, b) {
         return b.username.length - a.username.length;
     });
 
-    var parts = message.split(" ");
-    for (var i = 0; i < parts.length; i++) {
-        var part = parts[i];
+    let parts = message.split(" ");
+    for (let i = 0; i < parts.length; i++) {
+        let part = parts[i];
 
         if (options.quotes && part[0] === "\"") {
 
-            for (var j = 1; j <= 10 && i + j < parts.length; j++) {
+            for (let j = 1; j <= 10 && i + j < parts.length; j++) {
                 console.log(part);
                 if (part[part.length - 1] === "\"") {
 
@@ -193,8 +193,8 @@ plugin.parseMessage = function (message, options) {
         else if (options.users && part[0] === "@") {
             part = part.slice(1);
 
-            var matches = users;
-            for (var j = 1; j <= 10 && i + j < parts.length; j++) {
+            let matches = users;
+            for (let j = 1; j <= 10 && i + j < parts.length; j++) {
                 matches = matchName(part, j, matches);
 
                 if (matches.length > 0) {
@@ -223,7 +223,7 @@ plugin.eventproxy.chat = function (messageData) {
     messageData.delete = function() {
         plugin.plug.deleteMessage(this.cid);
     };
-    var commandPrefix = "!";
+    let commandPrefix = "!";
 
     //messageData.raw = messageData.message;
     if (messageData.message === "") {

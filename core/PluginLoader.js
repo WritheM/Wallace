@@ -1,4 +1,4 @@
-var fs = require("fs");
+let fs = require("fs");
 
 class PluginLoader {
     constructor(manager, directory) {
@@ -12,7 +12,7 @@ class PluginLoader {
     }
 
     reloadMeta() {
-        var file = this.directory + "/package.json";
+        let file = this.directory + "/package.json";
         this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
     };
 
@@ -22,9 +22,9 @@ class PluginLoader {
         }
 
         // get plugin script path
-        var path = "../" + this.directory + "/";
+        let path = "../" + this.directory + "/";
         try {
-            var plugin = require(path);
+            let plugin = require(path);
 
             if (typeof (plugin) === "function") {
                 this.plugin = plugin(this);
@@ -49,7 +49,7 @@ class PluginLoader {
     };
 
     _unload() {
-        var path = "../" + this.directory + "/";
+        let path = "../" + this.directory + "/";
 
         this.fireEvent("onUnload");
 
@@ -58,7 +58,7 @@ class PluginLoader {
 
         try {
             // http://stackoverflow.com/a/6677355
-            var name = require.resolve(path);
+            let name = require.resolve(path);
             delete require.cache[name];
         }
         catch (e) {
@@ -67,43 +67,43 @@ class PluginLoader {
     };
 
     load() {
-        var deps = this.manager.getDependencies(this);
-        for (var i = 0; i < deps.length; i++) {
-            var dep = deps[i];
+        let deps = this.manager.getDependencies(this);
+        for (let i = 0; i < deps.length; i++) {
+            let dep = deps[i];
             dep._load();
         }
     };
 
     unload() {
-        var deps = this.manager.filterLoaded(this.manager.getDependants(this));
-        for (var i = 0; i < deps.length; i++) {
-            var dep = deps[i];
+        let deps = this.manager.filterLoaded(this.manager.getDependants(this));
+        for (let i = 0; i < deps.length; i++) {
+            let dep = deps[i];
             dep._unload();
         }
         this._unload();
     };
 
     reload() {
-        var deps = this.manager.filterLoaded(this.manager.getDependants(this));
+        let deps = this.manager.filterLoaded(this.manager.getDependants(this));
 
         this.unload();
         this.load();
 
         //reload everything that got unloaded (as they were depending on this)
-        for (var i = 0; i < deps.length; i++) {
-            var dep = deps[i];
+        for (let i = 0; i < deps.length; i++) {
+            let dep = deps[i];
             dep.load();
         }
     };
 
     getConfig() {
-        var manconf = this.manager.getConfig();
+        let manconf = this.manager.getConfig();
         if (this.meta.name in manconf) {
             return manconf[this.meta.name];
         }
         // no existing userconfig, clone it before returning
 
-        var conf = {};
+        let conf = {};
         if ("wallace" in this.meta && "config" in this.meta.wallace) {
             conf = this.meta.wallace.config;
         }
@@ -119,7 +119,7 @@ class PluginLoader {
             return;
         }
         try {
-            var args = Array.prototype.slice.call(arguments);
+            let args = Array.prototype.slice.call(arguments);
             args.shift();
 
             this.plugin.events[eventname].apply(this.plugin, args);

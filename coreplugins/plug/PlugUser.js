@@ -6,7 +6,7 @@ class PlugUser {
         this.room = plugin.room;
 
         //copy over user info
-        for (var prop in user) {
+        for (let prop in user) {
             this[prop] = user[prop];
         }
 
@@ -23,13 +23,13 @@ class PlugUser {
     }
 
     kick(reason, callback) {
-        var plug = this.plug;
-        var that = this;
+        let plug = this.plug;
+        let that = this;
         reason = reason || plug.BANREASON.VIOLATING_COMMUNITY_RULES;
 
         //unban callback is unreliable,
 
-        var unban = function () {
+        let unban = function () {
             console.log("unbanning");
             plug.unbanUser(that.id, function () {
             });
@@ -44,7 +44,7 @@ class PlugUser {
     }
 
     ban(duration, reason, callback) {
-        var plug = this.plug;
+        let plug = this.plug;
         duration = duration || plug.BANDURATION.HOUR;
         reason = reason || plugBANREASON.VIOLATING_COMMUNITY_RULES;
 
@@ -52,7 +52,7 @@ class PlugUser {
     }
 
     setRole(role, callback) {
-        var plug = this.plug;
+        let plug = this.plug;
         role = role || plug.USERROLE.NONE;
 
         if (role === plug.USERROLE.NONE) {
@@ -65,7 +65,7 @@ class PlugUser {
 
 
     mute(time, reason, callback) {
-        var plug = this.plug;
+        let plug = this.plug;
         reason = reason || 1; //TODO: add lookup table
         time = time || plug.MUTE_DURATION.NONE;
 
@@ -103,7 +103,7 @@ class PlugUser {
     }
 
     moveDJ(position, callback) {
-        var oldpos = this.getWaitlistPosition();
+        let oldpos = this.getWaitlistPosition();
         if (oldpos && oldpos !== position) {
             this.plug.moveDJ(this.id, callback);
         }
@@ -118,7 +118,7 @@ class PlugUser {
     }
 
     isCurrentDJ() {
-        var dj = this.plug.getCurrentDJ();
+        let dj = this.plug.getCurrentDJ();
         if (dj === null) {
             return false;
         }
@@ -126,18 +126,17 @@ class PlugUser {
     }
 
     getWaitlistPosition() {
-        var waitlist = this.plug.getWaitlist();
-        for (var i in waitlist) {
+        let waitlist = this.plug.getWaitlist();
+        for (let i in waitlist) {
             if (!waitlist.hasOwnProperty(i)) {
                 continue;
             }
-            var user = waitlist[i];
+            let user = waitlist[i];
 
             if (user.id === this.id) {
                 return i;
             }
         }
-        ;
         return undefined;
     }
 

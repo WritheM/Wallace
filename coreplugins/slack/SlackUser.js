@@ -1,6 +1,6 @@
-var admins = ["ylt", "pironic"];
+let admins = ["ylt", "pironic"];
 
-var SlackUser = function (user, slack) {
+let SlackUser = function (user, slack) {
     this.user = user;
     this.slack = slack.slack;
 

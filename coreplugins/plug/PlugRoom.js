@@ -1,6 +1,6 @@
-//var PlugMessage = require("./PlugMessage.js");
-var PlugUser = require("./PlugUser.js");
-//var PlugMedia = require("./PlugMedia.js");
+//let PlugMessage = require("./PlugMessage.js");
+let PlugUser = require("./PlugUser.js");
+//let PlugMedia = require("./PlugMedia.js");
 
 class PlugRoom {
     constructor(plugin) {
@@ -9,9 +9,9 @@ class PlugRoom {
     }
 
     getUsers() {
-        var _users = this.plug.getUsers();
-        var users = [];
-        for(var user in _users) {
+        let _users = this.plug.getUsers();
+        let users = [];
+        for(let user in _users) {
             if (!_users.hasOwnProperty(user)) {
                 continue;
             }
@@ -24,7 +24,7 @@ class PlugRoom {
     //ID -> Id deliberate, match Javascript conventions better
     // (i.e. document.getElementById)
     getUserById(id, checkCache) {
-        var user = this.plug.getUserByID(id, checkCache);
+        let user = this.plug.getUserByID(id, checkCache);
         if (user) {
             return new PlugUser(this.plugin, user);
         }
@@ -34,7 +34,7 @@ class PlugRoom {
     }
 
     getUserByName(name, checkCache) {
-        var user = this.plug.getUserByName(name, checkCache);
+        let user = this.plug.getUserByName(name, checkCache);
         if (user) {
             return new PlugUser(this.plugin, user);
         }
@@ -60,7 +60,7 @@ class PlugRoom {
     }
 
     getCurrentMedia() {
-        var media = this.plug.getCurrentMedia();
+        let media = this.plug.getCurrentMedia();
         if (!media) {
             return undefined;
         }
@@ -79,13 +79,13 @@ class PlugRoom {
     sendChat(message, options) {
         options = options || {};
 
-        var parts = message.split("\n");
-        for(var i in parts) {
+        let parts = message.split("\n");
+        for(let i in parts) {
             if (!parts.hasOwnProperty(i)) {
                 continue;
             }
 
-            var part = parts[i];
+            let part = parts[i];
 
             if (options.rtl) {
                 part = "\u202E" + part;

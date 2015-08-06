@@ -1,4 +1,4 @@
-var PlugPlaylist = require("./PlugPlaylist.js");
+let PlugPlaylist = require("./PlugPlaylist.js");
 
 class PlugPlaylists {
     constructor(plugin) {
@@ -8,11 +8,11 @@ class PlugPlaylists {
         this.playlists = [];
 
         this.plug.getPlaylists((function (err, playlists) {
-            for (var i in playlists) {
+            for (let i in playlists) {
                 if (!playlists.hasOwnProperty(i)) {
                     continue;
                 }
-                var playlist = playlists[i];
+                let playlist = playlists[i];
                 this.playlists.push(new PlugPlaylist(this.plugin, playlist));
             }
         }).bind(this));
@@ -36,7 +36,7 @@ class PlugPlaylists {
             },
             (function (err, data) {
                 if (!err) {
-                    var details = data[0];
+                    let details = data[0];
                     playlist.name = details.name;
                     playlist.active = details.active;
                     playlist.id = details.id;
@@ -57,7 +57,7 @@ class PlugPlaylists {
                 playlist.active = false;
                 playlist.id = -1;
 
-                var index = this.playlists.indexOf(playlist);
+                let index = this.playlists.indexOf(playlist);
                 if (index > -1) {
                     this.playlists.splice(index, 1);
                 }

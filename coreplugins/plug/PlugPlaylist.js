@@ -72,10 +72,10 @@ class PlugPlaylist {
     }
 
     delMedia(media) {
-        var delMedia
+        let delMedia
         (media)
         {
-            var index = this.list.indexOf(media);
+            let index = this.list.indexOf(media);
             if (index > -1) {
                 this.list.splice(index, 1);
             }
@@ -107,7 +107,7 @@ class PlugPlaylist {
 
     //done after a play
     _rotate() {
-        var first = this.list.shift();
+        let first = this.list.shift();
         this.list.push(first);
     }
 }
