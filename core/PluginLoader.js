@@ -27,7 +27,7 @@ class PluginLoader {
             let plugin = require(path);
 
             if (typeof (plugin) === "function") {
-                this.plugin = plugin(this);
+                this.plugin = new plugin(this);
             }
             else {
                 this.plugin = plugin;
