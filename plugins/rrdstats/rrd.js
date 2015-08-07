@@ -16,6 +16,7 @@ export default class RRD extends PluginInstance {
 
     @EventHandler()
     onUnload() {
+        super.onUnload();
         clearInterval(this.statsTimer);
     }
 
@@ -93,14 +94,13 @@ export default class RRD extends PluginInstance {
     }
 
     save_stats() {
-        clearInterval(this.statsTimer);
-        this.statsTimer = setInterval(this.save_stats.bind(this), 30 * 1000);
+        clearTimeout(this.statsTimer);
         if (this.config.url !== null
             && typeof this.config.url !== "undefined"
             && this.config.url.length > 0) {
 
             var data = this.get_stats();
-
+            console.log(this.config.url, data);
             request.post({
                 url: this.config.url,
                 headers: {
@@ -109,9 +109,11 @@ export default class RRD extends PluginInstance {
                 json: [data]
             }, function (error, response, body) {
                 if (error || response.statusCode !== 200) {
-                    console.error("rrd error:", error, response, body);
+                    console.error("rrd error:", error, response.toJSON(), body);
                 }
-            });
+
+                this.statsTimer = setInterval(this.save_stats.bind(this), 30 * 1000);
+            }.bind(this));
         }
     }
 }

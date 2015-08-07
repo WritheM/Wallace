@@ -79,7 +79,7 @@ class Plugin extends PluginInstance {
         plugged.on(plugged.LOGIN_ERROR, function () {
             setTimeout(function () {
                 plugged.login(this.config.auth);
-            }, 5000);
+            }.bind(this), 5000);
             plugged.setJar(null);
         }.bind(this));
 
@@ -137,7 +137,7 @@ class EventProxy {
 
     advance(booth, playback, previous) {
         let event = playback;
-        event.currentDJ = plugin.plugged.getUserByID(booth.dj);
+        event.currentDJ = this.plugin.plugged.getUserByID(booth.dj);
         event.lastPlay = previous;
         console.debug("Event", "advance", event);
         this.plugin.manager.fireEvent("plug_advance", event);

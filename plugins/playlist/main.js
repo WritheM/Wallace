@@ -1,4 +1,5 @@
 var PluginInstance = require(__core + "PluginInstance.js");
+let EventHandler = require(__core + "Plugin/EventHandler.js");
 
 var plugAPI = require("plugapi"); //TODO: remove
 
@@ -10,13 +11,13 @@ export default class Playlist extends PluginInstance {
 
     @EventHandler()
     command_playlist(message) {
-        if (message.from.rank >= playlist.core.ranks.MANAGER) {
+        if (message.from.rank >= this.core.ranks.MANAGER) {
             var subcommand = message.args[0];
-            var func = list;
+            var func = this.subcommands.list;
             if (this.subcommands[subcommand]) {
                 func = this.subcommands[subcommand];
             }
-            func(message);
+            func.call(this.subcommands, message);
         }
         else {
             message.from.sendReply("Command only available to staff", {emote: true});
@@ -25,8 +26,8 @@ export default class Playlist extends PluginInstance {
 
     @EventHandler()
     command_grab(message) {
-        if (message.from.rank >= playlist.core.ranks.MANAGER) {
-            playlist.plug.grab();
+        if (message.from.rank >= this.core.ranks.MANAGER) {
+            this.plug.grab();
         }
         else {
             message.from.sendReply("Command only available to staff", {emote: true});
