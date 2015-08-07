@@ -5,7 +5,7 @@ var plugAPI = require("plugapi");
 var google = require("googleapis");
 var youtube = google.youtube("v3");
 
-export default class MediaSkip {
+export default class MediaSkip extends PluginInstance {
     init(plugin) {
         this.plug = this.manager.getPlugin("plug")
         this.plugged = this.manager.getPlugin("plug").plug; //TODO: implement better method

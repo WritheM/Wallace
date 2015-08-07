@@ -2,7 +2,7 @@ var PluginInstance = require(__core + "PluginInstance.js");
 
 var plugAPI = require("plugapi"); //TODO: remove
 
-export default class Playlist {
+export default class Playlist extends PluginInstance {
     init () {
         this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
         this.subcommands = new SubCommands(this);

@@ -1,4 +1,4 @@
-var PluginInstance = require(__core + "PluginInstance.js");
+let PluginInstance = require(__core + "PluginInstance.js");
 let EventHandler = require(__core + "Plugin/EventHandler.js");
 
 export default class TimedCallouts extends PluginInstance {
@@ -32,7 +32,7 @@ export default class TimedCallouts extends PluginInstance {
             + " entries in the list of valid callouts. To see each, please type /callouts view #", {emote: true});
         }
         else {
-            var args = message.args;
+            let args = message.args;
             if (args[0] === "view") {
                 if (!isNaN(args[1])) {
                     // rettrieve a certain number
@@ -45,7 +45,7 @@ export default class TimedCallouts extends PluginInstance {
             else if (args[0] === "add") {
                 // add a callout
                 args.splice(0, 1);
-                var newCallout = args.join(" ");
+                let newCallout = args.join(" ");
                 this.config.callouts.push(newCallout);
                 message.from.sendReply("Added a callout: " + newCallout, {emote: true});
             }
@@ -72,7 +72,7 @@ export default class TimedCallouts extends PluginInstance {
             clearTimeout(this.timeoutID);
         }
 
-        var shoutOutInterval = this.config.shoutOutInterval * 1000 * 60; // Conversion
+        let shoutOutInterval = this.config.shoutOutInterval * 1000 * 60; // Conversion
         // from
         // minutes
         // ->
@@ -85,7 +85,7 @@ export default class TimedCallouts extends PluginInstance {
         // The timeout has executed, we don't need the handle anymore.
         this.timeoutID = null;
 
-        var message = this.config.callouts[Math.floor(Math.random() * this.config.callouts.length)];
+        let message = this.config.callouts[Math.floor(Math.random() * this.config.callouts.length)];
         if (message && message.trim().length) {
             console.log("scheduledShoutout: " + message);
 

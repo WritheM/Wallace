@@ -4,7 +4,7 @@ let EventHandler = require(__core + "Plugin/EventHandler.js");
 var request = require("request");
 var qs = require("querystring");
 
-export default class Giphy {
+export default class Giphy extends PluginInstance {
     @EventHandler()
     command_gif(message) {
         var tags = null;
