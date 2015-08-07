@@ -27,7 +27,7 @@ export default class Playlist extends PluginInstance {
     @EventHandler()
     command_grab(message) {
         if (message.from.rank >= this.core.ranks.MANAGER) {
-            this.plug.grab();
+            this.plug.grab(parseInt(message.args[0]));
         }
         else {
             message.from.sendReply("Command only available to staff", {emote: true});
