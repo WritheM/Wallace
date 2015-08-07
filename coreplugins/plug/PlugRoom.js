@@ -79,7 +79,28 @@ class PlugRoom {
     sendChat(message, options) {
         options = options || {};
 
-        let parts = message.split("\n");
+        let prefix = "";
+        if (options.rtl) {
+            prefix += "\u202E";
+        }
+        if (options.emote) {
+            prefix += "/me ";
+        }
+
+        function splitSubstring(str, len) {
+            var ret = [ ];
+            for (var offset = 0, strLen = str.length; offset < strLen; offset += len) {
+                ret.push(str.substring(offset, offset + len));
+            }
+            return ret;
+        }
+
+        let lines = message.split("\n");
+        let parts = [];
+        for(let i in lines) {
+            parts = parts.concat(splitSubstring(lines[i], 245 - prefix.length));
+        }
+
         for(let i in parts) {
             if (!parts.hasOwnProperty(i)) {
                 continue;
@@ -87,33 +108,7 @@ class PlugRoom {
 
             let part = parts[i];
 
-            if (options.rtl) {
-                part = "\u202E" + part;
-            }
-            if (options.lol) {
-                part = "\u202E" + part.split("").reverse().join("");
-                part = part.replace(/[\[\]\{\}\(\)}]/g, function(str) {
-                    switch(str) {
-                        case "[":
-                            return "]";
-                        case "]":
-                            return "[";
-                        case "{":
-                            return "}";
-                        case "}":
-                            return "{";
-                        case "(":
-                            return ")";
-                        case ")":
-                            return "(";
-                    }
-                });
-            }
-            if (options.emote) {
-                part = "/me " + part;
-            }
-
-            this.plug.sendChat(part);
+            this.plug.sendChat(prefix+part);
         }
         this.plugin.manager.fireEvent("plug_sendchat", message, options);
     }

@@ -11,7 +11,7 @@ export default class Wolfram extends PluginInstance {
             if (message.args.length > 0) {
                 request(this.config.url + encodeURIComponent(message.args.join(" ")), function (error, response, body) {
                     if (error || response.statusCode !== 200) {
-                        console.error("!wa: Got Error:" + body);
+                        console.error("!wa: Got Error:", error);
                     }
                     else {
                         message.from.sendReply(body.replace(/[\r\n]/g, ""), {emote: true});
