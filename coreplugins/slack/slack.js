@@ -1,19 +1,19 @@
-var PluginInstance = require(__core + "PluginInstance.js");
-var slack = new PluginInstance();
+let PluginInstance = require(__core + "PluginInstance.js");
+let slack = new PluginInstance();
 
-var http = require("http");
-var request = require("request");
-var fs = require("fs");
-var path = require("path");
-var Entities = require('html-entities').XmlEntities;
-var entities = new Entities();
+let http = require("http");
+let request = require("request");
+let fs = require("fs");
+let path = require("path");
+let Entities = require('html-entities').XmlEntities;
+let entities = new Entities();
 
-var SlackUser = require("./SlackUser.js");
+let SlackUser = require("./SlackUser.js");
 
 slack.init = function () {
     this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
 
-    var Slack = require("node-slackr");
+    let Slack = require("node-slackr");
     this.slack = new Slack(this.config.webhookuri, {
         channel: this.config.channel,
         username: this.config.username
@@ -60,16 +60,16 @@ slack.plugToSlack = function (message) {
     }
 
     if (this.slackUsers) {
-        for (var i = 0; i < this.slackUsers.members.length; i++) {
-            var user = this.slackUsers.members[i];
+        for (let i = 0; i < this.slackUsers.members.length; i++) {
+            let user = this.slackUsers.members[i];
             message = message.replace("@" + user.name, "<@" + user.id + "|" + user.name + ">");
         }
     }
 
-    for (var k in this.slackEmotes) {
+    for (let k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
-            var emote = this.slackEmotes[k];
-            var replace = new RegExp("(^|\\s)" + escape(k) + "(?=$|\\s)", "g");
+            let emote = this.slackEmotes[k];
+            let replace = new RegExp("(^|\\s)" + escape(k) + "(?=$|\\s)", "g");
             message = message.replace(replace, "$1:" + emote + ":");
         }
     }
@@ -78,8 +78,8 @@ slack.plugToSlack = function (message) {
 
 slack.slackToPlug = function (message) {
     /*if (this.slackUsers) {
-        for (var i = 0; i < this.slackUsers.members.length; i++) {
-            var user = this.slackUsers.members[i];
+        for (let i = 0; i < this.slackUsers.members.length; i++) {
+            let user = this.slackUsers.members[i];
             //TODO: replace with a regex
             message = message.replace("<@" + user.id + "|" + user.name + ">", "@" + user.name);
             message = message.replace("<@" + user.id + ">", "@" + user.name);
@@ -89,15 +89,15 @@ slack.slackToPlug = function (message) {
     //console.log("message", this);
 
     message = message.replace(/<(.*?)>/g, (function (match, p1) {
-        var parts = p1.split("|");
-        var link = parts[0];
-        var text = parts[1];
+        let parts = p1.split("|");
+        let link = parts[0];
+        let text = parts[1];
 
         if (link[0] === "@") { //userid
             if (this.slackUsers) {
                 //find and return the user
-                for (var i = 0; i < this.slackUsers.members.length; i++) {
-                    var user = this.slackUsers.members[i];
+                for (let i = 0; i < this.slackUsers.members.length; i++) {
+                    let user = this.slackUsers.members[i];
                     if ("@" + user.id === link) {
                         return "@" + user.name;
                     }
@@ -121,9 +121,9 @@ slack.slackToPlug = function (message) {
     }).bind(this));
 
 
-    for (var k in this.slackEmotes) {
+    for (let k in this.slackEmotes) {
         if (this.slackEmotes.hasOwnProperty(k)) {
-            var emote = this.slackEmotes[k];
+            let emote = this.slackEmotes[k];
             message = message.replace(":" + emote + ":", k);
         }
     }
@@ -138,7 +138,7 @@ slack.events.plug_join = function (user) {
 slack.events.plug_sendchat = function(message, options) {
     options.hidden = options.hidden || false;
 
-    var messageData = {
+    let messageData = {
         from: this.plug.getSelf(),
         message: message,
         internal: true
@@ -155,7 +155,7 @@ slack.events.plug_sendchat = function(message, options) {
 };
 
 slack.events.plug_chat = function (message) {
-    var content = slack.plugToSlack(message.message);
+    let content = slack.plugToSlack(message.message);
 
 
 
@@ -164,7 +164,7 @@ slack.events.plug_chat = function (message) {
     }
 
 
-    var parts = content.split(" ");
+    let parts = content.split(" ");
     if (parts[0] === "/me") {
         parts.shift();
         content = "_" + parts.join(" ") + " _";
@@ -180,7 +180,7 @@ slack.events.plug_chat = function (message) {
 slack.events.plug_advance = function (track) {
     // on start: lastPlay: { dj: null, media: null, score: null }
 
-    var message = [];
+    let message = [];
 
     if (track.lastPlay !== undefined && track.lastPlay.dj) {
         message.push({
@@ -219,7 +219,7 @@ slack.events.plug_advance = function (track) {
 };
 
 slack.slackRequest = function (req, res) {
-    var that = this;
+    let that = this;
     if (req.method !== "POST") {
         res.writeHead("403", "Fuck off");
         res.end();
@@ -227,12 +227,12 @@ slack.slackRequest = function (req, res) {
         return;
     }
 
-    var body = "";
+    let body = "";
     req.on("data", function (data) {
         body += data;
     });
     req.on("end", function () {
-        var qs = require("querystring");
+        let qs = require("querystring");
         that.receivedSlackMessage(qs.parse(body));
     });
 
@@ -253,8 +253,8 @@ slack.receivedSlackMessage = function (message) {
 
     // command
     if (message.text[0] === "!") {
-        var cmd = message.text.substr(1).split(" ")[0];
-        var args = message.text.substr(1 + cmd.length + 1).split(" ");
+        let cmd = message.text.substr(1).split(" ")[0];
+        let args = message.text.substr(1 + cmd.length + 1).split(" ");
 
         this.manager.fireEvent("command_" + cmd, {
             command: cmd,

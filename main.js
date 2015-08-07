@@ -1,10 +1,14 @@
 #!/usr/bin/env node
 
-GLOBAL.WALLACEVERSION = "Err";
-GLOBAL.PLUGIN_CONTRIBUTORS = [];
-
+require("babel/register")({
+    "stage": 1
+});
 
 var fs = require("fs");
+
+
+GLOBAL.WALLACEVERSION = "Err";
+GLOBAL.PLUGIN_CONTRIBUTORS = [];
 
 try {
     var p = JSON.parse(fs.readFileSync(__dirname+"/package.json"));

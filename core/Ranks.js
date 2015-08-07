@@ -49,8 +49,8 @@ function PermManager(core) {
 
 
     //for compatibility with old plugins
-    for (var i = 0; i < this.ranks.length; i++) {
-        var rank = this.ranks[i];
+    for (let i = 0; i < this.ranks.length; i++) {
+        let rank = this.ranks[i];
         this[rank.short] = rank.value;
     }
 }
@@ -58,8 +58,8 @@ function PermManager(core) {
 PermManager.prototype.getByValue = function (val) {
     //we want to find the highest "rank" that val fits into
     // for this, the most efficient technique is to go through backwards
-    for (var i = this.ranks.length; i > 0; i--) {
-        var rank = this.ranks[i];
+    for (let i = this.ranks.length; i > 0; i--) {
+        let rank = this.ranks[i];
         if (val > rank.value) {
             return rank;
         }
@@ -67,8 +67,8 @@ PermManager.prototype.getByValue = function (val) {
 };
 
 PermManager.prototype.matchByName = function (name) {
-    for (var i = 0; i < this.ranks.length; i++) {
-        var rank = this.ranks[i];
+    for (let i = 0; i < this.ranks.length; i++) {
+        let rank = this.ranks[i];
         if (rank.isMatch(name)) {
             return rank;
         }
