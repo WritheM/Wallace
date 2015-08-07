@@ -9,14 +9,13 @@ export default class Plugman extends PluginInstance {
 
     @EventHandler()
     command_plugins(message) {
-        if (message.from.rank >= manager.core.ranks.MANAGER) {
+        if (message.from.rank >= this.manager.core.ranks.MANAGER) {
             if (message.args.length <= 0 || message.args[0] === "list") {
                 var loaded = [];
                 var unloaded = [];
 
-                for (var i = 0; i < manager.plugins.length; i++) {
-                    var plugin = manager.plugins[i];
-                    console.log(plugin);
+                for (var i = 0; i < this.manager.plugins.length; i++) {
+                    var plugin = this.manager.plugins[i];
                     if (plugin.loaded) {
                         loaded.push(plugin.meta.name);
                     }
@@ -29,7 +28,7 @@ export default class Plugman extends PluginInstance {
                 message.from.sendReply("Available: " + unloaded.join(", "));
             }
             else if (message.args[0] === "refresh") {
-                manager.scanPlugins();
+                this.manager.scanPlugins();
                 message.from.sendReply("Plugins rescanned");
             }
             else {
@@ -43,8 +42,8 @@ export default class Plugman extends PluginInstance {
 
     @EventHandler()
     command_plugin(message) {
-        if (message.from.rank >= manager.core.ranks.MANAGER) {
-            var plugin = manager.getPluginLoader(message.args[1]);
+        if (message.from.rank >= this.manager.core.ranks.MANAGER) {
+            var plugin = this.manager.getPluginLoader(message.args[1]);
             if (["info", "load", "unload", "reload"].indexOf(message.args[0]) !== -1) {
                 if (!plugin) {
                     message.from.sendReply("Error: Could not find plugin");

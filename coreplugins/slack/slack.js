@@ -162,7 +162,6 @@ export default class Slack extends PluginInstance {
 
     @EventHandler()
     plug_chat(message) {
-        console.log(this.events);
         let content = this.plugToSlack(message.message);
 
 
@@ -267,7 +266,7 @@ export default class Slack extends PluginInstance {
                 command: cmd,
                 args: args,
                 message: message.text,
-                from: new SlackUser(message, slack)
+                from: new SlackUser(message, this.slack)
             });
         }
         else {
@@ -276,7 +275,7 @@ export default class Slack extends PluginInstance {
 
         this.plugin.manager.fireEvent("chat", {
             message: message.text,
-            from: new SlackUser(message, this)
+            from: new SlackUser(message, this.slack)
         });
 
     }
