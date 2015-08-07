@@ -100,7 +100,6 @@ export default class RRD extends PluginInstance {
             && this.config.url.length > 0) {
 
             var data = this.get_stats();
-            console.log(this.config.url, data);
             request.post({
                 url: this.config.url,
                 headers: {

@@ -37,7 +37,6 @@ class Plugin extends PluginInstance {
 
         if (cookies) {
             let jar = tough.CookieJar.deserializeSync(cookies);
-            console.log(cookie);
             let rjar = cookie.jar();
             rjar._jar = jar;
             plugged.setJar(rjar);
