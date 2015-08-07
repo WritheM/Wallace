@@ -1,27 +1,50 @@
 let admins = ["ylt", "pironic"];
 
-let SlackUser = function (user, slack) {
-    this.user = user;
-    this.slack = slack.slack;
+export default class SlackUser {
+    constructor(user, slack) {
+        this.user = user;
+        this.slack = slack.slack;
 
-    this.rank = 0;
+        this.rank = 0;
 
-    //no tidy way of doing this for now
-    if (admins.indexOf(user.user_name) !== -1) {
-        this.rank = 100;
+        //no tidy way of doing this for now
+        if (admins.indexOf(user.user_name) !== -1) {
+            this.rank = 100;
+        }
     }
-};
 
-SlackUser.prototype.sendChat = function (message) {
-    this.slack.notify({text: message});
-};
+    get username() {
+        return this.user.user_name;
+    }
 
-SlackUser.prototype.sendReply = function (message) {
-    this.slack.notify({text: "[<@" + this.user.user_id + ">] " + message});
-};
+    //TODO: options
+    sendChat(message, options) {
+        this.slack.notify({text: message});
+    }
 
-SlackUser.prototype.sendEmote = function (message) {
-    this.slack.notify({text: "_[<@" + this.user.user_id + ">] " + message + " _"});
-};
+    sendReply(message, options) {
+        this.sendChat("[<@" + this.user.user_id + ">] " + message, options)
+    }
 
-module.exports = SlackUser;
+    /* TODO: remaining methods
+    kick(reason, callback) {
+
+    }
+
+    ban(duration, reason, callback) {
+
+    }
+
+    setRole(role, callback) {
+
+    }
+
+    mute(time, reason, callback) {
+
+    }
+
+    removeMessages() {
+
+    }
+    */
+}
