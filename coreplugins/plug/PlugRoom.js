@@ -87,23 +87,48 @@ class PlugRoom {
             prefix += "/me ";
         }
 
-        function splitSubstring(str, len) {
-            var ret = [ ];
-            for (var offset = 0, strLen = str.length; offset < strLen; offset += len) {
-                ret.push(str.substring(offset, offset + len));
+        function chunkify(text, limit) {
+            var chunks = [];
+            var symbols = {
+                "<": 4, // &lt;
+                ">": 4, // &gt;
+                "&": 5, // &amp;
+                "\"": 5, //no idea wtf plug does, should be 6..
+                "'": 5 //no idea here either, should be 6 also..
+            };
+            var start = 0;
+            var length = 0;
+            for (var i = 0; i < text.length; i++) {
+                var char = text[i];
+                var l = symbols[char] || 1;
+                //console.log(length, l);
+                if (length + l > limit) {
+                    var chunk = text.substring(start, i);
+                    chunks.push(chunk);
+                    start = i;
+                    length = 0;
+                }
+                length += l;
             }
-            return ret;
+            if (start < text.length) {
+                var chunk = text.substring(start, text.length);
+                chunks.push(chunk);
+            }
+            return chunks;
         }
 
         let lines = message.split("\n");
         let parts = [];
         for(let i in lines) {
-            parts = parts.concat(splitSubstring(lines[i], 245 - prefix.length));
+            parts = parts.concat(chunkify(lines[i], 250 - prefix.length));
         }
 
         for(let i in parts) {
             if (!parts.hasOwnProperty(i)) {
                 continue;
+            }
+            if (options.maxmsg && i >= options.maxmsg) {
+                break;
             }
 
             let part = parts[i];

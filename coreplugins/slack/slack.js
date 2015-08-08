@@ -15,6 +15,7 @@ let SlackUser = require("./SlackUser.js");
 export default class Slack extends PluginInstance {
     init() {
         this.plug = this.manager.getPlugin("plug").plug; //TODO: implement better method
+        this.plug2 = this.manager.getPlugin("plug");
 
         let Slack = require("node-slackr");
         this.slack = new Slack(this.config.webhookuri, {
@@ -165,7 +166,7 @@ export default class Slack extends PluginInstance {
         let content = this.plugToSlack(message.message);
 
 
-        if (!message.internal && message.from.username === this.plug.getSelf().username) {
+        if (message.internal || message.from.username === this.plug.getSelf().username) {
             return;
         }
 
@@ -270,7 +271,7 @@ export default class Slack extends PluginInstance {
             });
         }
         else {
-            this.plug.sendChat("<" + message.user_name + "@slack> " + this.slackToPlug(message.text));
+            this.plug2.room.sendChat("<" + message.user_name + "@slack> " + this.slackToPlug(message.text), {"internal": true, "maxmsg": 2});
         }
 
         this.plugin.manager.fireEvent("chat", {
