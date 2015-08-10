@@ -1,0 +1,16 @@
+{
+  "author": "Joe Carter",
+  "contributors": [
+    "Joe Carter"
+  ],
+  "name": "history",
+  "description": "record users + song history",
+  "peerDependencies": {
+  },
+  "main": "main.js",
+  "wallace": {
+    "dependencies": [
+      "plug"
+    ]
+  }
+}
