@@ -72,15 +72,13 @@ class PlugPlaylist {
     }
 
     delMedia(media) {
-        let delMedia
-        (media)
-        {
+        let delMedia = function(media)  {
             let index = this.list.indexOf(media);
             if (index > -1) {
                 this.list.splice(index, 1);
             }
-        }
-        ;
+        };
+
         if (this.id === -1) {
             delMedia(media);
         }

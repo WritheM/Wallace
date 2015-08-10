@@ -83,15 +83,13 @@ class Plugin extends PluginInstance {
         }.bind(this));
 
         plugged.on(plugged.JOINED_ROOM, function () {
-            plugged.sendChat("/me Wallace v" + WALLACEVERSION + " online");
+            //plugged.sendChat("/me Wallace v" + WALLACEVERSION + " online");
             this.room = new PlugRoom(this);
             this.playlists = new PlugPlaylists(this);
         }.bind(this));
 
-        //rrdstats fixes
-        plugged.getGuests = function () {
-            return plugged.state.room.meta.guests;
-        };
+        plugged.GRAB_UPDATE = plugged.GRAB;
+
         plugged.getWaitList = plugged.getWaitlist; //case
         plugged.getDJ = plugged.getCurrentDJ;
 
@@ -104,6 +102,8 @@ class Plugin extends PluginInstance {
         //monkey patch emit: http://stackoverflow.com/a/18087021
         plugged.emit_old = plugged.emit;
         plugged.emit = function () {
+            plugged.emit_old.apply(plugged, arguments);
+
             let event = arguments[0];
 
             if (event in this.eventproxy) {
@@ -113,8 +113,6 @@ class Plugin extends PluginInstance {
             else {
                 this.eventproxy.generic.apply(this.eventproxy, arguments);
             }
-
-            plugged.emit_old.apply(plugged, arguments);
         }.bind(this);
     }
 
@@ -132,6 +130,26 @@ class EventProxy {
             console.debug("Event", event, arg);
         }
         this.plugin.manager.fireEvent("plug_" + event, arg);
+    }
+
+    userUpdate(event) {
+        var user = this.plugin.plug.getUserByID(event.id);
+        if (event.level) {
+            user.level = event.level;
+        }
+        if (event.badge) {
+            user.badge = event.badge;
+        }
+        if (event.avatarID) {
+            user.avatarID = event.avatarID;
+        }
+        if (event.username) {
+            user.username = event.username;
+        }
+        if (event.sub) { // Note: Plugged removes this
+            user.sub = event.sub;
+        }
+        this.plugin.manager.fireEvent("plug_userUpdate", event);
     }
 
     advance(booth, playback, previous) {
