@@ -116,7 +116,7 @@ export default class History extends PluginInstance {
 
 
         if (!this.votes[user.id]) {
-            this.constructVote(uid);
+            this.constructVote(user.id);
         }
     }
 
