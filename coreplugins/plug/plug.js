@@ -242,9 +242,12 @@ class EventProxy {
     }
 
     chat(messageData) {
+        messageData.plug = this.plug;
+        messageData.plugin = this;
+
         messageData.from = this.plugin.room.getUserById(messageData.id);
         messageData.delete = function() {
-            plugin.plug.deleteMessage(this.cid);
+            this.plug.deleteMessage(this.cid);
         };
         let commandPrefix = "!";
 
@@ -272,7 +275,7 @@ class EventProxy {
                 else {
                     return this.plugin.room.getUserByName(this.args[index].substring(1));
                 }
-            };
+            }.bind(this);
 
 
             this.plugin.manager.fireEvent("plug_command_" + messageData.command, messageData);
