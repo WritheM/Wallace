@@ -83,7 +83,7 @@ class Plugin extends PluginInstance {
         }.bind(this));
 
         plugged.on(plugged.JOINED_ROOM, function () {
-            //plugged.sendChat("/me Wallace v" + WALLACEVERSION + " online");
+            plugged.sendChat("/me Wallace v" + WALLACEVERSION + " online");
             this.room = new PlugRoom(this);
             this.playlists = new PlugPlaylists(this);
         }.bind(this));
