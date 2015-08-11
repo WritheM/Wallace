@@ -94,7 +94,8 @@ export default class RRD extends PluginInstance {
     }
 
     save_stats() {
-        clearTimeout(this.statsTimer);
+        clearInterval(this.statsTimer);
+        this.statsTimer = null;
         if (this.config.url !== null
             && typeof this.config.url !== "undefined"
             && this.config.url.length > 0) {
@@ -110,7 +111,9 @@ export default class RRD extends PluginInstance {
                 if (error || response.statusCode !== 200) {
                     console.error("rrd error:", error, response.toJSON(), body);
                 }
-
+                if (this.statsTimer) {
+                    clearInterval(this.statsTimer);
+                }
                 this.statsTimer = setInterval(this.save_stats.bind(this), 30 * 1000);
             }.bind(this));
         }
