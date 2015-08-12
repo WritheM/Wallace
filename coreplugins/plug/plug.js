@@ -7,6 +7,7 @@ let fs = require("fs");
 let PlugUser = require("./PlugUser.js");
 let PlugRoom = require("./PlugRoom.js");
 let PlugPlaylists = require("./PlugPlaylists.js");
+let PlugMessage = require("./PlugMessage.js");
 
 let PluginInstance = require(__core + "PluginInstance.js");
 let EventHandler = require(__core + "Plugin/EventHandler.js");
@@ -160,130 +161,25 @@ class EventProxy {
         this.plugin.manager.fireEvent("plug_advance", event);
     }
 
-    parseMessage(message, options) {
-        if (!options) {
-            options = {};
-        }
-        options.keepquotes = options.keepquotes || false;
-        options.quotes = options.quotes || true;
-        options.users = options.users || true;
-
-        function matchName(query, i, users) {
-            let matches = [];
-            for(let iuser in users) {
-                if (!users.hasOwnProperty(iuser)) {
-                    continue;
-                }
-                let user = users[iuser];
-
-                let cmpname = user.username.split(" ").slice(0, i).join(" ");
-                if (cmpname === query) {
-                    matches.push(user);
-                }
-            }
-            return matches;
-        }
-
-        let users = this.plugin.plug.getUsers();
-
-        users.sort(function(a, b) {
-            return b.username.length - a.username.length;
-        });
-
-        let parts = message.split(" ");
-        for (let i = 0; i < parts.length; i++) {
-            let part = parts[i];
-
-            if (options.quotes && part[0] === "\"") {
-
-                for (let j = 1; j <= 10 && i + j < parts.length; j++) {
-                    console.log(part);
-                    if (part[part.length - 1] === "\"") {
-
-                        parts.splice(i + 1, j - 1);
-                        if (options.keepquotes === true) {
-                            parts[i] = part;
-                        }
-                        else {
-                            parts[i] = part.substring(1, part.length - 1);
-                        }
-
-                        break;
-                    }
-                    part = part + " " + parts[i + j];
-                }
-            }
-
-            else if (options.users && part[0] === "@") {
-                part = part.slice(1);
-
-                let matches = users;
-                for (let j = 1; j <= 10 && i + j < parts.length; j++) {
-                    matches = matchName(part, j, matches);
-
-                    if (matches.length > 0) {
-                        if (matches.length === 1) { //is this the name we're looking for?
-                            if (matches[0].username === part) {
-                                parts.splice(i + 1, j - 1);
-                                parts[i] = "@" + part;
-                            }
-                        }
-                    }
-                    else {
-                        break;
-                    }
-
-                    part = part + " " + parts[i + j];
-                }
-
-            }
-        }
-        return parts;
-    }
-
     chat(messageData) {
-        messageData.plug = this.plug;
-        messageData.plugin = this;
+        let message = new PlugMessage(this.plugin, messageData);
 
-        messageData.from = this.plugin.room.getUserById(messageData.id);
-        messageData.delete = function() {
-            this.plug.deleteMessage(this.cid);
-        };
         let commandPrefix = "!";
-
-        //messageData.raw = messageData.message;
-        if (messageData.message === "") {
-            messageData.args = [];
-        }
-        else {
-            messageData.args = this.parseMessage(messageData.message);
-        }
-
         if (messageData.message[0] === commandPrefix) {
-            messageData.command = messageData.command = messageData.args[0].substring(commandPrefix.length);
-            messageData.args = messageData.args.slice(1);
-            //messageData.message = messageData.message.substring(messageData.message.indexOf(" "));
+            let command = messageData.message.substring(1, messageData.message.indexOf(" "));
+            messageData.message = messageData.message.substring(messageData.message.indexOf(" ")+1);
 
+            let commandMessage = new PlugMessage(this.plugin, messageData);
+            commandMessage.command = command;
 
-            messageData.getUser = function(index) {
-                if (this.args.length < index) {
-                    return undefined;
-                }
-                else if (this.args[index][0] !== "@") {
-                    return undefined;
-                }
-                else {
-                    return this.plugin.room.getUserByName(this.args[index].substring(1));
-                }
-            };
+            console.log(commandMessage);
 
-
-            this.plugin.manager.fireEvent("plug_command_" + messageData.command, messageData);
-            this.plugin.manager.fireEvent("command_" + messageData.command, messageData);
+            this.plugin.manager.fireEvent("plug_command_" + commandMessage.command, commandMessage);
+            this.plugin.manager.fireEvent("command_" + commandMessage.command, commandMessage);
         }
 
-        this.plugin.manager.fireEvent("plug_chat", messageData);
-        this.plugin.manager.fireEvent("chat", messageData);
+        this.plugin.manager.fireEvent("plug_chat", message);
+        this.plugin.manager.fireEvent("chat", message);
     }
 }
 
