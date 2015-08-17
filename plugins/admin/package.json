@@ -1,20 +1,31 @@
 {
   "author": "Michael Writhe",
+  "contributors": [
+    "Joe Carter",
+    "Michael Writhe"
+  ],
   "name": "admin",
-  "version": "0.0.1",
-  "description": "suite of admin commands",
+  "description": "suite of essential admin commands",
   "peerDependencies": {
 
   },
-  "main": ["main.js"],
+  "main": "main.js",
   "wallace": {
     "config": {
-      "echo": {
-        "permission": ["COHOST"]
+      "ban": {
+        "permission": ["BOUNCER"]
       },
-      "say": {
+      "ping": {
+        "permission": ["NORMAL"]
+      },
+      "skip": {
+        "reasons": {
+          "theme": "This song does not fit the room theme. Check http://wiki.writhem.com/display/radio/Our+Music+Choices for more information.",
+          "op": "second sample"
+        },
         "permission": ["BOUNCER"]
       }
-    }
+    },
+    "dependencies": ["plug"]
   }
 }
