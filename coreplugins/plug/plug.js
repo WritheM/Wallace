@@ -173,7 +173,7 @@ class EventProxy {
 
             let command = messageData.message.substring(1, end);
             messageData.message = messageData.message.substring(end+1);
-            
+
             let commandMessage = new PlugMessage(this.plugin, messageData);
             commandMessage.command = command;
 

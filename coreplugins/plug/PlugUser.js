@@ -125,6 +125,10 @@ class PlugUser {
         return dj.id === this.id;
     }
 
+    skipDJ(callback) {
+        return this.plug.skipDJ(this.id, callback);
+    }
+
     getWaitlistPosition() {
         let waitlist = this.plug.getWaitlist();
         for (let i in waitlist) {

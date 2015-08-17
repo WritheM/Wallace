@@ -59,6 +59,10 @@ class PlugRoom {
         return this.plug.getSetting(setting);
     }
 
+    getDJ() {
+        return this.getUserById(this.plug.room.booth.dj);
+    }
+
     getCurrentMedia() {
         let media = this.plug.getCurrentMedia();
         if (!media) {

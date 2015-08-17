@@ -12,7 +12,7 @@ export default class PlugMessage {
     }
 
     delete() {
-        this.plug.deleteMessage(this.cid);
+        this.plugin.plug.deleteMessage(this.cid);
     }
 
     parseMessage(message, options) {
@@ -109,5 +109,13 @@ export default class PlugMessage {
         else {
             return this.plugin.room.getUserByName(this.args[index].substring(1));
         }
+    }
+
+    sendReply() {
+        this.from.sendReply.apply(this.from, arguments);
+    }
+
+    sendChat() {
+        this.from.sendChat.apply(this.from, arguments);
     }
 }

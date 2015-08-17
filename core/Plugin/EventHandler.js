@@ -8,7 +8,7 @@ export default function EventHandler(event) {
         }
 
         let events = target.startevents.slice();
-        events.push({"event": event, "func": descriptor.value})
+        events.push({"event": event, "func": descriptor.value});
         target.startevents = events;
-    }
+    };
 }
