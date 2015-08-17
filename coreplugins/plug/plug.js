@@ -172,8 +172,6 @@ class EventProxy {
             let commandMessage = new PlugMessage(this.plugin, messageData);
             commandMessage.command = command;
 
-            console.log(commandMessage);
-
             this.plugin.manager.fireEvent("plug_command_" + commandMessage.command, commandMessage);
             this.plugin.manager.fireEvent("command_" + commandMessage.command, commandMessage);
         }
