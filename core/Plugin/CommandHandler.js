@@ -41,8 +41,6 @@ export default function CommandHandler(name, opts) {
             func = descriptor.value;
         }
 
-        console.log(name, opts, event);
-
         //same as EventHandler for now
         let events = target.startevents.slice();
         events.push({"event": event, "func": func});

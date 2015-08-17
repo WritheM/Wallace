@@ -122,7 +122,7 @@ export default class BasicBot extends PluginInstance {
                 if (error) {
                     message.from.sendReply("Error (likely plug, please try again)");
                 }
-                else {
+                else if (this.config.skip && this.config.skip.reasons) {
                     let reason = this.config.skip.reasons[message.args[0]];
 
                     if (reason) {

@@ -60,7 +60,7 @@ class PlugRoom {
     }
 
     getDJ() {
-        return this.getUserById(this.plug.room.booth.dj);
+        return this.getUserById(this.plug.state.room.booth.dj);
     }
 
     getCurrentMedia() {
