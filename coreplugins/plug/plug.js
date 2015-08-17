@@ -166,9 +166,14 @@ class EventProxy {
 
         let commandPrefix = "!";
         if (messageData.message[0] === commandPrefix) {
-            let command = messageData.message.substring(1, messageData.message.indexOf(" "));
-            messageData.message = messageData.message.substring(messageData.message.indexOf(" ")+1);
+            let end = messageData.message.indexOf(" ");
+            if (end == -1) { //no space
+                end = messageData.message.length;
+            }
 
+            let command = messageData.message.substring(1, end);
+            messageData.message = messageData.message.substring(end+1);
+            
             let commandMessage = new PlugMessage(this.plugin, messageData);
             commandMessage.command = command;
 
