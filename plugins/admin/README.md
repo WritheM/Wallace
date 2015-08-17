@@ -1,6 +1,6 @@
 # basicBot plugin for Wallace
 
-This plugin provides you with most of the commands that come with [basicBot](https://github.com/Yemasthui/basicBot).
+This plugin provides you and your staff abilities to control the plug community via the bot. This means that you can now control the plug community from any service the bot is located in.
 
 # Configuration
 
