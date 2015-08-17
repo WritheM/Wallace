@@ -140,7 +140,7 @@ export default class BasicBot extends PluginInstance {
 
     @CommandHandler("ban", {rank: "bouncer"})
     ban(message) {
-        user = message.getUser(0);
+        let user = message.getUser(0);
 
         if (!user) {
             message.sendReply("Error, couldn't find user");
@@ -152,15 +152,27 @@ export default class BasicBot extends PluginInstance {
 
     @CommandHandler("unban", {rank: "bouncer"})
     unban(message) {
-        //TODO: implement matching for offline users :/
-        user = message.getUser(0);
-
-        if (!user) {
-            message.sendReply("Error, couldn't find user");
+        let username = message.message;
+        //if it begins with an @, strip it
+        if (username[0] == "@") {
+            username = username.substring(1);
         }
-        else {
-            //user.unban();
-        }
+        this.plug.room.getBan(username, (e, ban) => {
+            if (e) {
+                message.sendReply("Error, couldn't find user");
+            }
+            else {
+                //message.sendReply("User found, unbanning");
+                this.plug.plugged.unbanUser(ban.id, (e) => {
+                    if (!e) {
+                        message.sendReply("User successfully unbanned");
+                    }
+                    else {
+                        message.sendReply("Plug Error: " + e);
+                    }
+                })
+            }
+        });
     }
 
     @CommandHandler("mute", {rank: "bouncer"})

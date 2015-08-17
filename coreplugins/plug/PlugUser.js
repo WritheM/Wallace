@@ -46,7 +46,7 @@ class PlugUser {
     ban(duration, reason, callback) {
         let plug = this.plug;
         duration = duration || plug.BANDURATION.HOUR;
-        reason = reason || plugBANREASON.VIOLATING_COMMUNITY_RULES;
+        reason = reason || plug.BANREASON.VIOLATING_COMMUNITY_RULES;
 
         plug.banUser(this.id, duration, reason, callback);
     }

@@ -1,5 +1,4 @@
 let Plugged = require("plugged");
-let FileCookieStore = require('tough-cookie-filestore');
 let tough = require("tough-cookie");
 let cookie = require("request/lib/cookies");
 let fs = require("fs");

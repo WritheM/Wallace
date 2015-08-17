@@ -2,6 +2,9 @@
 let PlugUser = require("./PlugUser.js");
 //let PlugMedia = require("./PlugMedia.js");
 
+let Entities = require('html-entities').XmlEntities;
+let entities = new Entities();
+
 class PlugRoom {
     constructor(plugin) {
         this.plugin = plugin;
@@ -61,6 +64,31 @@ class PlugRoom {
 
     getDJ() {
         return this.getUserById(this.plug.state.room.booth.dj);
+    }
+
+    getBans(callback) {
+        //TODO: wrap with class
+        return this.plug.getBans(callback);
+    }
+
+    getBan(username, callback) {
+        this.getBans((e, bans) => {
+            if (e) {
+                callback(arguments);
+            }
+            else {
+                for(let i in bans) {
+                    let ban = bans[i];
+                    //TODO: remove entities decode if plugged fixes issue
+                    let banUsername = entities.decode(ban.username).toLowerCase();
+                    if (banUsername == username.toLowerCase()) {
+                        callback(false, ban);
+                        return;
+                    }
+                }
+                callback("User not found");
+            }
+        });
     }
 
     getCurrentMedia() {

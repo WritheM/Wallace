@@ -7,9 +7,10 @@
 
   },
   "dependencies": {
-    "plugged": ">=2.3.1",
+    "plugged": ">=2.4.1",
     "googleapis": "*",
-    "tough-cookie": ">=2.0.0"
+    "tough-cookie": ">=2.0.0",
+    "html-entities": ">=1.1.3"
   },
   "main": "plug.js",
   "wallace": {
