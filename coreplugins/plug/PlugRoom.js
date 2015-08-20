@@ -119,29 +119,82 @@ class PlugRoom {
             prefix += "/me ";
         }
 
-        function chunkify(text, limit) {
+        function chunkify(text) {
             var chunks = [];
+            // 1. lengths are worked out by sending the maximum possible
+            // 2. resending what plug given back with regular chars appended
+            // 3. removing a char and sending more chars appended
+            // difference of the padding chars is then worked out (http://i.imgur.com/zZTSfhQ.png)
             var symbols = {
-                "<": 4, // &lt;
-                ">": 4, // &gt;
-                "&": 5, // &amp;
-                "\"": 5, //no idea wtf plug does, should be 6..
-                "'": 5 //no idea here either, should be 6 also..
-            };
-            var start = 0;
-            var length = 0;
+                        "<": 4, // &lt;
+                        ">": 4, // &gt;
+                        "&": 5, // &amp;
+                        "\"": 5, //&quot (plug seems to do without the ;)
+                        "'": 5 //plug encodes as &#34;
+                    };
+            var start = 0; //where this chunk begins
+            var length = 0; //length of chunk
             for (var i = 0; i < text.length; i++) {
                 var char = text[i];
-                var l = symbols[char] || 1;
-                //console.log(length, l);
-                if (length + l > limit) {
+                var charCode = text.charCodeAt(i);
+                
+                var l; //char length
+                var l2 = 0; // char skip, for multichar chars
+                
+                if (symbols[char]) {
+                    l = symbols[char];
+                }
+                else if ((charCode & 0x8000) > 0) {
+                    //this is a 2 byte char, with a following char
+                    // 3-4 byte char (2 UTF16 chars)
+                    if (text.length < i+1) {
+                        //already truncated, so nothing to join on :/
+                        l = 1;
+                    }
+                    else {
+                        if (text.charCodeAt(i+1) > 0xFF) { //next is 2 bytes
+                            l = 4;
+                        }
+                        else { //next is 1 byte
+                            l = 3;
+                        }
+                    	
+                    	l2 = 1; //skip 1 char
+                    }
+                }
+                else if (charCode >= 2048) {
+                	l = 3;
+                }
+                else if (charCode >= 0xFF) { //2 byte char
+                    l = 2;
+                }
+                else {
+                    l = 1;
+                }
+               
+                //adding this char will bring the message over the length limit
+                // so we need to make a new chunk (without char), (next message will start with this char)
+                if (length + l > 250) {
                     var chunk = text.substring(start, i);
                     chunks.push(chunk);
-                    start = i;
-                    length = 0;
+                    start = i; //next chunk starts from here
+                    length = 0; //and length starts anew (note: we're instantly incrementing)
                 }
+                
+                //now that we've taken care of the splitting, we can add on the char to slice length
                 length += l;
+                
+                
+                //multichars char handling..
+                // its already accounted for in the length and the following byte can't be wrapped
+                // so we increment i (it'll be double incremented by)
+                if (l2 > 0) {
+                    i += l2;
+                }
             }
+            
+            //this is the following text that didn't need to be wrapped
+            // add it as a chunk so that it doesn't get lost
             if (start < text.length) {
                 var chunk = text.substring(start, text.length);
                 chunks.push(chunk);
