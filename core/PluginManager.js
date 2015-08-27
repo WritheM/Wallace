@@ -1,7 +1,20 @@
 let fs = require("fs");
 let PluginLoader = require("./PluginLoader");
 
-class PluginManager {
+/**
+ * @module Wallace
+ */
+
+/**
+ * @class PluginManager
+ */
+export default class PluginManager {
+    /**
+     * @constructor
+     * @class PluginManager
+     * @method constructor
+     * @param _core
+     */
     constructor(_core) {
         this.paths = [];
         this.plugins = [];
@@ -13,6 +26,9 @@ class PluginManager {
         this.config = _core.config; // temporary
     }
 
+    /**
+     * @method start
+     */
     start() {
         for (let i = 0; i < this.config.core.paths.length; i++) {
             let path = this.config.core.paths[i];
@@ -31,10 +47,17 @@ class PluginManager {
         }
     }
 
+    /**
+     * @method addPath
+     * @param {string} path
+     */
     addPath(path) {
         this.paths.push(path);
     }
 
+    /**
+     * @method scanPlugins
+     */
     scanPlugins() {
         let newplugins = [];
         let plugin = null;
@@ -84,11 +107,20 @@ class PluginManager {
 
     }
 
+    /**
+     * @method getConfig
+     * @return {*}
+     */
     // temporary until a proper config system is in place
     getConfig() {
         return this.core.loadConfig();
     }
 
+    /**
+     * @method getPluginLoader
+     * @param {String} pluginName
+     * @return {PluginLoader}
+     */
     getPluginLoader(pluginName) {
         pluginName = pluginName.toLowerCase();
         for (let i = 0; i < this.plugins.length; i++) {
@@ -99,6 +131,11 @@ class PluginManager {
         }
     }
 
+    /**
+     * @method getPlugin
+     * @param {String} pluginName
+     * @return {PluginInstance}
+     */
     getPlugin(pluginName) {
         let plugin = this.getPluginLoader(pluginName);
         if (!plugin || !plugin.loaded) {
@@ -107,6 +144,11 @@ class PluginManager {
         return plugin.plugin;
     }
 
+    /**
+     * @method getPluginByPath
+     * @param path
+     * @return PluginLoader
+     */
     getPluginByPath(path) {
         for (let i = 0; i < this.plugins.length; i++) {
             let plugin = this.plugins[i];
@@ -116,6 +158,11 @@ class PluginManager {
         }
     }
 
+    /**
+     * @method fireEvent
+     * @param String eventName
+     * @param args ...
+     */
     fireEvent() {
         for (let i = 0; i < this.plugins.length; i++) {
             let plugin = this.plugins[i];
@@ -125,6 +172,14 @@ class PluginManager {
         }
     }
 
+    /**
+     * Recursively looks up dependencies for specified plugin.
+     *
+     * @method getDependencies
+     * @param {PluginLoader} plugin Plugin to look up dependencies for
+     * @param {[PluginLoader]} missing List of missing dependencies
+     * @return {[PluginLoader]}
+     */
     getDependencies(plugin, missing) {
         let plugins = [plugin];
         missing = missing || [];
@@ -152,6 +207,11 @@ class PluginManager {
         return plugins.reverse();
     }
 
+    /**
+     * @method getDependants
+     * @param plugin
+     * @return [PluginLoader]
+     */
     getDependants(plugin) {
         let dependants = [];
         for (let i = 0; i < this.plugins.length; i++) {
@@ -164,6 +224,11 @@ class PluginManager {
         return dependants;
     }
 
+    /**
+     * @method filterLoaded
+     * @param plugins
+     * @return {Array}
+     */
     filterLoaded(plugins) {
         let out = [];
         for (let i = 0; i < plugins.length; i++) {
@@ -175,5 +240,3 @@ class PluginManager {
         return out;
     }
 }
-
-module.exports = PluginManager;

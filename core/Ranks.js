@@ -1,3 +1,12 @@
+/**
+ * @module Wallace
+ */
+
+/**
+ * @class PermManager
+ * @param {Core} core
+ * @constructor
+ */
 function PermManager(core) {
     this.core = core;
 
@@ -55,6 +64,11 @@ function PermManager(core) {
     }
 }
 
+/**
+ * @method getByValue
+ * @param val
+ * @returns {*}
+ */
 PermManager.prototype.getByValue = function (val) {
     //we want to find the highest "rank" that val fits into
     // for this, the most efficient technique is to go through backwards
@@ -66,6 +80,11 @@ PermManager.prototype.getByValue = function (val) {
     }
 };
 
+/**
+ * @method matchByName
+ * @param name
+ * @returns {*}
+ */
 PermManager.prototype.matchByName = function (name) {
     for (let i = 0; i < this.ranks.length; i++) {
         let rank = this.ranks[i];
@@ -75,6 +94,12 @@ PermManager.prototype.matchByName = function (name) {
     }
 };
 
+/**
+ * @class Rank
+ * @param short
+ * @param info
+ * @constructor
+ */
 function Rank(short, info) {
     this.short = short;
     this.value = info.value;
@@ -82,6 +107,11 @@ function Rank(short, info) {
     this.matches = info.matches;
 }
 
+/**
+ * @method isMatch
+ * @param name
+ * @returns {boolean}
+ */
 Rank.prototype.isMatch = function (name) {
     name = name.toLowerCase();
     if (name === this.short || name === this.name || this.matches.indexOf(name) !== -1) {
@@ -89,6 +119,11 @@ Rank.prototype.isMatch = function (name) {
     }
 };
 
+/**
+ * @method isWithin
+ * @param value
+ * @returns {boolean}
+ */
 Rank.prototype.isWithin = function (value) {
     if (value instanceof Rank) {
         value = value.value;

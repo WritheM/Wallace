@@ -1,7 +1,23 @@
 let fs = require("fs");
 let EventHandler = require("./Plugin/EventHandler.js");
 
+/**
+ * @module Wallace
+ */
+
+/**
+ * A base class for plugins to extend, this handles basics such as event binding, etc
+ *
+ * @class PluginInstance
+ */
 export default class PluginInstance {
+    /**
+     * takes in PluginLoader object for itself, sets up events, etc
+     *
+     * @constructor
+     * @class PluginInstance
+     * @param {PluginLoader} _plugin
+     */
     constructor(_plugin) {
         this.pinst = this;
         this.files = [];
@@ -23,6 +39,14 @@ export default class PluginInstance {
         }*/
     }
 
+
+    /**
+     * Was to allow loading in an entire directory, need to come up with a better approach
+     *
+     * @method loadDir
+     * @param {String} path
+     * @deprecated
+     */
     loadDir(path) {
         let files = fs.readdirSync(path);
         for (let i = 0; i < files.length; i++) {
@@ -43,6 +67,14 @@ export default class PluginInstance {
         }
     }
 
+
+    /**
+     * Default onLoad handler, instantiates attributes that allow access rest of wallace internals
+     * (pluginloader, manager, core, config and logger)
+     *
+     * @method onLoad
+     * @param {PluginInstance} _plugin PluginInstance
+     */
     @EventHandler()
     onLoad(_plugin) {
         this.plugin = _plugin;
@@ -56,6 +88,11 @@ export default class PluginInstance {
         }
     }
 
+    /**
+     * Default onUnload handler, handle file unloading (as part of loadDir)
+     *
+     * @method onUnLoad
+     */
     @EventHandler()
     onUnload() {
         for (let i = 0; i < this.files.length; i++) {

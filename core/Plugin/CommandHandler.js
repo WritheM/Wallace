@@ -1,3 +1,7 @@
+/**
+ * @module Wallace.Plugin
+ */
+
 export default function CommandHandler(name, opts) {
     opts = opts || {};
 

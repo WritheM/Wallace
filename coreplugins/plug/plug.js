@@ -12,14 +12,24 @@ let PluginInstance = require(__core + "PluginInstance.js");
 let EventHandler = require(__core + "Plugin/EventHandler.js");
 //let plugin = new PluginInstance();
 
-class Plugin extends PluginInstance {
+//TODO: rename class
+/**
+ * @class PlugPlugin
+ */
+export default class Plugin extends PluginInstance {
 
+    /**
+     * @method init
+     */
     init() {
         this.eventproxy = new EventProxy(this);
 
         this.initPlugged();
     }
 
+    /**
+     * @method initPlugged
+     */
     initPlugged() {
         let logger = this.core.log4js.getLogger("plugged");
 
@@ -118,11 +128,23 @@ class Plugin extends PluginInstance {
 
 }
 
+/**
+ * @class EventProxy
+ */
 class EventProxy {
+    /**
+     * @class EventProxy
+     * @param plugin
+     */
     constructor(plugin) {
         this.plugin = plugin;
     }
 
+    /**
+     * @method generic
+     * @param {String} event
+     * @param {*} arg
+     */
     generic(event, arg) {
         //console.log("generic", event, arg);
         let ignore = ["sockOpen"];
@@ -132,6 +154,10 @@ class EventProxy {
         this.plugin.manager.fireEvent("plug_" + event, arg);
     }
 
+    /**
+     * @method userUpdate
+     * @param event
+     */
     userUpdate(event) {
         var user = this.plugin.plug.getUserByID(event.id);
         if (event.level) {
@@ -152,6 +178,12 @@ class EventProxy {
         this.plugin.manager.fireEvent("plug_userUpdate", event);
     }
 
+    /**
+     * @method advance
+     * @param booth
+     * @param playback
+     * @param previous
+     */
     advance(booth, playback, previous) {
         let event = playback;
         event.currentDJ = this.plugin.plugged.getUserByID(booth.dj);
@@ -160,6 +192,10 @@ class EventProxy {
         this.plugin.manager.fireEvent("plug_advance", event);
     }
 
+    /**
+     * @method chat
+     * @param messageData
+     */
     chat(messageData) {
         let message = new PlugMessage(this.plugin, messageData);
 
@@ -184,5 +220,3 @@ class EventProxy {
         this.plugin.manager.fireEvent("chat", message);
     }
 }
-
-module.exports = Plugin;
