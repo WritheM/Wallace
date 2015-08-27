@@ -1,6 +1,21 @@
 let fs = require("fs");
 
-class PluginLoader {
+/**
+ * @module Wallace
+ */
+
+/**
+ * Wrapper around plugins, handles the meta information as well as the loading and unloading of them
+ *
+ * @class PluginLoader
+ */
+export default class PluginLoader {
+    /**
+     * @constructor
+     * @class PluginLoader
+     * @param {PluginManager} manager
+     * @param {String} directory
+     */
     constructor(manager, directory) {
         this.manager = manager;
         this.directory = directory;
@@ -11,11 +26,24 @@ class PluginLoader {
         this.reloadMeta();
     }
 
+    /**
+     * reload meta information from the plugins package.json
+     *
+     * @method reloadMeta
+     */
     reloadMeta() {
         let file = this.directory + "/package.json";
         this.meta = JSON.parse(fs.readFileSync(file, "utf8"));
     };
 
+
+    /**
+     * Load plugin (without checking dependencies)
+     *
+     * @method _load
+     * @return {boolean}
+     * @private
+     */
     _load() {
         if (this.loaded) {
             return true;
@@ -48,6 +76,12 @@ class PluginLoader {
         }
     };
 
+    /**
+     * Unload plugin (without checking dependencies)
+     *
+     * @method _unload
+     * @private
+     */
     _unload() {
         let path = "../" + this.directory + "/";
 
@@ -66,6 +100,11 @@ class PluginLoader {
         }
     };
 
+    /**
+     * Load plugin (along with dependencies)
+     *
+     * @method load
+     */
     load() {
         let deps = this.manager.getDependencies(this);
         for (let i = 0; i < deps.length; i++) {
@@ -74,6 +113,11 @@ class PluginLoader {
         }
     };
 
+    /**
+     * Unload plugin (along with dependent plugins)
+     *
+     * @method unload
+     */
     unload() {
         let deps = this.manager.filterLoaded(this.manager.getDependants(this));
         for (let i = 0; i < deps.length; i++) {
@@ -83,6 +127,11 @@ class PluginLoader {
         this._unload();
     };
 
+    /**
+     * Reload plugin (along with dependent plugins)
+     *
+     * @method reload
+     */
     reload() {
         let deps = this.manager.filterLoaded(this.manager.getDependants(this));
 
@@ -96,6 +145,12 @@ class PluginLoader {
         }
     };
 
+    /**
+     * Get config for this plugin (Note: will be changing to global at some point)
+     *
+     * @method getConfig
+     * @return {*}
+     */
     getConfig() {
         let manconf = this.manager.getConfig();
         if (this.meta.name in manconf) {
@@ -111,6 +166,10 @@ class PluginLoader {
         return [this.meta.name];
     };
 
+    /**
+     * @method fireEvent
+     * @param {String} eventname
+     */
     fireEvent(eventname) {
         if (!this.loaded) {
             return;
@@ -129,6 +188,10 @@ class PluginLoader {
         }
     };
 
+    /**
+     * @method addAuthor
+     * @param {String} author
+     */
     addAuthor(author) {
         if (author instanceof Array) {
             author.forEach(function (auth) {
@@ -145,5 +208,3 @@ class PluginLoader {
         }
     };
 }
-
-module.exports = PluginLoader;

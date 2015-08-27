@@ -1,4 +1,17 @@
+/**
+ * @module Plug
+ */
+
+/**
+ * @class PlugMessage
+ */
 export default class PlugMessage {
+    /**
+     * @class PlugMessage
+     * @constructor
+     * @param plugin
+     * @param messageData
+     */
     constructor(plugin, messageData) {
         this.plugin = plugin;
 
@@ -11,10 +24,19 @@ export default class PlugMessage {
         messageData.args = this.parseMessage(messageData.message);
     }
 
+    /**
+     * @method delete
+     */
     delete() {
         this.plugin.plug.deleteMessage(this.cid);
     }
 
+    /**
+     * @method parseMessage
+     * @param message
+     * @param options
+     * @returns {*}
+     */
     parseMessage(message, options) {
         if (message == "") {
             return []; // :)
@@ -99,6 +121,11 @@ export default class PlugMessage {
         return parts;
     }
 
+    /**
+     * @method getUser
+     * @param index
+     * @returns {*}
+     */
     getUser(index) {
         if (this.args.length < index) {
             return undefined;
@@ -111,10 +138,16 @@ export default class PlugMessage {
         }
     }
 
+    /**
+     * @method sendReply
+     */
     sendReply() {
         this.from.sendReply.apply(this.from, arguments);
     }
 
+    /**
+     * @method sendChat
+     */
     sendChat() {
         this.from.sendChat.apply(this.from, arguments);
     }

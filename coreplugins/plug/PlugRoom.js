@@ -5,12 +5,28 @@ let PlugUser = require("./PlugUser.js");
 let Entities = require('html-entities').XmlEntities;
 let entities = new Entities();
 
-class PlugRoom {
+/**
+ * @module Plug
+ */
+
+/**
+ * @class PlugRoom
+ */
+export default class PlugRoom {
+    /**
+     * @class PlugRoom
+     * @constructor
+     * @param plugin
+     */
     constructor(plugin) {
         this.plugin = plugin;
         this.plug = plugin.plug;
     }
 
+    /**
+     * @method getUsers
+     * @returns {Array}
+     */
     getUsers() {
         let _users = this.plug.getUsers();
         let users = [];
@@ -24,9 +40,17 @@ class PlugRoom {
         return users;
     }
 
-    //ID -> Id deliberate, match Javascript conventions better
-    // (i.e. document.getElementById)
+    /**
+     * @
+     *
+     * @method getUserById
+     * @param id
+     * @param checkCache
+     * @returns {*}
+     */
     getUserById(id, checkCache) {
+        //ID -> Id deliberate, match Javascript conventions better
+        // (i.e. document.getElementById)
         let user = this.plug.getUserByID(id, checkCache);
         if (user) {
             return new PlugUser(this.plugin, user);
@@ -36,6 +60,12 @@ class PlugRoom {
         }
     }
 
+    /**
+     * @method getUserByName
+     * @param name
+     * @param checkCache
+     * @returns {*}
+     */
     getUserByName(name, checkCache) {
         let user = this.plug.getUserByName(name, checkCache);
         if (user) {
@@ -49,28 +79,37 @@ class PlugRoom {
         }
     }
 
+    /**
+     * @method getSelf
+     * @returns {PlugUser|exports|module.exports}
+     */
     getSelf() {
         return new PlugUser(this.plugin, this.plug.getSelf());
     }
 
-    //TODO: maybe abstract out into own class/container
-    setSetting(setting, value, callback) {
-        return this.plug.setSetting(setting, value, callback);
-    }
-
-    getSetting(setting) {
-        return this.plug.getSetting(setting);
-    }
-
+    /**
+     * @method getDJ
+     * @returns {*}
+     */
     getDJ() {
         return this.getUserById(this.plug.state.room.booth.dj);
     }
 
+    /**
+     * @method getBans
+     * @param callback
+     * @returns {*}
+     */
     getBans(callback) {
         //TODO: wrap with class
         return this.plug.getBans(callback);
     }
 
+    /**
+     * @method getBan
+     * @param username
+     * @param callback
+     */
     getBan(username, callback) {
         this.getBans((e, bans) => {
             if (e) {
@@ -91,7 +130,11 @@ class PlugRoom {
         });
     }
 
-    getCurrentMedia() {
+    /**
+     * @method getMedia
+     * @returns {*}
+     */
+    getMedia() {
         let media = this.plug.getCurrentMedia();
         if (!media) {
             return undefined;
@@ -99,15 +142,36 @@ class PlugRoom {
         return new PlugMedia(this.plugin, media);
     }
 
+    /**
+     * @method getCurrentMedia
+     * @deprecated
+     */
+    getCurrentMedia() {
+        return this.getMedia();
+    }
+
+    /**
+     * @method getMessages
+     */
     getMessages() {
 
     }
 
+    /**
+     * @method tokenizeMessage
+     * @param message
+     */
     tokenizeMessage(message) {
 
     }
 
-    //TODO: implement queue (with message priorities)
+    /**
+     * @todo implement queue (with message priorities)
+     *
+     * @method sendChat
+     * @param message
+     * @param options
+     */
     sendChat(message, options) {
         options = options || {};
 
@@ -170,4 +234,3 @@ class PlugRoom {
         this.plugin.manager.fireEvent("plug_sendchat", message, options);
     }
 }
-module.exports = PlugRoom;

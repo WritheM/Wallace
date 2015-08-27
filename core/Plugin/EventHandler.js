@@ -1,3 +1,7 @@
+/**
+ * @module Wallace.Plugin
+ */
+
 export default function EventHandler(event) {
     return function (target, method, descriptor) {
         if (!event) {

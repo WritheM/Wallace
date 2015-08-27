@@ -1,3 +1,13 @@
+/**
+ * @module Plug
+ */
+
+/**
+ * @class PlugMedia
+ * @param plugin
+ * @param media
+ * @constructor
+ */
 function PlugMedia(plugin, media) {
     this.plugin = plugin;
     this.media = media;
@@ -25,3 +35,4 @@ for(let i in keys) {
     })(key);
 }
 
+module.exports = PlugMedia;

@@ -1,6 +1,18 @@
 let PlugPlaylist = require("./PlugPlaylist.js");
 
-class PlugPlaylists {
+/**
+ * @module Plug
+ */
+
+/**
+ * @class PlugPlaylists
+ */
+export default class PlugPlaylists {
+    /**
+     * @class PlugPlaylists
+     * @constructor
+     * @param plugin
+     */
     constructor(plugin) {
         this.plugin = plugin;
         this.plug = plugin.plug;
@@ -18,10 +30,19 @@ class PlugPlaylists {
         }).bind(this));
     }
 
+    /**
+     * @method list
+     * @returns {Array}
+     */
     list() {
         return this.playlists;
     }
 
+    /**
+     * @method add
+     * @param playlist
+     * @param callback
+     */
     add(playlist, callback) {
         playlist.plugin = this.plugin;
         /*this.plug.addPlaylist(playlist.name, (function(details) {
@@ -50,6 +71,11 @@ class PlugPlaylists {
             true);
     }
 
+    /**
+     * @method remove
+     * @param playlist
+     * @param callback
+     */
     remove(playlist, callback) {
         this.plug.deletePlaylist(playlist.id, function (err, data) {
             if (!err) {
@@ -68,5 +94,3 @@ class PlugPlaylists {
         });
     }
 }
-
-module.exports = PlugPlaylists;
