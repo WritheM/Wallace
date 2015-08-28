@@ -1,5 +1,18 @@
-class PlugPlaylist {
+/**
+ * @module Plug
+ */
 
+/**
+ * @class PlugPlaylist
+ */
+export default class PlugPlaylist {
+
+    /**
+     * @class PlugPlaylist
+     * @constructor
+     * @param plugin
+     * @param details
+     */
     constructor(plugin, details) {
         this.plugin = plugin;
         this.plug = plugin.plug;
@@ -12,6 +25,11 @@ class PlugPlaylist {
         this.id = details.id;
     }
 
+    /**
+     * @method list
+     * @param callback
+     * @returns {undefined|*}
+     */
     list(callback) {
         if (this.plist !== undefined) {
             if (callback) {
@@ -33,10 +51,21 @@ class PlugPlaylist {
         }
     }
 
+    /**
+     * @method _setPlaylist
+     * @param media
+     * @private
+     */
     _setPlaylist(media) {
         this.plist = media; //TODO: use PlugMedia
     }
 
+    /**
+     * @method addMedia
+     * @param media
+     * @param append
+     * @param callback
+     */
     addMedia(media, append, callback) {
         if (this.id == -1) {
             if (append) {
@@ -71,6 +100,10 @@ class PlugPlaylist {
         }
     }
 
+    /**
+     * @method delMedia
+     * @param media
+     */
     delMedia(media) {
         let delMedia = function(media)  {
             let index = this.list.indexOf(media);
@@ -92,6 +125,10 @@ class PlugPlaylist {
         }
     }
 
+    /**
+     * @method shuffle
+     * @param callback
+     */
     shuffle(callback) {
         this.plug.shufflePlaylist(this.id, (function (err, data) {
             if (!err) {
@@ -103,11 +140,14 @@ class PlugPlaylist {
         }).bind(this));
     }
 
-    //done after a play
+    /**
+     * done after a play
+     *
+     * @method _rotate
+     * @private
+     */
     _rotate() {
         let first = this.list.shift();
         this.list.push(first);
     }
 }
-
-module.exports = PlugPlaylist;

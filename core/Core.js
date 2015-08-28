@@ -3,13 +3,26 @@ var PluginManager = require("./PluginManager.js");
 var Ranks = require("./Ranks.js");
 
 global.__core = __dirname + "/";
+
+/**
+ * @module Wallace
+ */
+
+/**
+ * @class Core
+ */
 class Core {
     /*public config;
-    public ranks;
-    public log4js;
-    public logger;
-    public plugman;*/
+     public ranks;
+     public log4js;
+     public logger;
+     public plugman;*/
 
+    /**
+     * @constructor
+     * @class Core
+     * @method constructor
+     */
     constructor() {
         Core.prototype.loadConfig();
 
@@ -35,6 +48,10 @@ class Core {
         this.plugman.start();
     }
 
+    /**
+     * @method loadConfig
+     * @return {*}
+     */
     loadConfig() {
         this.config = {
             "core": {
@@ -53,9 +70,10 @@ class Core {
         return this.config;
     }
 
+    /**
+     * @method saveConfig
+     */
     saveConfig() {
         fs.writeFileSync("config.json", JSON.stringify(this.config, null, 4), "utf8");
     }
 }
-
-module.exports = Core;
